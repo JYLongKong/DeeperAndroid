@@ -7,4 +7,10 @@
     <string name="app_name_jetpack">DeeperJetpack</string>
     <string name="app_name_opengl">DeeperOpenGL</string>
     <string name="app_name_ndk">DeeperNDK</string>
+
+    <string name="jetpack">Jetpack</string>
+    <string name="opengl">OpenGL</string>
+    <string name="ndk">NDK</string>
+    <string name="flutter">Flutter</string>
+    <string name="compose">Compose</string>
 </resources>

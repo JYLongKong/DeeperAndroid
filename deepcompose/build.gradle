@@ -8,7 +8,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk deepCompileSdk
     defaultConfig {
-        if (isRelease) {
+        if (!isRelease) {
             applicationId "${deepApplicationId}.compose"
         }
         minSdk deepMinSdk

@@ -19,7 +19,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("../deeper_android.jks")
+            storeFile file("../deeperandroid.jks")
             storePassword deepStorePwd
             keyAlias deepKeyAlias
             keyPassword deepKeyPwd
@@ -45,11 +45,9 @@ dependencies {
     implementation project(':libnetwork')
     implementation project(':librepo')
 
-    if (isRelease) {
-        implementation project(':deepjetpack')
-        implementation project(':deepndk')
-        implementation project(':deepopengl')
-        implementation project(':deepcompose')
-        implementation project(':deepflutter')
-    }
+    implementation project(':deepjetpack')
+    implementation project(':deepndk')
+    implementation project(':deepopengl')
+    implementation project(':deepcompose')
+    implementation project(':deepflutter')
 }

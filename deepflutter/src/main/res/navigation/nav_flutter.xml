@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_flutter"
+    app:startDestination="@id/fragment_flutter">
+
+    <fragment
+        android:id="@+id/fragment_flutter"
+        android:name="com.youyes.deeper.flutter.fragment.FlutterFragment"
+        android:label="FlutterFragment" />
+
+</navigation>

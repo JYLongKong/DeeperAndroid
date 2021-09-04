@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="DeeperAndroidTheme" parent="Theme.MaterialComponents.NoActionBar">
 
+    <style name="BaseTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/font_default</item>
+        <item name="colorAccent">@color/theme_green</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme" parent="BaseTheme" />
+
+    <style name="BaseFullScreenTheme" parent="AppTheme">
+        <item name="android:immersive">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="FullScreenTheme" parent="BaseFullScreenTheme" />
+
+    <style name="AppDialogTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="CancellableDialogTheme" parent="AppDialogTheme">
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_compose"
+    app:startDestination="@id/fragment_compose">
+
+    <fragment
+        android:id="@+id/fragment_compose"
+        android:name="com.youyes.deeper.compose.fragment.ComposeFragment"
+        android:label="ComposeFragment" />
+
+</navigation>

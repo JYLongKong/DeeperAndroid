@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_nav"
+    app:startDestination="@id/nav_jetpack">
+
+    <include app:graph="@navigation/nav_jetpack" />
+
+    <include app:graph="@navigation/nav_ndk" />
+
+    <include app:graph="@navigation/nav_opengl" />
+
+    <include app:graph="@navigation/nav_flutter" />
+
+    <include app:graph="@navigation/nav_compose" />
+
+</navigation>

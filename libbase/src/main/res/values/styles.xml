@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--BottomNavigationView TextStyle-->
+    <style name="NavTextInactive">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/font_default</item>
+    </style>
+
+    <style name="NavTextActive">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/font_black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AnimBottomDialog">
+        <item name="android:windowEnterAnimation">@anim/bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/bottom_out</item>
+    </style>
+
+</resources>

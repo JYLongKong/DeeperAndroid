@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_jetpack"
+        android:enabled="true"
+        android:icon="@drawable/ic_jetpack"
+        android:title="@string/jetpack" />
+    <item
+        android:id="@+id/nav_opengl"
+        android:enabled="true"
+        android:icon="@drawable/ic_opengl"
+        android:title="@string/opengl" />
+    <item
+        android:id="@+id/nav_ndk"
+        android:enabled="true"
+        android:icon="@drawable/ic_ndk"
+        android:title="@string/ndk" />
+    <item
+        android:id="@+id/nav_compose"
+        android:enabled="true"
+        android:icon="@drawable/ic_compose"
+        android:title="@string/compose" />
+    <item
+        android:id="@+id/nav_flutter"
+        android:enabled="true"
+        android:icon="@drawable/ic_flutter"
+        android:title="@string/flutter" />
+</menu>

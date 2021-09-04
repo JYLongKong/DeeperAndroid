@@ -9,8 +9,8 @@ buildscript {
         deepVersionCode = 1_00_00
         deepVersionName = "1.0.0"
 
-        deepStorePwd = 'deepandroid'
-        deepKeyAlias = 'deeperandroid'
-        deepKeyPwd = 'deepandroid'
+        deepStorePwd = 'deeperandroid'
+        deepKeyAlias = 'lgjy'
+        deepKeyPwd = 'deeperandroid'
     }
 }
