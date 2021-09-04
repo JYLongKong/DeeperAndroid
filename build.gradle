@@ -5,7 +5,7 @@ buildscript {
     ext {
         kotlin_version = '1.5.30'
         java_version = JavaVersion.VERSION_1_8
-        nav_version = "2.3.5"
+        nav_version = '2.3.5'
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.2"

@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -32,4 +34,10 @@ android {
 }
 
 dependencies {
+    api(dep_ktx)
+    api(dep_kotlin)
+    api(dep_coroutine)
+
+    implementation(dep_moshi)
+    kapt kapt_moshi
 }
