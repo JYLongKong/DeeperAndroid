@@ -1,0 +1,37 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk deepCompileSdk
+    defaultConfig {
+        minSdk deepMinSdk
+        targetSdk deepTargetSdk
+        versionCode deepVersionCode
+        versionName deepVersionName
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility java_version
+        targetCompatibility java_version
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    api(dep_appcompat)
+    implementation(dep_material)
+}

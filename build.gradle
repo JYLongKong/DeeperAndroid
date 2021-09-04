@@ -1,15 +1,27 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from:"dependency.gradle"
+apply from:"configuration.gradle"
+
 buildscript {
+    ext {
+        kotlin_version = '1.5.30'
+        java_version = JavaVersion.VERSION_1_8
+        nav_version = "2.3.5"
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
     repositories {
         google()
         mavenCentral()
     }
-    dependencies {
-        classpath "com.android.tools.build:gradle:7.0.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30"
+}
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }
 

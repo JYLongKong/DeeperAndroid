@@ -1,0 +1,50 @@
+if (isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk deepCompileSdk
+    defaultConfig {
+        if (isRelease) {
+            applicationId "${deepApplicationId}.jetpack"
+        }
+        minSdk deepMinSdk
+        targetSdk deepTargetSdk
+        versionCode deepVersionCode
+        versionName deepVersionName
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility java_version
+        targetCompatibility java_version
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    sourceSets {
+        main {
+            if (isRelease) {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':libbase')
+}

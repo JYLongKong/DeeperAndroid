@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DeeperAndroid</string>
+
+    <string name="app_name_compose">DeeperCompose</string>
+    <string name="app_name_flutter">DeeperFlutter</string>
+    <string name="app_name_jetpack">DeeperJetpack</string>
+    <string name="app_name_opengl">DeeperOpenGL</string>
+    <string name="app_name_ndk">DeeperNDK</string>
+</resources>

@@ -1,43 +1,55 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
 }
 
 android {
-    compileSdk 30
-
+    compileSdk deepCompileSdk
     defaultConfig {
-        applicationId "com.youyes.deeper.android"
-        minSdk 21
-        targetSdk 30
-        versionCode 1
-        versionName "1.0"
+        applicationId deepApplicationId
+        minSdk deepMinSdk
+        targetSdk deepTargetSdk
+        versionCode deepVersionCode
+        versionName deepVersionName
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+        resConfigs 'zh-rCN', 'en-rAU'    // cut down resource size
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        ndk {
+            abiFilters 'x86', 'armeabi-v7a'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    signingConfigs {
+        release {
+            storeFile file("../deeper_android.jks")
+            storePassword deepStorePwd
+            keyAlias deepKeyAlias
+            keyPassword deepKeyPwd
+        }
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false   // only work when minifyEnabled == true
+            signingConfig signingConfigs.release
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+        }
     }
 }
 
 dependencies {
+    implementation project(':libcommon')
+    implementation project(':libbase')
+    implementation project(':libnetwork')
+    implementation project(':librepo')
 
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    if (isRelease) {
+        implementation project(':deepjetpack')
+        implementation project(':deepndk')
+        implementation project(':deepopengl')
+        implementation project(':deepcompose')
+        implementation project(':deepflutter')
+    }
 }

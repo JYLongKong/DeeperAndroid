@@ -1,0 +1,16 @@
+buildscript {
+    ext {
+        isRelease = true
+
+        deepApplicationId = "com.youyes.deeper.android"
+        deepCompileSdk = 30
+        deepMinSdk = 21
+        deepTargetSdk = 30
+        deepVersionCode = 1_00_00
+        deepVersionName = "1.0.0"
+
+        deepStorePwd = 'deepandroid'
+        deepKeyAlias = 'deeperandroid'
+        deepKeyPwd = 'deepandroid'
+    }
+}
