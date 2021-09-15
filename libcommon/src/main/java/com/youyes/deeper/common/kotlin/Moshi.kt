@@ -4,27 +4,29 @@ import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 /**
- * Created by YJY on 19-8-2.
+ * Created by LGJY on 19/8/2.
  * Email：yujye@sina.com
+ *
+ * Learning Moshi
  */
 
-data class BlackjackHand(
+private data class BlackjackHand(
     val hidden_card: Card,
     val visible_cards: List<Card>,
     @Transient  // Prevent a field from being encoding JSON
     private val total: Int = 0
 )
 
-data class Card(
+private data class Card(
     val rank: Char,
     val suit: Suit
 )
 
-enum class Suit {
+private enum class Suit {
     CLUBS, DIAMONDS, HEARTS, SPADES
 }
 
-fun basicUse() {
+private fun basicUse() {
     val json = ""
     val moshi = Moshi.Builder().build()
     val jsonAdapter = moshi.adapter(BlackjackHand::class.java)
@@ -85,7 +87,7 @@ fun basicUse() {
  *  }
  *
  */
-class CardAdapter {
+private class CardAdapter {
     @ToJson
     fun toJson(card: Card): String {
         return card.rank + card.suit.name.substring(0, 1)
@@ -117,11 +119,11 @@ class CardAdapter {
     }
 }
 
-fun registerAdapter() {
+private fun registerAdapter() {
     val moshi = Moshi.Builder().add(CardAdapter()).build()
 }
 
-fun parseJSONArrays() {
+private fun parseJSONArrays() {
     val cardsJsonResponse = ""
     val type = Types.newParameterizedType(List::class.java, Card::class.java)
     val moshi = Moshi.Builder().build()
@@ -138,7 +140,7 @@ fun parseJSONArrays() {
  * "lucky number": 32
  * }
  */
-data class Player(
+private data class Player(
     val username: String,
     @Json(name = "lucky number") val luckyNumber: Int
 )
@@ -163,15 +165,15 @@ data class Player(
  */
 @Retention(AnnotationRetention.RUNTIME)
 @JsonQualifier
-annotation class HexColor
+private annotation class HexColor
 
-data class Rectangle(
+private data class Rectangle(
     val width: Int,
     val height: Int,
     @HexColor val color: Int
 )
 
-class ColorAdapter {
+private class ColorAdapter {
     @ToJson
     fun toJson(@HexColor rgb: Int): String {
         return String.format("#%06x", rgb)
@@ -186,7 +188,7 @@ class ColorAdapter {
 
 // If the class has a no-arguments constructor, Moshi will call that constructor and whatever value it assigns will be used.
 // the total field is initialized to -1
-class BlackjackHand2 {
+private class BlackjackHand2 {
     private val total = -1
 
     @SuppressWarnings("unused") // Moshi uses this!
@@ -200,7 +202,7 @@ class BlackjackHand2 {
 // If the class doesn’t have a no-arguments constructor, Moshi can’t assign the field’s default value, even if it’s specified in the field declaration
 // Instead, the field’s default is always 0 for numbers, false for booleans, and null for references
 // the default value of total is 0!
-class BlackjackHand3 {
+private class BlackjackHand3 {
     private val total = -1
 
     constructor(hidden_card: Card, visible_cards: List<Card>) {}
@@ -210,7 +212,7 @@ class BlackjackHand3 {
 // add the Kotlin adapter after your own custom adapters,
 // Otherwise the KotlinJsonAdapterFactory will take precedence and your custom adapters will not be called.
 // Note that the reflection adapter transitively depends on the kotlin-reflect library which is a 2.5 MiB .jar file.
-fun enableKotlinReflection() {
+private fun enableKotlinReflection() {
     val moshi = Moshi.Builder()
         // ... add your own JsonAdapters and factories ...
         .add(KotlinJsonAdapterFactory())
@@ -220,7 +222,7 @@ fun enableKotlinReflection() {
 // @JsonClass(generateAdapter = true) generates a small and fast adapter for each of your Kotlin classes at compile time
 // The codegen adapter requires that your Kotlin types and their properties be either internal or public (this is Kotlin’s default visibility).
 @JsonClass(generateAdapter = true)
-data class Bean(val bean: String)
+private data class Bean(val bean: String)
 
 // Limitations: Neither reflection or codegen support Kotlin types with FinalizeEscapeGC supertypes or FinalizeEscapeGC types with Kotlin supertypes
 // If you need to convert such classes to JSON you must create a custom type adapter.

@@ -3,6 +3,9 @@ package com.youyes.deeper.common.log
 import android.util.Log
 
 /**
+ * Created by LGJY on 19/8/2.
+ * Email：yujye@sina.com
+ *
  * Log Proxy
  */
 

@@ -22,8 +22,10 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 /**
- * Created by YJY on 19-8-6.
+ * Created by LGJY on 19/8/6.
  * Email：yujye@sina.com
+ *
+ * Learning Kotlin
  */
 
 // Check if a number is out of range
@@ -170,9 +172,9 @@ private fun forWithIndex() {
 }
 
 private fun mainReturnLabel() {
-    run yjy@{
+    run lgjy@{
         listOf(1, 2, 3, 4, 5).forEach {
-            if (it == 3) return@yjy 1   // means "return 1 at label @yjy"
+            if (it == 3) return@lgjy 1   // means "return 1 at label @lgjy"
             println(it)
         }
     }

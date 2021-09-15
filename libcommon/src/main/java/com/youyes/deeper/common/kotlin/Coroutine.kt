@@ -13,8 +13,10 @@ import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 /**
- * Created by YJY on 19-4-30.
+ * Created by LGJY on 19/4/30.
  * Email：yujye@sina.com
+ *
+ * Learning Coroutine
  */
 
 private fun main1() {
