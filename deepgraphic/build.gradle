@@ -17,6 +17,13 @@ android {
         versionName deepVersionName
 
         consumerProguardFiles "consumer-rules.pro"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11  -frtti -fexceptions"
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+            }
+        }
     }
     buildTypes {
         debug {
@@ -25,6 +32,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
         }
     }
     compileOptions {

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragment_opengl"
-        android:name="com.youyes.deeper.opengl.fragment.OpenGLFragment"
+        android:name="com.youyes.deeper.graphic.fragment.GraphicFragment"
         android:label="OpenGLFragment" />
 
 </navigation>
