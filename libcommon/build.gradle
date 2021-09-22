@@ -16,12 +16,18 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
     buildTypes {
+        ext.createConfig = { variant, p1, p2 ->
+            variant.buildConfigField 'int', "VERSION_CODE", "$p1"
+            variant.buildConfigField 'String', "VERSION_NAME", "\"$p2\""
+        }
         debug {
             minifyEnabled false
+            createConfig(debug, deepVersionCode, deepVersionName)
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            createConfig(release, deepVersionCode, deepVersionName)
         }
     }
     compileOptions {
@@ -42,8 +48,11 @@ dependencies {
 
     // Moshi
     implementation(dep_moshi)
-    kapt kapt_moshi
+    kapt(kapt_moshi)
 
     // DataStore
     implementation(dep_datatore)
+
+    // App Startup
+    implementation(dep_startup)
 }
