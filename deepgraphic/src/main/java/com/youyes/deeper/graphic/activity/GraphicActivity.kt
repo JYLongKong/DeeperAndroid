@@ -1,7 +1,8 @@
-package com.youyes.deeper.graphic
+package com.youyes.deeper.graphic.activity
 
 import android.os.Bundle
 import com.youyes.deeper.base.mvvm.BaseActivity
+import com.youyes.deeper.graphic.R
 
 internal class GraphicActivity : BaseActivity() {
 

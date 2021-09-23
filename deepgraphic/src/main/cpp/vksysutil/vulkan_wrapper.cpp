@@ -3,12 +3,12 @@
 
 namespace vk {
     int loadVulkan(void) {
-        // 加载Android下支持Vulkan的动态库文件libvulkan.so
+        //加载Android下支持Vulkan的动态库文件libvulkan.so
         void *libvulkan = dlopen("libvulkan.so", RTLD_NOW | RTLD_LOCAL);
         if (!libvulkan) {
             return 0;
         }
-        // 如果动态库文件加载成功，则通过dlsym函数获取各个Vulkan函数的地址
+      //如果动态库文件加载成功，则通过dlsym函数获取各个Vulkan函数的地址
         vkCreateInstance = reinterpret_cast<PFN_vkCreateInstance>(dlsym(libvulkan,
                                                                         "vkCreateInstance"));
         vkDestroyInstance = reinterpret_cast<PFN_vkDestroyInstance>(dlsym(libvulkan,
@@ -342,7 +342,7 @@ namespace vk {
         return 1;
     }
 
-    // 声明函数地址指针
+//声明函数地址指针
     PFN_vkCreateInstance vkCreateInstance;
     PFN_vkDestroyInstance vkDestroyInstance;
     PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices;

@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.map
  */
 
 /**
- * get dataStore by context anywhere and it will keep it as singleton
+ * get dataStore by context anywhere and it will keep it single
  */
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = BuildConfig.LIBRARY_PACKAGE_NAME)
 

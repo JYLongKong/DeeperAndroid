@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_jetpack"
         android:title="@string/jetpack" />
     <item
-        android:id="@+id/nav_opengl"
+        android:id="@+id/nav_graphic"
         android:enabled="true"
         android:icon="@drawable/ic_opengl"
-        android:title="@string/opengl" />
+        android:title="@string/graphic" />
     <item
         android:id="@+id/nav_ndk"
         android:enabled="true"

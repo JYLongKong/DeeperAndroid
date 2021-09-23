@@ -7,9 +7,10 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdk deepCompileSdk
+//    ndkVersion "17.2.4988734"
     defaultConfig {
         if (!isRelease) {
-            applicationId "${deepApplicationId}.opengl"
+            applicationId "${deepApplicationId}.graphic"
         }
         minSdk deepMinSdk
         targetSdk deepTargetSdk

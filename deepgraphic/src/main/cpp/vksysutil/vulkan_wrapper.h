@@ -6,10 +6,10 @@
 #include <vulkan/vulkan.h>
 
 namespace vk {
-    // 加载Vulkan动态库，初始化各个功能函数指针值的方法
+    //加载Vulkan动态库，初始化各个功能函数指针值的方法
     int loadVulkan(void);
 
-    // vulkan核心功能函数声明
+//vulkan核心功能函数声明
     extern PFN_vkCreateInstance vkCreateInstance;
     extern PFN_vkDestroyInstance vkDestroyInstance;
     extern PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices;
