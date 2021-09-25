@@ -222,7 +222,7 @@ private fun enableKotlinReflection() {
 // @JsonClass(generateAdapter = true) generates a small and fast adapter for each of your Kotlin classes at compile time
 // The codegen adapter requires that your Kotlin types and their properties be either internal or public (this is Kotlin’s default visibility).
 @JsonClass(generateAdapter = true)
-private data class Bean(val bean: String)
+internal data class Bean(val bean: String)
 
 // Limitations: Neither reflection or codegen support Kotlin types with FinalizeEscapeGC supertypes or FinalizeEscapeGC types with Kotlin supertypes
 // If you need to convert such classes to JSON you must create a custom type adapter.

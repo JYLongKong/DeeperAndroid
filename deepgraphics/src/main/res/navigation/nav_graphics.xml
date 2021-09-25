@@ -3,12 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graphics"
-    app:startDestination="@id/fragment_graphics">
+    app:startDestination="@id/graphicsFragment">
 
     <fragment
-        android:id="@+id/fragment_graphics"
+        android:id="@+id/graphicsFragment"
         android:name="com.lgjy.deeper.graphics.fragment.GraphicsFragment"
         android:label="@string/label_computer_graphics"
-        tools:layout="@layout/fragment_graphics" />
+        tools:layout="@layout/fragment_graphics">
+        <action
+            android:id="@+id/action_graphicsFragment_to_vulkanActivity"
+            app:destination="@id/vulkanActivity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/vulkanActivity"
+        android:name="com.lgjy.deeper.graphics.activity.VulkanActivity"
+        android:label="@string/label_vulkan" />
 
 </navigation>

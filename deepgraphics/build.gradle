@@ -4,10 +4,11 @@ if (isRelease) {
     apply plugin: 'com.android.application'
 }
 apply plugin: 'kotlin-android'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdk deepCompileSdk
-//    ndkVersion "17.2.4988734"
+    ndkVersion "21.4.7075529"
     defaultConfig {
         if (!isRelease) {
             applicationId "${deepApplicationId}.graphics"
