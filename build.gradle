@@ -3,7 +3,7 @@ apply from:"configuration.gradle"
 
 buildscript {
     ext {
-        kotlin_version = '1.5.30'
+        kotlin_version = '1.5.31'
         java_version = JavaVersion.VERSION_1_8
         nav_version = '2.3.5'
     }

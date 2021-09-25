@@ -47,7 +47,7 @@ dependencies {
 
     implementation project(':deepjetpack')
     implementation project(':deepndk')
-    implementation project(':deepgraphic')
+    implementation project(':deepgraphics')
     implementation project(':deepcompose')
     implementation project(':deepflutter')
 }

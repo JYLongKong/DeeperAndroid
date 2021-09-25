@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragment_ndk"
-        android:name="com.youyes.deeper.ndk.fragment.NDKFragment"
+        android:name="com.lgjy.deeper.ndk.fragment.NDKFragment"
         android:label="NDKFragment" />
 
 </navigation>

@@ -8,7 +8,7 @@
 
     <include app:graph="@navigation/nav_ndk" />
 
-    <include app:graph="@navigation/nav_graphic" />
+    <include app:graph="@navigation/nav_graphics" />
 
     <include app:graph="@navigation/nav_flutter" />
 

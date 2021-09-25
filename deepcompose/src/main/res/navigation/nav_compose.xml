@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragment_compose"
-        android:name="com.youyes.deeper.compose.fragment.ComposeFragment"
+        android:name="com.lgjy.deeper.compose.fragment.ComposeFragment"
         android:label="ComposeFragment" />
 
 </navigation>

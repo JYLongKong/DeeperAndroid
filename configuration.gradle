@@ -2,7 +2,7 @@ buildscript {
     ext {
         isRelease = true
 
-        deepApplicationId = "com.youyes.deeper.android"
+        deepApplicationId = "com.lgjy.deeper.android"
         deepCompileSdk = 30
         deepMinSdk = 21
         deepTargetSdk = 30

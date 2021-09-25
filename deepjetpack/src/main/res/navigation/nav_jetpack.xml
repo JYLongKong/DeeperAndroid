@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragment_jetpack"
-        android:name="com.youyes.deeper.jetpack.fragment.JetpackFragment"
+        android:name="com.lgjy.deeper.jetpack.fragment.JetpackFragment"
         android:label="JetpackFragment" />
 
 </navigation>

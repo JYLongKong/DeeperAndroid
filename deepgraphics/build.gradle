@@ -1,0 +1,63 @@
+if (isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk deepCompileSdk
+//    ndkVersion "17.2.4988734"
+    defaultConfig {
+        if (!isRelease) {
+            applicationId "${deepApplicationId}.graphics"
+        }
+        minSdk deepMinSdk
+        targetSdk deepTargetSdk
+        versionCode deepVersionCode
+        versionName deepVersionName
+
+        consumerProguardFiles "consumer-rules.pro"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11  -frtti -fexceptions"
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+    compileOptions {
+        sourceCompatibility java_version
+        targetCompatibility java_version
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    sourceSets {
+        main {
+            if (isRelease) {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':libbase')
+}

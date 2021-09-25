@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fragment_flutter"
-        android:name="com.youyes.deeper.flutter.fragment.FlutterFragment"
+        android:name="com.lgjy.deeper.flutter.fragment.FlutterFragment"
         android:label="FlutterFragment" />
 
 </navigation>

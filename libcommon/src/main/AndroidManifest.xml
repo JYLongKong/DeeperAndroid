@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.youyes.deeper.common">
+    package="com.lgjy.deeper.common">
 
     <application>
         <provider
@@ -10,7 +10,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="com.youyes.deeper.common.init.CommonInitializer"
+                android:name="com.lgjy.deeper.common.init.CommonInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>
