@@ -7,6 +7,7 @@
     <string name="app_name_jetpack">DeeperJetpack</string>
     <string name="app_name_graphics">DeeperGraphics</string>
     <string name="app_name_ndk">DeeperNDK</string>
+    <string name="app_name_login">DeeperLogin</string>
 
     <string name="jetpack">Jetpack</string>
     <string name="graphics">Graphics</string>

@@ -50,4 +50,5 @@ dependencies {
     implementation project(':deepgraphics')
     implementation project(':deepcompose')
     implementation project(':deepflutter')
+    implementation project(':deeplogin')
 }
