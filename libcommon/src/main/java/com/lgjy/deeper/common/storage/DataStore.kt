@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
  * Created by LGJY on 2021/9/15.
  * Email：yujye@sina.com
  *
- * DataStore from Jetpack
+ * tip1: DataStore preference wrapper
  */
 
 /**
