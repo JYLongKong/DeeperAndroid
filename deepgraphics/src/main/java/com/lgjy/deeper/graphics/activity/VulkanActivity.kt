@@ -1,8 +1,6 @@
 package com.lgjy.deeper.graphics.activity
 
-import android.os.Bundle
-import com.lgjy.deeper.base.mvvm.BaseActivity
-import com.lgjy.deeper.graphics.R
+import android.app.NativeActivity
 
 /**
  * Created by LGJY on 2021/9/23.
@@ -11,14 +9,9 @@ import com.lgjy.deeper.graphics.R
  * Vulkan demo
  */
 
-class VulkanActivity : BaseActivity() {
+class VulkanActivity : NativeActivity() {
 
     init {
         System.loadLibrary("bn-vulkan-lib")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_graphics)
     }
 }

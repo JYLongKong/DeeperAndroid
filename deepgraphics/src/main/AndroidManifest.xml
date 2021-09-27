@@ -3,6 +3,10 @@
     package="com.lgjy.deeper.graphics">
 
     <application>
-        <activity android:name=".activity.VulkanActivity" />
+        <activity android:name=".activity.VulkanActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="bn-vulkan-lib" />
+        </activity>
     </application>
 </manifest>

@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.GraphicsActivity">
+        <activity
+            android:name=".activity.GraphicsActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,6 +19,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.VulkanActivity" />
+        <activity android:name=".activity.VulkanActivity">
+            <!--Tip7: NativeActivity works-->
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="bn-vulkan-lib" />
+        </activity>
     </application>
 </manifest>
