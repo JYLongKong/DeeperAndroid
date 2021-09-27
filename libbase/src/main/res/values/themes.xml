@@ -6,6 +6,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/font_default</item>
+        <item name="android:background">@android:color/white</item>
         <item name="colorAccent">@color/theme_green</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
