@@ -14,7 +14,7 @@ import com.lgjy.deeper.base.mvvm.BaseFragment
  * Home Page with Bottom Navigation
  */
 
-internal class NavFragment: BaseFragment() {
+internal class NavFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_nav, container, false)
@@ -25,7 +25,8 @@ internal class NavFragment: BaseFragment() {
         (childFragmentManager.findFragmentById(R.id.fragment_container_nav) as? NavHostFragment)?.navController?.let {
             view.findViewById<BottomNavigationView>(R.id.bottom_nav).apply {
                 itemIconTintList = null     // get rid of BottomNavigationView's control for icon style
-                setupWithNavController(it)
+                setupWithNavController(it)  // connect navController and BottomNavigationView
+                setOnNavigationItemReselectedListener { }   // avoid recreate when reselected
             }
         }
     }

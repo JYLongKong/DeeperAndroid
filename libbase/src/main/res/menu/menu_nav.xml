@@ -8,12 +8,12 @@
     <item
         android:id="@+id/nav_graphics"
         android:enabled="true"
-        android:icon="@drawable/ic_opengl"
+        android:icon="@drawable/ic_vulkan"
         android:title="@string/graphics" />
     <item
         android:id="@+id/nav_ndk"
         android:enabled="true"
-        android:icon="@drawable/ic_ndk"
+        android:icon="@drawable/ic_ffmpeg"
         android:title="@string/ndk" />
     <item
         android:id="@+id/nav_compose"

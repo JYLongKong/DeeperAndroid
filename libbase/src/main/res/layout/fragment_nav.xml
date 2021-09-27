@@ -18,12 +18,14 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="56dp"
         android:background="@drawable/bg_line_t"
         app:itemBackground="@null"
-        app:itemIconSize="38dp"
+        app:itemIconSize="29dp"
+        app:itemRippleColor="@android:color/transparent"
         app:itemTextAppearanceActive="@style/NavTextActive"
         app:itemTextAppearanceInactive="@style/NavTextInactive"
+        app:itemTextColor="@color/selector_text_color_nav"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_nav" />
 </LinearLayout>

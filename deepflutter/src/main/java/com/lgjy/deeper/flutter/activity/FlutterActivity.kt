@@ -1,7 +1,8 @@
-package com.lgjy.deeper.flutter
+package com.lgjy.deeper.flutter.activity
 
 import android.os.Bundle
 import com.lgjy.deeper.base.mvvm.BaseActivity
+import com.lgjy.deeper.flutter.R
 
 internal class FlutterActivity : BaseActivity() {
 

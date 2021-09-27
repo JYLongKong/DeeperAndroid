@@ -10,7 +10,7 @@
         android:id="@+id/iv_vulkan"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_opengl"
+        android:src="@drawable/ic_vulkan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
