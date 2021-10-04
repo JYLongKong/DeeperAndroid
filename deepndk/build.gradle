@@ -7,6 +7,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdk deepCompileSdk
+    ndkVersion deepNDKVersion
     defaultConfig {
         if (!isRelease) {
             applicationId "${deepApplicationId}.ndk"
@@ -17,6 +18,16 @@ android {
         versionName deepVersionName
 
         consumerProguardFiles "consumer-rules.pro"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                abiFilters 'armeabi-v7a'    // cmake compile these abi
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a'    // apk contains these abi
+        }
     }
     buildTypes {
         debug {
@@ -25,6 +36,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
     compileOptions {
@@ -46,5 +62,6 @@ android {
 }
 
 dependencies {
+    implementation project(':libcommon')
     implementation project(':libbase')
 }
