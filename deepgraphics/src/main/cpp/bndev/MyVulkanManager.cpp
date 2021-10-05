@@ -1,18 +1,19 @@
 #include <vulkan/vulkan.h>
-#include "MatrixState3D.h"
-#include "MyVulkanManager.h"
-#include "../util/FileUtil.h"
-#include "../util/HelpFunction.h"
 #include <thread>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 #include <chrono>
-#include "ThreadTask.h"
-#include "../util/FPSUtil.h"
-#include "TriangleData.h"
-#include <sys/time.h>
+#include <ctime>
 
-//静态成员实现
+#include "../util/FileUtil.h"
+#include "../util/HelpFunction.h"
+#include "../util/FPSUtil.h"
+#include "MyVulkanManager.h"
+#include "ThreadTask.h"
+#include "TriangleData.h"
+#include "MatrixState3D.h"
+
+// 静态成员实现
 android_app *MyVulkanManager::Android_application;
 bool MyVulkanManager::loopDrawFlag = true;
 std::vector<const char *>  MyVulkanManager::instanceExtensionNames;
@@ -61,42 +62,43 @@ ShaderQueueSuit_Common *MyVulkanManager::sqsCL;
 DrawableObjectCommonLight *MyVulkanManager::triForDraw;
 float MyVulkanManager::xAngle = 0;
 
-//创建Vulkan实例的方法
+/**
+ * 创建Vulkan实例的方法
+ */
 void MyVulkanManager::init_vulkan_instance() {
-  AAssetManager *aam = MyVulkanManager::Android_application->activity->assetManager;//获取资源管理器指针
-  FileUtil::setAAssetManager(aam);//将资源管理器传给文件IO工具类
-  if (!vk::loadVulkan()) {//加载Vulkan动态库
-    LOGI("加载Vulkan图形应用程序接口失败!");
+  AAssetManager *aam = MyVulkanManager::Android_application->activity->assetManager; // 获取资源管理器指针
+  FileUtil::setAAssetManager(aam);                                          // 将资源管理器传给文件I/O工具类，以便在后面加载着色器脚本字符串
+  if (!vk::loadVulkan()) {                                                  // 加载Vulkan动态库
+    LOGE("load Vulkan application interfaces failed!");
     return;
   }
-  instanceExtensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);//初始化所需实例扩展名称列表
-  instanceExtensionNames.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
 
-  VkApplicationInfo app_info = {};//构建应用信息结构体实例
-  app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;//结构体的类型
-  app_info.pNext = NULL;//自定义数据的指针
-  app_info.pApplicationName = "HelloVulkan";//应用的名称
-  app_info.applicationVersion = 1;//应用的版本号
-  app_info.pEngineName = "HelloVulkan";//应用的引擎名称
-  app_info.engineVersion = 1;//应用的引擎版本号
-  app_info.apiVersion = VK_API_VERSION_1_0;//使用的Vulkan图形应用程序API版本
+  VkApplicationInfo app_info = {};                                          // 构建应用信息结构体实例
+  app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;                      // 结构体的类型
+  app_info.pNext = nullptr;                                                 // 自定义数据的指针
+  app_info.pApplicationName = "HelloDeepVulkan";                            // 应用的名称
+  app_info.applicationVersion = 1;                                          // 应用的版本号
+  app_info.pEngineName = "DeepVulkanEngine";                                // 应用的引擎名称
+  app_info.engineVersion = 1;                                               // 应用引擎的版本号
+  app_info.apiVersion = VK_API_VERSION_1_0;                                 // 使用的Vulkan图形应用程序API版本
+  VkInstanceCreateInfo inst_info = {};                                      // 构建实例创建信息结构体实例
+  inst_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;                 // 结构体的类型
+  inst_info.pNext = nullptr;                                                // 自定义数据的指针
+  inst_info.flags = 0;                                                      // 供将来使用的标志
+  inst_info.pApplicationInfo = &app_info;                                   // 绑定应用信息结构体
+  instanceExtensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);          // 该扩展名称列表用于支持KHR表面
+  instanceExtensionNames.push_back(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);  // 该扩展名称列表用于支持Android下的KHR表面
+  inst_info.enabledExtensionCount = instanceExtensionNames.size();          // 扩展的数量
+  inst_info.ppEnabledExtensionNames = instanceExtensionNames.data();        // 扩展名称列表数据
+  inst_info.enabledLayerCount = 0;                                          // 启动的层数量
+  inst_info.ppEnabledLayerNames = nullptr;                                  // 启动的层名称列表
 
-  VkInstanceCreateInfo inst_info = {};//构建实例创建信息结构体实例
-  inst_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;//结构体的类型
-  inst_info.pNext = NULL;//自定义数据的指针
-  inst_info.flags = 0;//供将来使用的标志
-  inst_info.pApplicationInfo = &app_info;//绑定应用信息结构体
-  inst_info.enabledExtensionCount = instanceExtensionNames.size();//扩展的数量
-  inst_info.ppEnabledExtensionNames = instanceExtensionNames.data();//扩展名称列表数据
-  inst_info.enabledLayerCount = 0;//启动的层数量
-  inst_info.ppEnabledLayerNames = NULL;//启动的层名称列表
-  VkResult result;//存储运行结果的辅助变量
-  //创建Vulkan实例
-  result = vk::vkCreateInstance(&inst_info, NULL, &instance);
-  if (result == VK_SUCCESS) {//检查实例是否创建成功
-    LOGE("Vulkan实例创建成功!");
+  VkResult result;                                                          // 存储运行结果的辅助变量
+  result = vk::vkCreateInstance(&inst_info, nullptr, &instance);            // 创建Vulkan实例
+  if (result == VK_SUCCESS) {                                               // 检查实例是否创建成功
+    LOGI("Vulkan instance create successfully!");
   } else {
-    LOGE("Vulkan实例创建失败!");
+    LOGE("Vulkan instance create failed!");
   }
 }
 
@@ -106,60 +108,65 @@ void MyVulkanManager::destroy_vulkan_instance() {
   LOGE("Vulkan实例销毁完毕!");
 }
 
-//获取物理设备列表
+/**
+ * 获取物理设备列表
+ */
 void MyVulkanManager::enumerate_vulkan_phy_devices() {
-  gpuCount = 0;//存储物理设备数量的变量
-  VkResult result = vk::vkEnumeratePhysicalDevices(instance, &gpuCount, NULL);//获取物理设备数量
+  gpuCount = 0;                                                             // 存储物理设备数量的变量
+  VkResult result = vk::vkEnumeratePhysicalDevices(instance, &gpuCount, nullptr); // 获取物理设备数量
   assert(result == VK_SUCCESS);
-  LOGE("[Vulkan硬件设备数量为%d个]", gpuCount);
-  gpus.resize(gpuCount);//设置物理设备列表尺寸
-  result = vk::vkEnumeratePhysicalDevices(instance, &gpuCount, gpus.data());//填充物理设备列表
+  LOGI("Vulkan gpuCount = %d", gpuCount);
+  gpus.resize(gpuCount);                                                    // 设置物理设备列表尺寸
+  result = vk::vkEnumeratePhysicalDevices(instance, &gpuCount, gpus.data());// 填充物理设备列表
   assert(result == VK_SUCCESS);
-  vk::vkGetPhysicalDeviceMemoryProperties(gpus[0], &memoryroperties);//获取第一物理设备的内存属性
+  vk::vkGetPhysicalDeviceMemoryProperties(gpus[0], &memoryroperties);       // 获取第一物理设备的内存属性
 }
 
-//创建逻辑设备的方法
+/**
+ * 创建逻辑设备
+ */
 void MyVulkanManager::create_vulkan_devices() {
-  vk::vkGetPhysicalDeviceQueueFamilyProperties(gpus[0], &queueFamilyCount, NULL);//获取物理设备0中队列家族的数量
-  LOGE("[Vulkan硬件设备0支持的队列家族数量为%d]", queueFamilyCount);
-  queueFamilyprops.resize(queueFamilyCount);//随队列家族数量改变vector长度
-  vk::vkGetPhysicalDeviceQueueFamilyProperties(gpus[0], &queueFamilyCount,
-                                               queueFamilyprops.data());//填充物理设备0队列家族属性列表
-  LOGE("[成功获取Vulkan硬件设备0支持的队列家族属性列表]");
+  vk::vkGetPhysicalDeviceQueueFamilyProperties(gpus[0], &queueFamilyCount, nullptr); // 获取物理设备0中队列家族的数量
+  LOGI("gpus[0].queueFamilyCount = %d", queueFamilyCount);
+  queueFamilyprops.resize(queueFamilyCount);                                // 随队列家族数量改变vector长度
+  vk::vkGetPhysicalDeviceQueueFamilyProperties(gpus[0], &queueFamilyCount, queueFamilyprops.data()); // 填充物理设备0队列家族属性列表
+  LOGI("successfully get queue of family properties from gpu[0]");
 
-  VkDeviceQueueCreateInfo queueInfo = {};//构建设备队列创建信息结构体实例
-  bool found = false;//辅助标志
-  for (unsigned int i = 0; i < queueFamilyCount; i++) {//遍历所有队列家族
-    if (queueFamilyprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {//若当前队列家族支持图形工作
-      queueInfo.queueFamilyIndex = i;//绑定此队列家族索引
-      queueGraphicsFamilyIndex = i;//记录支持图形工作的队列家族索引
-      LOGE("[支持GRAPHICS工作的一个队列家族的索引为%d]", i);
-      LOGE("[此家族中的实际队列数量是%d]", queueFamilyprops[i].queueCount);
+  VkDeviceQueueCreateInfo queueInfo = {};                                   // 构建设备队列创建信息结构体实例
+  bool found = false;
+  // 遍历所有队列家族属性列表，找到其中支持图形工作的一个队列家族并记录其索引
+  for (unsigned int i = 0; i < queueFamilyCount; ++i) {
+    if (queueFamilyprops[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {           // 若当前队列家族支持图形工作
+      queueInfo.queueFamilyIndex = i;                                       // 绑定此队列家族索引
+      queueGraphicsFamilyIndex = i;                                         // 记录支持图形工作的队列家族索引
+      LOGI("the queue family index of supporting GRAPHICS work is %d", i);
+      LOGI("the actual queue count of this family is %d", queueFamilyprops[i].queueCount);
       found = true;
       break;
     }
   }
 
-  float queue_priorities[1] = {0.0};//创建队列优先级数组
-  queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;//给出结构体类型
-  queueInfo.pNext = NULL;//自定义数据的指针
-  queueInfo.queueCount = 1;//指定队列数量
-  queueInfo.pQueuePriorities = queue_priorities;//给出每个队列的优先级
-  queueInfo.queueFamilyIndex = queueGraphicsFamilyIndex;//绑定队列家族索引
-  deviceExtensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);//设置所需扩展
+  float queue_priorities[1] = {0.0};                                        // 创建队列优先级数组
+  queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;             // 给出结构体类型
+  queueInfo.pNext = nullptr;                                                // 自定义数据的指针
+  queueInfo.queueCount = 1;                                                 // 指定队列数量
+  queueInfo.pQueuePriorities = queue_priorities;                            // 给出每个队列的优先级
+  queueInfo.queueFamilyIndex = queueGraphicsFamilyIndex;                    // 绑定队列家族索引
 
-  VkDeviceCreateInfo deviceInfo = {};//构建逻辑设备创建信息结构体实例
-  deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;//给出结构体类型
-  deviceInfo.pNext = NULL;//自定义数据的指针
-  deviceInfo.queueCreateInfoCount = 1;//指定设备队列创建信息结构体数量
-  deviceInfo.pQueueCreateInfos = &queueInfo;//给定设备队列创建信息结构体列表
-  deviceInfo.enabledExtensionCount = deviceExtensionNames.size();//所需扩展数量
-  deviceInfo.ppEnabledExtensionNames = deviceExtensionNames.data();//所需扩展列表
-  deviceInfo.enabledLayerCount = 0;//需启动Layer的数量
-  deviceInfo.ppEnabledLayerNames = NULL;//需启动Layer的名称列表
-  deviceInfo.pEnabledFeatures = NULL;//启用的设备特性
-  VkResult result = vk::vkCreateDevice(gpus[0], &deviceInfo, NULL, &device);//创建逻辑设备
-  assert(result == VK_SUCCESS);//检查逻辑设备是否创建成功
+  VkDeviceCreateInfo deviceInfo = {};                                       // 构建逻辑设备创建信息结构体实例
+  deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;                  // 给出结构体类型
+  deviceInfo.pNext = nullptr;                                               // 自定义数据的指针
+  deviceInfo.queueCreateInfoCount = 1;                                      // 指定设备队列创建信息结构体数量
+  deviceInfo.pQueueCreateInfos = &queueInfo;                                // 给定设备队列创建信息结构体列表
+  deviceExtensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);          // 设置逻辑设备所需的扩展名称列表，使创建的设备支持交换链的使用
+  deviceInfo.enabledExtensionCount = deviceExtensionNames.size();           // 所需扩展数量
+  deviceInfo.ppEnabledExtensionNames = deviceExtensionNames.data();         // 所需扩展列表
+  deviceInfo.enabledLayerCount = 0;                                         // 需启动Layer的数量
+  deviceInfo.ppEnabledLayerNames = nullptr;                                 // 需启动Layer的名称列表
+  deviceInfo.pEnabledFeatures = nullptr;                                    // 启动的设备特性
+
+  VkResult result = vk::vkCreateDevice(gpus[0], &deviceInfo, nullptr, &device); // 创建逻辑设备
+  assert(result == VK_SUCCESS);                                             // 检查逻辑设备是否创建成功
 }
 
 //销毁逻辑设备的方法
