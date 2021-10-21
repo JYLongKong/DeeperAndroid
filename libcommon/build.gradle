@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     // Kotlin Coroutine
     api(dep_ktx)
     api(dep_kotlin)

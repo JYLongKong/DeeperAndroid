@@ -6,11 +6,13 @@ buildscript {
         kotlin_version = '1.5.31'
         java_version = JavaVersion.VERSION_1_8
         nav_version = '2.3.5'
+        hilt_version = '2.36'
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
     repositories {
         google()

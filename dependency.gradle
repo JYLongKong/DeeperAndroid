@@ -16,7 +16,7 @@ buildscript {
         dep_constraintlayout = 'androidx.constraintlayout:constraintlayout:2.1.0'
 
         // Lifecycle
-        lifecycle_version = "2.4.0-alpha03"
+        lifecycle_version = '2.4.0-alpha03'
         dep_lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
         dep_lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
         dep_lifecycle_livedata = "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
@@ -26,6 +26,13 @@ buildscript {
         // Navigation
         dep_nav_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
         dep_nav_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
+
+        // Hilt
+        dep_hilt = "com.google.dagger:hilt-android:$hilt_version"
+        kapt_hilt = "com.google.dagger:hilt-android-compiler:$hilt_version"
+        hilt_viewmodel_version = '1.0.0-alpha03'
+        dep_hilt_viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+        kapt_hilt_viewmodel = "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
 
         // Retrofit
         retrofit_version = '2.9.0'

@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -44,4 +45,10 @@ dependencies {
 
     api(dep_nav_ui)
     api(dep_nav_fragment)
+
+    // Hilt
+    implementation(dep_hilt)
+    implementation(dep_hilt_viewmodel)
+    kapt(kapt_hilt)
+    kapt(kapt_hilt_viewmodel)
 }
