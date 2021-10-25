@@ -30,9 +30,6 @@ buildscript {
         // Hilt
         dep_hilt = "com.google.dagger:hilt-android:$hilt_version"
         kapt_hilt = "com.google.dagger:hilt-android-compiler:$hilt_version"
-        hilt_viewmodel_version = '1.0.0-alpha03'
-        dep_hilt_viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
-        kapt_hilt_viewmodel = "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
 
         // Retrofit
         retrofit_version = '2.9.0'

@@ -1,19 +1,15 @@
-//dependencyResolutionManagement {
-//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-//    repositories {
-//        google()
-//        mavenCentral()
-//    }
-//}
 rootProject.name = "DeeperAndroid"
-include ':app'
-include ':libbase'
+
 include ':libcommon'
+include ':libbase'
+include ':libnetwork'
+include ':librepo'
+
 include ':deepndk'
 include ':deepflutter'
 include ':deepgraphics'
 include ':deepjetpack'
-include ':libnetwork'
-include ':librepo'
 include ':deepcompose'
 include ':deeplogin'
+
+include ':app'

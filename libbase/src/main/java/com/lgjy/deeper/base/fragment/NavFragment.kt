@@ -24,7 +24,7 @@ internal class NavFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         (childFragmentManager.findFragmentById(R.id.fragment_container_nav) as? NavHostFragment)?.navController?.let {
             view.findViewById<BottomNavigationView>(R.id.bottom_nav).apply {
-                itemIconTintList = null     // get rid of BottomNavigationView's control for icon style
+                itemIconTintList = null     // get out of BottomNavigationView's control for icon style
                 setupWithNavController(it)  // connect navController and BottomNavigationView
                 setOnNavigationItemReselectedListener { }   // avoid recreate when reselected
             }

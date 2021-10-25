@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.lgjy.deeper.common.BuildConfig
-import com.lgjy.deeper.common.app.DeepApplication
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.map
  * Created by LGJY on 2021/9/15.
  * Email：yujye@sina.com
  *
- * Tip1: DataStore preference wrapper
+ * Tip1: DataStore wrapper for preference
  */
 
 /**
@@ -22,14 +21,14 @@ import kotlinx.coroutines.flow.map
  */
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = BuildConfig.LIBRARY_PACKAGE_NAME)
 
-object DataStore {
+class DataStore(private val context: Context) {
 
     /**
      * A data dictionary user for getting data synchronously
      * Example:
      * val exampleData = runBlocking { context.dataStore.data.first() }
      */
-    suspend fun dict(): Preferences = DeepApplication.instance.dataStore.data.first()
+    suspend fun dict(): Preferences = context.dataStore.data.first()
 
     fun getInt(key: String, defValue: Int = 0): Flow<Int> = get(intPreferencesKey(key), defValue)
 
@@ -61,14 +60,10 @@ object DataStore {
     suspend fun setStringSet(key: String, value: Set<String>): Unit = set(stringSetPreferencesKey(key), value)
 
     private fun <T> get(preferencesKey: Preferences.Key<T>, defValue: T): Flow<T> {
-        return DeepApplication.instance.dataStore.data.map { preferences ->
-            preferences[preferencesKey] ?: defValue
-        }
+        return context.dataStore.data.map { preferences -> preferences[preferencesKey] ?: defValue }
     }
 
     private suspend fun <T> set(preferencesKey: Preferences.Key<T>, value: T) {
-        DeepApplication.instance.dataStore.edit { mutablePreferences ->
-            mutablePreferences[preferencesKey] = value
-        }
+        context.dataStore.edit { mutablePreferences -> mutablePreferences[preferencesKey] = value }
     }
 }

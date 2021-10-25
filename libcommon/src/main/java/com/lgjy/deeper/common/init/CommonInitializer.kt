@@ -1,9 +1,7 @@
 package com.lgjy.deeper.common.init
 
-import android.app.Application
 import android.content.Context
 import androidx.startup.Initializer
-import com.lgjy.deeper.common.app.DeepApplication
 
 /**
  * Created by LGJY on 2021/9/22.
@@ -15,15 +13,13 @@ import com.lgjy.deeper.common.app.DeepApplication
  * 再手动调用AppInitializer.getInstance(this).initializeComponent(XXXInitializer::class.java)
  */
 
-internal class CommonInitializer : Initializer<DeepApplication> {
+internal class CommonInitializer : Initializer<Unit> {
 
     /**
      * contains all of the necessary operations to initialize the component and returns an instance of T
      * call ordering: Application.attachBaseContext()->ContentProvider.onCreate()->Application.onCreate()
      */
-    override fun create(context: Context): DeepApplication {
-        DeepApplication.instance = context.applicationContext as Application
-        return DeepApplication
+    override fun create(context: Context): Unit {
     }
 
     /**

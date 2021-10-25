@@ -15,7 +15,7 @@
             app:destination="@id/vulkanActivity" />
     </fragment>
 
-    <!--Tip2: Open Activity by Navigation-->
+    <!--Tip2: Navigate to Activity-->
     <activity
         android:id="@+id/vulkanActivity"
         android:name="com.lgjy.deeper.graphics.activity.VulkanActivity"
