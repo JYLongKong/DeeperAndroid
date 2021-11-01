@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import com.lgjy.deeper.base.mvvm.BaseFragment
-import com.lgjy.deeper.common.log.LogP
+import com.lgjy.deeper.common.util.LogP
 import com.lgjy.deeper.ndk.R
 import com.lgjy.deeper.ndk.player.DeepPlayer
 import kotlinx.coroutines.CoroutineScope

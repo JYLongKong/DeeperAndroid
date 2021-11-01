@@ -1,8 +1,8 @@
-package com.lgjy.deeper.common.manager
+package com.lgjy.deeper.common.util
 
-import android.content.Context
+import android.app.Application
 import android.widget.Toast
-import com.lgjy.deeper.common.log.LogP
+import javax.inject.Inject
 
 /**
  * Created by LGJY on 2021/9/22.
@@ -11,15 +11,15 @@ import com.lgjy.deeper.common.log.LogP
  * Show toast
  */
 
-class ToastManager(private val context: Context) {
+object ShowToast {
 
     fun show(msg: String, tag: String? = null) {
         LogP.i(tag ?: "===Toast", msg)
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        Toast.makeText(application, msg, Toast.LENGTH_SHORT).show()
     }
 
     fun showLong(msg: String, tag: String? = null) {
         LogP.i(tag ?: "===ToastLong", msg)
-        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+        Toast.makeText(application, msg, Toast.LENGTH_LONG).show()
     }
 }

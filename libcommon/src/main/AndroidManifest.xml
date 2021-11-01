@@ -10,7 +10,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="com.lgjy.deeper.common.init.CommonInitializer"
+                android:name="com.lgjy.deeper.common.init.AppInfoInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>

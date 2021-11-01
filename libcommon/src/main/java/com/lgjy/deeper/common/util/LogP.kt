@@ -1,4 +1,4 @@
-package com.lgjy.deeper.common.log
+package com.lgjy.deeper.common.util
 
 import android.util.Log
 

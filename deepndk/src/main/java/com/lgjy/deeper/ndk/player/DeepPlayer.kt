@@ -3,7 +3,7 @@ package com.lgjy.deeper.ndk.player
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.lgjy.deeper.common.log.LogP
+import com.lgjy.deeper.common.util.LogP
 
 /**
  * Created by LGJY on 2021/10/4.

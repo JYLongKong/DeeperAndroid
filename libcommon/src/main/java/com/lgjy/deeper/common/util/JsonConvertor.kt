@@ -1,4 +1,4 @@
-package com.lgjy.deeper.common.json
+package com.lgjy.deeper.common.util
 
 import com.squareup.moshi.Moshi
 

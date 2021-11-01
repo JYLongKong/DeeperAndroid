@@ -6,50 +6,66 @@
 #include "MyVulkanManager.h"
 #include "ShaderCompileUtil.h"
 
-//创建一致变量缓冲
+ShaderQueueSuit_Common::ShaderQueueSuit_Common(VkDevice *deviceIn,
+                                               VkRenderPass &renderPass,
+                                               VkPhysicalDeviceMemoryProperties &memoryroperties) {
+  this->devicePointer = deviceIn;
+  create_uniform_buffer(*devicePointer, memoryroperties);           // 创建一致变量缓冲
+  create_pipeline_layout(*devicePointer);                              // 创建管线布局
+  init_descriptor_set(*devicePointer);                                 // 初始化描述集
+  create_shader(*devicePointer);                                       // 创建着色器
+  initVertexAttributeInfo();                                              // 初始化顶点属性信息
+  create_pipe_line(*devicePointer, renderPass);                     // 创建管线
+}
+
+/**
+ * 创建一致变量缓冲
+ */
 void ShaderQueueSuit_Common::create_uniform_buffer(VkDevice &device,
                                                    VkPhysicalDeviceMemoryProperties &memoryroperties) {
-  bufferByteCount = sizeof(float) * 16;//一致变量缓冲的总字节数
+  // 计算一致变量缓冲的总字节数，与后面着色器中对应的一致变量块所占的总字节数是一致的
+  // 当着色器的这部分发生变化时，这里也需要相应修改(本案例用于存储总变换矩阵4x4)
+  bufferByteCount = sizeof(float) * 16;
 
-  VkBufferCreateInfo buf_info = {};//构建一致变量缓冲创建信息结构体实例
-  buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;    //结构体的类型
-  buf_info.pNext = NULL;//自定义数据的指针
-  buf_info.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;//缓冲的用途
-  buf_info.size = bufferByteCount;//缓冲总字节数
-  buf_info.queueFamilyIndexCount = 0;    //队列家族数量
-  buf_info.pQueueFamilyIndices = NULL;//队列家族索引列表
-  buf_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;//共享模式
-  buf_info.flags = 0;//标志
+  VkBufferCreateInfo buf_info = {};                                       // 构建一致变量缓冲创建信息结构体实例
+  buf_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;                  // 结构体的类型
+  buf_info.pNext = nullptr;                                               // 自定义数据的指针
+  buf_info.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;                    // 缓冲的用途
+  buf_info.size = bufferByteCount;                                        // 缓冲总字节数
+  buf_info.queueFamilyIndexCount = 0;                                     // 队列家族数量
+  buf_info.pQueueFamilyIndices = nullptr;                                 // 队列家族索引列表
+  buf_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;                       // 共享模式
+  buf_info.flags = 0;                                                     // 标志
+  VkResult result = vk::vkCreateBuffer(device, &buf_info, nullptr, &uniformBuf); // 创建一致变量缓冲
+  assert(result == VK_SUCCESS);                                           // 检查创建是否成功
 
-  VkResult result = vk::vkCreateBuffer(device, &buf_info, NULL, &uniformBuf);//创建一致变量缓冲
-  assert(result == VK_SUCCESS);//检查创建是否成功
+  VkMemoryRequirements mem_reqs;                                          // 内存需求变量
+  vk::vkGetBufferMemoryRequirements(device, uniformBuf, &mem_reqs);       // 获取此缓冲的内存需求
 
-  VkMemoryRequirements mem_reqs;//内存需求变量
-  vk::vkGetBufferMemoryRequirements(device, uniformBuf, &mem_reqs);//获取此缓冲的内存需求
+  VkMemoryAllocateInfo alloc_info = {};                                   // 构建内存分配信息结构体实例
+  alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;              // 结构体类型
+  alloc_info.pNext = nullptr;                                             // 自定义数据的指针
+  alloc_info.memoryTypeIndex = 0;                                         // 内存类型索引
+  alloc_info.allocationSize = mem_reqs.size;                              // 缓冲内存分配字节数
+  VkFlags requirements_mask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |       // 需要的内存类型掩码
+      VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;                               // 该组合表示分配的设备内存可以被CPU访问，同时保证CPU与GPU访问的一致性
+  bool flag = memoryTypeFromProperties(                                   // 获取所需内存类型索引
+      memoryroperties, mem_reqs.memoryTypeBits, requirements_mask, &alloc_info.memoryTypeIndex);
+  if (flag) {
+    LOGI("confirm memory type of uniformBuf succeed, memoryTypeIndex = %d", alloc_info.memoryTypeIndex);
+  } else {
+    LOGE("confirm memory type of uniformBuf failed!");
+  }
+  result = vk::vkAllocateMemory(device, &alloc_info, nullptr, &memUniformBuf); // 分配内存
+  assert(result == VK_SUCCESS);                                           // 检查内存分配是否成功
 
-  VkMemoryAllocateInfo alloc_info = {};//构建内存分配信息结构体实例
-  alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;//结构体类型
-  alloc_info.pNext = NULL;//自定义数据的指针
-  alloc_info.memoryTypeIndex = 0;//内存类型索引
-  alloc_info.allocationSize = mem_reqs.size;//缓冲内存分配字节数
+  result = vk::vkBindBufferMemory(device, uniformBuf, memUniformBuf, 0);  // 将内存和一致变量缓冲绑定
+  assert(result == VK_SUCCESS);                                           // 检查绑定操作是否成功
 
-  VkFlags requirements_mask =
-      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;//需要的内存类型掩码
-  bool flag = memoryTypeFromProperties(memoryroperties, mem_reqs.memoryTypeBits,
-                                       requirements_mask,
-                                       &alloc_info.memoryTypeIndex);    //获取所需内存类型索引
-  if (flag) { LOGE("确定内存类型成功 类型索引为%d", alloc_info.memoryTypeIndex); }
-  else { LOGE("确定内存类型失败!"); }
-
-  result = vk::vkAllocateMemory(device, &alloc_info, NULL, &memUniformBuf);//分配内存
-  assert(result == VK_SUCCESS);//检查内存分配是否成功
-  result = vk::vkBindBufferMemory(device, uniformBuf, memUniformBuf, 0);//将内存和对应缓冲绑定
-  assert(result == VK_SUCCESS);//检查绑定操作是否成功
-
-  uniformBufferInfo.buffer = uniformBuf;//指定一致变量缓冲
-  uniformBufferInfo.offset = 0;//起始偏移量
-  uniformBufferInfo.range = bufferByteCount;//一致变量缓冲总字节数
-
+  // 完善了一致变量缓冲信息结构体实例，为后面对缓冲的使用做好准备
+  uniformBufferInfo.buffer = uniformBuf;                                  // 指定一致变量缓冲
+  uniformBufferInfo.offset = 0;                                           // 起始偏移量
+  uniformBufferInfo.range = bufferByteCount;                              // 一致变量缓冲总字节数
 }
 
 void ShaderQueueSuit_Common::destroy_uniform_buffer(VkDevice &device)//销毁一致变量缓冲相关
@@ -58,39 +74,42 @@ void ShaderQueueSuit_Common::destroy_uniform_buffer(VkDevice &device)//销毁一
   vk::vkFreeMemory(device, memUniformBuf, NULL);//释放一致变量缓冲对应设备内存
 }
 
-//创建管线布局
+/**
+ * 创建管线布局
+ *
+ * 管线布局主要是管理相关的各个描述集，而描述集负责将所需的一致数据、纹理等资源与管线关联，以备特定着色器进行访问。
+ * 每个描述集布局关联多个描述集布局绑定，每个描述集布局绑定关联到某个着色器阶段着色器中的某项一致数据或纹理采样器等。
+ * 描述集布局绑定与着色器中接收的一致变量情况应当是匹配的。
+ */
 void ShaderQueueSuit_Common::create_pipeline_layout(VkDevice &device) {
-  NUM_DESCRIPTOR_SETS = 1;//设置描述集数量
+  NUM_DESCRIPTOR_SETS = 1;                                                // 设置描述集数量
 
-  VkDescriptorSetLayoutBinding layout_bindings[1];//描述集布局绑定数组
-  layout_bindings[0].binding = 0;//此绑定的绑定点编号
-  layout_bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;//描述类型
-  layout_bindings[0].descriptorCount = 1;//描述数量
-  layout_bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;    //目标着色器阶段
-  layout_bindings[0].pImmutableSamplers = NULL;
+  VkDescriptorSetLayoutBinding layout_bindings[1];                        // 描述集布局绑定数组
+  layout_bindings[0].binding = 0;                                         // 此绑定的绑定点编号(需要与着色器中给定的对应绑定点编号一致)
+  layout_bindings[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;  // 描述类型(此绑定对应类型为一致变量缓冲)
+  layout_bindings[0].descriptorCount = 1;                                 // 描述数量
+  layout_bindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;             // 目标着色器阶段(此绑定对应的是顶点着色器)
+  layout_bindings[0].pImmutableSamplers = nullptr;
 
-  VkDescriptorSetLayoutCreateInfo descriptor_layout = {};    //构建描述集布局创建信息结构体实例
-  descriptor_layout.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;//结构体类型
-  descriptor_layout.pNext = NULL;//自定义数据的指针
-  descriptor_layout.bindingCount = 1;//描述集布局绑定的数量
-  descriptor_layout.pBindings = layout_bindings;//描述集布局绑定数组
+  VkDescriptorSetLayoutCreateInfo descriptor_layout = {};                 // 构建描述集布局创建信息结构体实例
+  descriptor_layout.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+  descriptor_layout.pNext = nullptr;
+  descriptor_layout.bindingCount = 1;                                     // 描述集布局绑定的数量
+  descriptor_layout.pBindings = layout_bindings;                          // 描述集布局绑定数组
+  descLayouts.resize(NUM_DESCRIPTOR_SETS);                                // 调整描述集布局列表尺寸
+  VkResult result = vk::vkCreateDescriptorSetLayout(                      // 创建描述集布局
+      device, &descriptor_layout, nullptr, descLayouts.data());
+  assert(result == VK_SUCCESS);                                           // 检查描述集布局创建是否成功
 
-  descLayouts.resize(NUM_DESCRIPTOR_SETS);//调整描述集布局列表尺寸
-  VkResult result = vk::vkCreateDescriptorSetLayout(device, &descriptor_layout, NULL,
-                                                    descLayouts.data());//创建描述集布局
-  assert(result == VK_SUCCESS);//检查描述集布局创建是否成功
-
-  VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};//构建管线布局创建信息结构体实例
-  pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;    //结构体类型
-  pPipelineLayoutCreateInfo.pNext = NULL;//自定义数据的指针
-  pPipelineLayoutCreateInfo.pushConstantRangeCount = 0;//推送常量范围的数量
-  pPipelineLayoutCreateInfo.pPushConstantRanges = NULL;//推送常量范围的列表
-  pPipelineLayoutCreateInfo.setLayoutCount = NUM_DESCRIPTOR_SETS;//描述集布局的数量
-  pPipelineLayoutCreateInfo.pSetLayouts = descLayouts.data();//描述集布局列表
-
-  result = vk::vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, NULL,
-                                      &pipelineLayout);//创建管线布局
-  assert(result == VK_SUCCESS);//检查创建是否成功
+  VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};              // 构建管线布局创建信息结构体实例
+  pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+  pPipelineLayoutCreateInfo.pNext = nullptr;
+  pPipelineLayoutCreateInfo.pushConstantRangeCount = 0;                   // 推送常量范围的数量
+  pPipelineLayoutCreateInfo.pPushConstantRanges = nullptr;                // 推送常量范围的列表
+  pPipelineLayoutCreateInfo.setLayoutCount = NUM_DESCRIPTOR_SETS;         // 描述集布局的数量
+  pPipelineLayoutCreateInfo.pSetLayouts = descLayouts.data();             // 描述集布局列表
+  result = vk::vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, nullptr, &pipelineLayout); // 创建管线布局
+  assert(result == VK_SUCCESS);
 }
 
 void ShaderQueueSuit_Common::destroy_pipeline_layout(VkDevice &device)//销毁管线布局的方法
@@ -102,42 +121,47 @@ void ShaderQueueSuit_Common::destroy_pipeline_layout(VkDevice &device)//销毁�
   vk::vkDestroyPipelineLayout(device, pipelineLayout, NULL);//销毁管线布局
 }
 
-//初始化描述集
+/**
+ * 初始化描述集
+ */
 void ShaderQueueSuit_Common::init_descriptor_set(VkDevice &device) {
-  VkDescriptorPoolSize type_count[1];//描述集池尺寸实例数组
-  type_count[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;//描述类型
-  type_count[0].descriptorCount = 1;//描述数量
 
-  VkDescriptorPoolCreateInfo descriptor_pool = {};//构建描述集池创建信息结构体实例
-  descriptor_pool.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;//结构体类型
-  descriptor_pool.pNext = NULL;//自定义数据的指针
-  descriptor_pool.maxSets = 1;//描述集最大数量
-  descriptor_pool.poolSizeCount = 1;//描述集池尺寸实例数量
-  descriptor_pool.pPoolSizes = type_count;//描述集池尺寸实例数组
-  VkResult result = vk::vkCreateDescriptorPool(device, &descriptor_pool, NULL, &descPool);//创建描述集池
-  assert(result == VK_SUCCESS);//检查描述集池创建是否成功
 
-  std::vector<VkDescriptorSetLayout> layouts;//描述集布局列表
-  layouts.push_back(descLayouts[0]);//向列表中添加指定描述集布局
 
-  VkDescriptorSetAllocateInfo alloc_info[1];//构建描述集分配信息结构体实例数组
-  alloc_info[0].sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;//结构体类型
-  alloc_info[0].pNext = NULL;//自定义数据的指针
-  alloc_info[0].descriptorPool = descPool;//指定描述集池
-  alloc_info[0].descriptorSetCount = 1;//描述集数量
-  alloc_info[0].pSetLayouts = layouts.data();//描述集布局列表
-  descSet.resize(1);//调整描述集列表尺寸
-  result = vk::vkAllocateDescriptorSets(device, alloc_info, descSet.data());//分配描述集
-  assert(result == VK_SUCCESS);//检查描述集分配是否成功
-
-  writes[0] = {}; //完善一致变量写入描述集实例数组
-  writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;//结构体类型
-  writes[0].pNext = NULL;    //自定义数据的指针
-  writes[0].descriptorCount = 1;//描述数量
-  writes[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;//描述类型
-  writes[0].pBufferInfo = &uniformBufferInfo;//对应一致变量缓冲的信息
-  writes[0].dstArrayElement = 0;//目标数组起始元素
-  writes[0].dstBinding = 0;//目标绑定编号
+//  VkDescriptorPoolSize type_count[1];//描述集池尺寸实例数组
+//  type_count[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;//描述类型
+//  type_count[0].descriptorCount = 1;//描述数量
+//
+//  VkDescriptorPoolCreateInfo descriptor_pool = {};//构建描述集池创建信息结构体实例
+//  descriptor_pool.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;//结构体类型
+//  descriptor_pool.pNext = NULL;//自定义数据的指针
+//  descriptor_pool.maxSets = 1;//描述集最大数量
+//  descriptor_pool.poolSizeCount = 1;//描述集池尺寸实例数量
+//  descriptor_pool.pPoolSizes = type_count;//描述集池尺寸实例数组
+//  VkResult result = vk::vkCreateDescriptorPool(device, &descriptor_pool, NULL, &descPool);//创建描述集池
+//  assert(result == VK_SUCCESS);//检查描述集池创建是否成功
+//
+//  std::vector<VkDescriptorSetLayout> layouts;//描述集布局列表
+//  layouts.push_back(descLayouts[0]);//向列表中添加指定描述集布局
+//
+//  VkDescriptorSetAllocateInfo alloc_info[1];//构建描述集分配信息结构体实例数组
+//  alloc_info[0].sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;//结构体类型
+//  alloc_info[0].pNext = NULL;//自定义数据的指针
+//  alloc_info[0].descriptorPool = descPool;//指定描述集池
+//  alloc_info[0].descriptorSetCount = 1;//描述集数量
+//  alloc_info[0].pSetLayouts = layouts.data();//描述集布局列表
+//  descSet.resize(1);//调整描述集列表尺寸
+//  result = vk::vkAllocateDescriptorSets(device, alloc_info, descSet.data());//分配描述集
+//  assert(result == VK_SUCCESS);//检查描述集分配是否成功
+//
+//  writes[0] = {}; //完善一致变量写入描述集实例数组
+//  writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;//结构体类型
+//  writes[0].pNext = NULL;    //自定义数据的指针
+//  writes[0].descriptorCount = 1;//描述数量
+//  writes[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;//描述类型
+//  writes[0].pBufferInfo = &uniformBufferInfo;//对应一致变量缓冲的信息
+//  writes[0].dstArrayElement = 0;//目标数组起始元素
+//  writes[0].dstBinding = 0;//目标绑定编号
 
 }
 
@@ -374,18 +398,6 @@ void ShaderQueueSuit_Common::destroy_pipe_line(VkDevice &device) {
   vk::vkDestroyPipeline(device, pipeline, NULL);
   //销毁管线缓冲
   vk::vkDestroyPipelineCache(device, pipelineCache, NULL);
-}
-
-ShaderQueueSuit_Common::ShaderQueueSuit_Common(VkDevice *deviceIn, VkRenderPass &renderPass,
-                                               VkPhysicalDeviceMemoryProperties &memoryroperties) {
-  this->devicePointer = deviceIn;
-  create_uniform_buffer(*devicePointer, memoryroperties);//创建一致变量缓冲
-  create_pipeline_layout(*devicePointer);//创建管线布局
-  init_descriptor_set(*devicePointer);//初始化描述集
-  create_shader(*devicePointer);//创建着色器
-  initVertexAttributeInfo();//初始化顶点属性信息
-  create_pipe_line(*devicePointer, renderPass);//创建管线
-
 }
 
 ShaderQueueSuit_Common::~ShaderQueueSuit_Common() {//析构函数

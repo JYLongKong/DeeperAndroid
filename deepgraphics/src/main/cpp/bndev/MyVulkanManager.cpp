@@ -623,27 +623,28 @@ void MyVulkanManager::init_queue() {
  * 创建帧缓冲
  */
 void MyVulkanManager::create_frame_buffer() {
-  VkImageView attachments[2];//附件图像视图数组
-  attachments[1] = depthImageView;//给定深度图像视图
-  VkFramebufferCreateInfo fb_info = {};//构建帧缓冲创建信息结构体实例
-  fb_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;//结构体类型
-  fb_info.pNext = NULL;//自定义数据的指针
-  fb_info.renderPass = renderPass;//指定渲染通道
-  fb_info.attachmentCount = 2;//附件数量
-  fb_info.pAttachments = attachments;//附件图像视图数组
-  fb_info.width = screenWidth;//宽度
-  fb_info.height = screenHeight;//高度
-  fb_info.layers = 1;//层数
-  uint32_t i;//循环控制变量
-  framebuffers = (VkFramebuffer *) malloc(
-      swapchainImageCount * sizeof(VkFramebuffer));//为帧缓冲序列动态分配内存
-  assert(framebuffers);//检查内存分配是否成功
-  for (i = 0; i < swapchainImageCount; i++) //遍历交换链中的各个图像
-  {
-    attachments[0] = swapchainImageViews[i];//给定颜色附件对应图像视图
-    VkResult result = vk::vkCreateFramebuffer(device, &fb_info, NULL, &framebuffers[i]);//创建帧缓冲
-    assert(result == VK_SUCCESS);//检查是否创建成功
-    LOGE("[创建帧缓冲%d成功！]", i);
+  VkImageView attachments[2];                                             // 附件图像视图数组
+  attachments[1] = depthImageView;                                        // 给定深度图像视图
+
+  VkFramebufferCreateInfo fb_info = {};                                   // 构建帧缓冲创建信息结构体实例
+  fb_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;              // 结构体类型
+  fb_info.pNext = nullptr;                                                // 自定义数据的指针
+  fb_info.renderPass = renderPass;                                        // 指定渲染通道
+  fb_info.attachmentCount = 2;                                            // 附件数量
+  fb_info.pAttachments = attachments;                                     // 附件图像视图数组
+  fb_info.width = screenWidth;                                            // 宽度
+  fb_info.height = screenHeight;                                          // 高度
+  fb_info.layers = 1;                                                     // 层数
+
+  // 根据交换链中的图像数量分配了对应数量帧缓冲所需的内存
+  framebuffers = (VkFramebuffer *) malloc(swapchainImageCount * sizeof(VkFramebuffer)); // 为帧缓冲序列动态分配内存
+  assert(framebuffers);                                                   // 检查内存分配是否成功
+
+  for (uint32_t i = 0; i < swapchainImageCount; ++i) {                    // 遍历交换链中的各个图像
+    attachments[0] = swapchainImageViews[i];                              // 给定颜色附件对应图像视图
+    VkResult result = vk::vkCreateFramebuffer(device, &fb_info, nullptr, &framebuffers[i]); // 为每一个图像创建对应帧缓冲
+    assert(result == VK_SUCCESS);                                         // 检查是否创建成功
+    LOGI("create framebuffer[%d] success!", i);
   }
 }
 
@@ -657,12 +658,13 @@ void MyVulkanManager::destroy_frame_buffer() {
   LOGE("销毁帧缓冲成功！");
 }
 
-//创建绘制用物体
+/**
+ * 创建绘制用物体
+ */
 void MyVulkanManager::createDrawableObject() {
-  TriangleData::genVertexData();//生成三色三角形顶点数据和颜色数据
-  triForDraw = new DrawableObjectCommonLight(TriangleData::vdata, TriangleData::dataByteCount,
-                                             TriangleData::vCount, device,
-                                             memoryroperties);//创建绘制用三色三角形对象
+  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
+  triForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
+      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
 }
 
 //销毁绘制用物体
@@ -765,9 +767,11 @@ void MyVulkanManager::doVulkan() {
   t1.detach();
 }
 
-void MyVulkanManager::initPipeline()//初始化管线的方法
-{
-  sqsCL = new ShaderQueueSuit_Common(&device, renderPass, memoryroperties);//创建封装了渲染管线相关的对象
+/**
+ * 初始化渲染管线
+ */
+void MyVulkanManager::initPipeline() {
+  sqsCL = new ShaderQueueSuit_Common(&device, renderPass, memoryroperties); // 创建封装了渲染管线相关的对象
 }
 
 void MyVulkanManager::destroyPipeline()//销毁管线

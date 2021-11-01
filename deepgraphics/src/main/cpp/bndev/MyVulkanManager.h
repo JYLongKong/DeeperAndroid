@@ -15,7 +15,7 @@ class MyVulkanManager {
  public:
   static android_app *Android_application;                // Android应用指针
   static bool loopDrawFlag;                               // 绘制的循环工作标志
-  static std::vector<const char *> instanceExtensionNames; // 需要使用的实例扩展名称列表
+  static std::vector<const char *> instanceExtensionNames;// 需要使用的实例扩展名称列表
   static VkInstance instance;                             // Vulkan实例
   static uint32_t gpuCount;                               // 物理设备数量
   static std::vector<VkPhysicalDevice> gpus;              // 物理设备列表

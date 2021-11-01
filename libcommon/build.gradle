@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'   // for @Parcelize in Kotlin.kt
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -45,6 +46,10 @@ dependencies {
     api(dep_ktx)
     api(dep_kotlin)
     api(dep_coroutine)
+
+    // Hilt
+    implementation(dep_hilt)
+    kapt(kapt_hilt)
 
     // Moshi
     implementation(dep_moshi)
