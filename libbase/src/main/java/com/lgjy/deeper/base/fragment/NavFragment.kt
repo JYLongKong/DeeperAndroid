@@ -22,11 +22,11 @@ internal class NavFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (childFragmentManager.findFragmentById(R.id.fragment_container_nav) as? NavHostFragment)?.navController?.let {
+        (childFragmentManager.findFragmentById(R.id.container_nav) as? NavHostFragment)?.navController?.let {
             view.findViewById<BottomNavigationView>(R.id.bottom_nav).apply {
                 itemIconTintList = null     // get out of BottomNavigationView's control for icon style
                 setupWithNavController(it)  // connect navController and BottomNavigationView
-                setOnNavigationItemReselectedListener { }   // avoid recreate when reselected
+                setOnItemReselectedListener { }   // avoid recreate when reselected
             }
         }
     }

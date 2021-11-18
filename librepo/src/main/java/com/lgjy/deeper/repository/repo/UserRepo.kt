@@ -1,6 +1,4 @@
-package com.lgjy.deeper.repository
-
-import com.lgjy.deeper.base.mvvm.BaseRepository
+package com.lgjy.deeper.repository.repo
 
 /**
  * Created by LGJY on 2021/9/16.

@@ -1,11 +1,6 @@
 buildscript {
     ext {
-        // Test
-        dep_junit = 'junit:junit:4.13'
-        dep_androidRunner = 'androidx.test:runner:1.2.0'
-        dep_androidEspresso = 'androidx.test.espresso:espresso-core:3.4.0'
-
-        // Kotlin Coroutine
+        // KTX Kotlin Coroutine
         dep_ktx = 'androidx.core:core-ktx:1.6.0'
         dep_kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         dep_coroutine = 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
@@ -26,6 +21,7 @@ buildscript {
         // Navigation
         dep_nav_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
         dep_nav_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
+        dep_nav_compose = "androidx.navigation:navigation-compose:$nav_version"
 
         // Hilt
         dep_hilt = "com.google.dagger:hilt-android:$hilt_version"
@@ -38,7 +34,7 @@ buildscript {
         dep_retrofit_coroutine = 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
         // Okhttp
-        okhttp_version = '5.0.0'
+        okhttp_version = '4.9.2'
         dep_okhttp = "com.squareup.okhttp3:okhttp:$okhttp_version"
         dep_okhttp_log = "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
@@ -69,5 +65,10 @@ buildscript {
 
         // Paging3
         dep_paging = "androidx.paging:paging-runtime:3.0.1"
+
+        // Test
+        dep_junit = 'junit:junit:4.13'
+        dep_androidRunner = 'androidx.test:runner:1.2.0'
+        dep_androidEspresso = 'androidx.test.espresso:espresso-core:3.4.0'
     }
 }

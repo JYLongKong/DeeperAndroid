@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--placeholder of navigation graph, app module implemented in detail-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nav_ndk" />
+    android:id="@+id/graph_nav" />

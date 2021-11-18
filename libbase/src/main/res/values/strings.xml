@@ -14,4 +14,8 @@
     <string name="ndk">NDK</string>
     <string name="flutter">Flutter</string>
     <string name="compose">Compose</string>
+
+    <string name="label_fragment_deep">I am DeepFragment</string>
+    <string name="label_fragment_content">I am ContentFragment</string>
+    <string name="label_fragment_nav">I am NavFragment</string>
 </resources>

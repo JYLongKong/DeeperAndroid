@@ -46,7 +46,6 @@ android {
 }
 
 dependencies {
+    implementation project(':libcommon')
     implementation project(':libbase')
-
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
 }

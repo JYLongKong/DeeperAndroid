@@ -1,6 +1,5 @@
 package com.lgjy.deeper.network.core
 
-import com.squareup.moshi.JsonClass
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 
@@ -11,7 +10,6 @@ import retrofit2.Response
  * Unified api response format
  */
 
-@JsonClass(generateAdapter = true)
 internal data class ApiResponse<T>(
     val code: Int,
     val message: String = "",

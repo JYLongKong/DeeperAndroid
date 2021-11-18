@@ -1,8 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
     // Tip16: Implement Parcelable detail by annotated with @Parcelize
     id 'kotlin-parcelize'
 }
@@ -18,19 +16,12 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
     buildTypes {
-        // Tip11: Create properties from gradle to BuildConfig.java
-        ext.createConfig = { variant, p1, p2 ->
-            variant.buildConfigField 'int', "VERSION_CODE", "$p1"
-            variant.buildConfigField 'String', "VERSION_NAME", "\"$p2\""
-        }
         debug {
             minifyEnabled false
-            createConfig(debug, deepVersionCode, deepVersionName)
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            createConfig(release, deepVersionCode, deepVersionName)
         }
     }
     compileOptions {
@@ -43,22 +34,33 @@ android {
 }
 
 dependencies {
-    // Kotlin Coroutine
+    // KTX Kotlin Coroutine
     api(dep_ktx)
     api(dep_kotlin)
     api(dep_coroutine)
 
+    // UI
+    api(dep_appcompat)
+    api(dep_material)
+    api(dep_constraintlayout)
+
+    // Lifecycle
+    api(dep_lifecycle_common)
+    api(dep_lifecycle_runtime)
+    api(dep_lifecycle_livedata)
+    api(dep_lifecycle_viewmodel)
+    api(dep_lifecycle_savedstate)
+
+    // Navigation
+    api(dep_nav_ui)
+    api(dep_nav_fragment)
+
     // Hilt
-    implementation(dep_hilt)
-    kapt(kapt_hilt)
+    api(dep_hilt)
 
     // Moshi
     implementation(dep_moshi)
-    kapt(kapt_moshi)
 
     // DataStore
     implementation(dep_datatore)
-
-    // App Startup
-    implementation(dep_startup)
 }

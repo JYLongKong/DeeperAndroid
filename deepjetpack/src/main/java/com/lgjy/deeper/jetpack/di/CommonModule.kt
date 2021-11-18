@@ -1,4 +1,4 @@
-package com.lgjy.deeper.common.di
+package com.lgjy.deeper.jetpack.di
 
 import android.content.Context
 import com.lgjy.deeper.common.storage.DataStore

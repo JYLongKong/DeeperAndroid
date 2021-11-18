@@ -4,10 +4,8 @@
 class ThreadTask {
  public:
   ThreadTask();
-
   ~ThreadTask();
-
-  void doTask();
+  void doTask();  // 执行Vulkan绘制相关任务的方法
 };
 
 #endif

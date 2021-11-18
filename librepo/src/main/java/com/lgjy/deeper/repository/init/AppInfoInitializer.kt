@@ -1,4 +1,4 @@
-package com.lgjy.deeper.common.init
+package com.lgjy.deeper.repository.init
 
 import android.content.Context
 import androidx.startup.Initializer

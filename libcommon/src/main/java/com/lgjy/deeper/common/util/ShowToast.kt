@@ -2,7 +2,6 @@ package com.lgjy.deeper.common.util
 
 import android.app.Application
 import android.widget.Toast
-import javax.inject.Inject
 
 /**
  * Created by LGJY on 2021/9/22.
@@ -11,7 +10,7 @@ import javax.inject.Inject
  * Show toast
  */
 
-object ShowToast {
+class ShowToast(private val application: Application) {
 
     fun show(msg: String, tag: String? = null) {
         LogP.i(tag ?: "===Toast", msg)

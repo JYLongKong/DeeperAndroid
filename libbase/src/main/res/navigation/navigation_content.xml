@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graph_content"
+    app:startDestination="@id/fragment_content">
+
+    <fragment
+        android:id="@+id/fragment_content"
+        android:name="com.lgjy.deeper.base.fragment.ContentFragment"
+        android:label="@string/label_fragment_content" />
+</navigation>

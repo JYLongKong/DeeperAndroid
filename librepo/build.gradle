@@ -14,12 +14,19 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
     buildTypes {
+        // Tip11: Create properties from gradle to BuildConfig.java
+        ext.createConfig = { variant, p1, p2 ->
+            variant.buildConfigField 'int', "VERSION_CODE", "$p1"
+            variant.buildConfigField 'String', "VERSION_NAME", "\"$p2\""
+        }
         debug {
             minifyEnabled false
+            createConfig(debug, deepVersionCode, deepVersionName)
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            createConfig(release, deepVersionCode, deepVersionName)
         }
     }
     compileOptions {
@@ -32,6 +39,8 @@ android {
 }
 
 dependencies {
-    implementation project(":libcommon")
-    implementation project(":libbase")
+    implementation project(':libcommon')
+
+    // App Startup
+    implementation(dep_startup)
 }

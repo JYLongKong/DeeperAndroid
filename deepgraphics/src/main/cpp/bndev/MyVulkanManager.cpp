@@ -102,10 +102,12 @@ void MyVulkanManager::init_vulkan_instance() {
   }
 }
 
-//销毁Vulkan实例的方法
+/**
+ * 销毁Vulkan实例
+ */
 void MyVulkanManager::destroy_vulkan_instance() {
-  vk::vkDestroyInstance(instance, NULL);
-  LOGE("Vulkan实例销毁完毕!");
+  vk::vkDestroyInstance(instance, nullptr);
+  LOGI("destroy_vulkan_instance completed!");
 }
 
 /**
@@ -169,10 +171,12 @@ void MyVulkanManager::create_vulkan_devices() {
   assert(result == VK_SUCCESS);                                             // 检查逻辑设备是否创建成功
 }
 
-//销毁逻辑设备的方法
+/**
+ * 销毁逻辑设备
+ */
 void MyVulkanManager::destroy_vulkan_devices() {
-  vk::vkDestroyDevice(device, NULL);
-  LOGE("逻辑设备销毁完毕！");
+  vk::vkDestroyDevice(device, nullptr);
+  LOGI("destroy_vulkan_devices completed！");
 }
 
 /**
@@ -213,16 +217,18 @@ void MyVulkanManager::create_vulkan_CommandBuffer() {
   submit_info[0].pSignalSemaphores = nullptr;                               // 任务完毕后设置的信号量数组
 }
 
-//销毁命令缓冲的方法
+/**
+ * 销毁命令缓冲
+ */
 void MyVulkanManager::destroy_vulkan_CommandBuffer() {
-  VkCommandBuffer cmdBufferArray[1] = {cmdBuffer};//创建要释放的命令缓冲数组
-  vk::vkFreeCommandBuffers(//释放命令缓冲
-      device, //所属逻辑设备
-      cmdPool,//所属命令池
-      1,//要销毁的命令缓冲数量
-      cmdBufferArray//要销毁的命令缓冲数组
+  VkCommandBuffer cmdBufferArray[1] = {cmdBuffer};                          // 创建要释放的命令缓冲数组
+  vk::vkFreeCommandBuffers(                                                 // 释放命令缓冲
+      device,                                                               // 所属逻辑设备
+      cmdPool,                                                              // 所属命令池
+      1,                                                                    // 要销毁的命令缓冲数量
+      cmdBufferArray                                                        // 要销毁的命令缓冲数组
   );
-  vk::vkDestroyCommandPool(device, cmdPool, NULL);//销毁命令池
+  vk::vkDestroyCommandPool(device, cmdPool, nullptr);                       // 销毁命令池
 }
 
 /**
@@ -422,14 +428,16 @@ void MyVulkanManager::create_vulkan_swapChain() {
   }
 }
 
-void MyVulkanManager::destroy_vulkan_swapChain()//销毁交换链相关的方法
-{
+/**
+ * 销毁交换链相关
+ */
+void MyVulkanManager::destroy_vulkan_swapChain() {
   for (uint32_t i = 0; i < swapchainImageCount; i++) {
-    vk::vkDestroyImageView(device, swapchainImageViews[i], NULL);
-    LOGE("[销毁SwapChain ImageView %d 成功]", i);
+    vk::vkDestroyImageView(device, swapchainImageViews[i], nullptr);
+    LOGI("Destroy swapchainImageViews[%d] success!", i);
   }
-  vk::vkDestroySwapchainKHR(device, swapChain, NULL);
-  LOGE("销毁SwapChain成功!");
+  vk::vkDestroySwapchainKHR(device, swapChain, nullptr);
+  LOGI("Destroy SwapChain success!");
 }
 
 /**
@@ -514,12 +522,14 @@ void MyVulkanManager::create_vulkan_DepthBuffer() {
   assert(result == VK_SUCCESS);
 }
 
-//销毁深度缓冲相关
+/**
+ * 销毁深度缓冲相关
+ */
 void MyVulkanManager::destroy_vulkan_DepthBuffer() {
-  vk::vkDestroyImageView(device, depthImageView, NULL);
-  vk::vkDestroyImage(device, depthImage, NULL);
-  vk::vkFreeMemory(device, memDepth, NULL);
-  LOGE("销毁深度缓冲相关成功!");
+  vk::vkDestroyImageView(device, depthImageView, nullptr);
+  vk::vkDestroyImage(device, depthImage, nullptr);
+  vk::vkFreeMemory(device, memDepth, nullptr);
+  LOGI("destroy_vulkan_DepthBuffer success!");
 }
 
 /**
@@ -606,10 +616,12 @@ void MyVulkanManager::create_render_pass() {
   rp_begin.pClearValues = clear_values;                                   // 帧缓冲清除值数组
 }
 
-void MyVulkanManager::destroy_render_pass()//销毁渲染通道相关
-{
-  vk::vkDestroyRenderPass(device, renderPass, NULL);
-  vk::vkDestroySemaphore(device, imageAcquiredSemaphore, NULL);
+/**
+ * 销毁渲染通道相关
+ */
+void MyVulkanManager::destroy_render_pass() {
+  vk::vkDestroyRenderPass(device, renderPass, nullptr);
+  vk::vkDestroySemaphore(device, imageAcquiredSemaphore, nullptr);
 }
 
 /**
@@ -648,14 +660,16 @@ void MyVulkanManager::create_frame_buffer() {
   }
 }
 
-//销毁帧缓冲
+/**
+ * 销毁帧缓冲
+ * 遍历销毁交换链中各个图像对应的帧缓冲
+ */
 void MyVulkanManager::destroy_frame_buffer() {
-  //循环销毁交换链中各个图像对应的帧缓冲
   for (int i = 0; i < swapchainImageCount; i++) {
-    vk::vkDestroyFramebuffer(device, framebuffers[i], NULL);
+    vk::vkDestroyFramebuffer(device, framebuffers[i], nullptr);
   }
   free(framebuffers);
-  LOGE("销毁帧缓冲成功！");
+  LOGI("destroy_frame_buffer success!");
 }
 
 /**
@@ -667,104 +681,128 @@ void MyVulkanManager::createDrawableObject() {
       TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
 }
 
-//销毁绘制用物体
+/**
+ * 销毁绘制用物体
+ */
 void MyVulkanManager::destroyDrawableObject() {
   delete triForDraw;
 }
 
-void MyVulkanManager::createFence() {//创建用于等待指定任务执行完毕的栅栏
-  VkFenceCreateInfo fenceInfo;//栅栏创建信息结构体实例
-  fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;//结构体类型
-  fenceInfo.pNext = NULL;//自定义数据的指针
-  fenceInfo.flags = 0;//供将来使用的标志位
-  vk::vkCreateFence(device, &fenceInfo, NULL, &taskFinishFence);//创建栅栏
+/**
+ * 创建用于等待指定任务执行完毕的栅栏
+ */
+void MyVulkanManager::createFence() {
+  VkFenceCreateInfo fenceInfo;                                            // 栅栏创建信息结构体实例
+  fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+  fenceInfo.pNext = nullptr;
+  // 若设置为VK_FENCE_CREATE_SIGNALED_BIT，则栅栏的初始状态为触发态(一般代表任务已完成)
+  fenceInfo.flags = 0;                                                    // 栅栏在初始状态下为未触发态(一般代表任务未完成)
+  vk::vkCreateFence(device, &fenceInfo, nullptr, &taskFinishFence);       // 创建栅栏
 }
 
+/**
+ * 销毁栅栏
+ */
 void MyVulkanManager::destroyFence() {
-  vk::vkDestroyFence(device, taskFinishFence, NULL);
+  vk::vkDestroyFence(device, taskFinishFence, nullptr);
 }
 
+/**
+ * 初始化呈现信息
+ */
 void MyVulkanManager::initPresentInfo() {
-  present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;    //结构体类型
-  present.pNext = NULL;//自定义数据的指针
-  present.swapchainCount = 1;//交换链的数量
-  present.pSwapchains = &swapChain;//交换链列表
-  present.waitSemaphoreCount = 0;//等待的信号量数量
-  present.pWaitSemaphores = NULL;//等待的信号量列表
-  present.pResults = NULL;//呈现操作结果标志列表
+  present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+  present.pNext = nullptr;
+  present.swapchainCount = 1;                                             // 交换链的数量
+  present.pSwapchains = &swapChain;                                       // 交换链列表
+  present.waitSemaphoreCount = 0;                                         // 等待的信号量数量
+  present.pWaitSemaphores = nullptr;                                      // 等待的信号量列表
+  // 呈现操作结果标志列表：指向元素数量与交换链数量相同的VkResult型数组首元素的指针，
+  // 当呈现完成后Vulkan会根据各个交换链执行呈现的情况来填充此数组对应的元素值
+  present.pResults = nullptr;
 }
 
+/**
+ * 初始化基本变换矩阵、摄像机矩阵和投影矩阵
+ */
 void MyVulkanManager::initMatrix() {
-  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0);//初始化摄像机
-  MatrixState3D::setInitStack();//初始化基本变换矩阵
-  float ratio = (float) screenWidth / (float) screenHeight;//求屏幕长宽比
-  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000);//设置投影参数
+  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机
+  MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
+  float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕长宽比
+  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
 }
 
-void MyVulkanManager::flushUniformBuffer()//将当前帧相关数据送入一致变量缓冲
-{
-  xAngle = xAngle + 1.0f;//改变三色三角形旋转角
-  if (xAngle >= 360) { xAngle = 0; }//限制三色三角形旋转角范围
-  MatrixState3D::pushMatrix();//保护现场
-  MatrixState3D::rotate(xAngle, 1, 0, 0);//旋转变换
-  float *vertexUniformData = MatrixState3D::getFinalMatrix();//获取最终变换矩阵
-  MatrixState3D::popMatrix();//恢复现场
-  uint8_t *pData;//CPU访问时的辅助指针
-  VkResult result = vk::vkMapMemory(device, sqsCL->memUniformBuf, 0, sqsCL->bufferByteCount, 0,
-                                    (void **) &pData);//将设备内存映射为CPU可访问
-  assert(result == VK_SUCCESS);
-  memcpy(pData, vertexUniformData, sqsCL->bufferByteCount);//将最终矩阵数据拷贝进显存
-  vk::vkUnmapMemory(device, sqsCL->memUniformBuf);    //解除内存映射
+/**
+ * 将当前帧相关数据送入一致变量缓冲
+ */
+void MyVulkanManager::flushUniformBuffer() {
+  xAngle = xAngle + 1.0f;                                                 // 改变3色三角形的旋转角
+  if (xAngle >= 360) { xAngle = 0; }                                      // 限制3色三角形旋转角范围
 
+  MatrixState3D::pushMatrix();                                            // 保护现场
+  MatrixState3D::rotate(xAngle, 1, 0, 0);                           // 旋转变换
+  float *vertexUniformData = MatrixState3D::getFinalMatrix();             // 获取最终变换矩阵
+  MatrixState3D::popMatrix();                                             // 恢复现场
+
+  uint8_t *pData;                                                         // CPU访问设备内存时的辅助指针
+  VkResult result = vk::vkMapMemory(                                      // 将设备内存映射为CPU可访问
+      device, sqsCL->memUniformBuf, 0, sqsCL->bufferByteCount, 0, (void **) &pData);
+  assert(result == VK_SUCCESS);                                           // 检查映射是否成功
+  memcpy(pData, vertexUniformData, sqsCL->bufferByteCount);               // 将最终矩阵数据复制进设备内存
+  vk::vkUnmapMemory(device, sqsCL->memUniformBuf);                        // 解除内存映射
 }
 
-void MyVulkanManager::flushTexToDesSet()//更新绘制用描述集的方法
-{
-  sqsCL->writes[0].dstSet = sqsCL->descSet[0];//更新描述集对应的写入属性
-  vk::vkUpdateDescriptorSets(device, 1, sqsCL->writes, 0, NULL);//更新描述集
+/**
+ * 更新绘制用描述集
+ */
+void MyVulkanManager::flushTexToDesSet() {
+  sqsCL->writes[0].dstSet = sqsCL->descSet[0];                            // 更新描述集对应的写入属性
+  vk::vkUpdateDescriptorSets(device, 1, sqsCL->writes, 0, nullptr);       // 更新描述集
 }
 
+/**
+ * 执行绘制
+ * 其中建立了渲染循环以持续绘制各帧画面
+ */
 void MyVulkanManager::drawObject() {
-  FPSUtil::init();//初始化FPS计算
-  while (MyVulkanManager::loopDrawFlag) {//每循环一次绘制一帧画面
-    FPSUtil::calFPS();//计算FPS
-    FPSUtil::before();//一帧开始
+  FPSUtil::init();                                                        // 初始化FPS计算
+  while (MyVulkanManager::loopDrawFlag) {                                 // 每循环一次绘制一帧画面
+    FPSUtil::calFPS();                                                    // 计算FPS
+    FPSUtil::before();                                                    // 一帧开始
 
-    VkResult result = vk::vkAcquireNextImageKHR(device, swapChain, UINT64_MAX,
-                                                imageAcquiredSemaphore, VK_NULL_HANDLE,
-                                                &currentBuffer);//获取交换链中的当前帧索引
-    rp_begin.framebuffer = framebuffers[currentBuffer];    //为渲染通道设置当前帧缓冲
-    vk::vkResetCommandBuffer(cmdBuffer, 0);//恢复命令缓冲到初始状态
-    result = vk::vkBeginCommandBuffer(cmdBuffer, &cmd_buf_info);//启动命令缓冲
+    VkResult result = vk::vkAcquireNextImageKHR(                          // 获取交换链中的当前帧索引
+        device, swapChain, UINT64_MAX, imageAcquiredSemaphore, VK_NULL_HANDLE, &currentBuffer);
+    rp_begin.framebuffer = framebuffers[currentBuffer];                   // 为渲染通道设置此次绘制使用的帧缓冲索引
+    vk::vkResetCommandBuffer(cmdBuffer, 0);                               // 恢复命令缓冲到初始状态
+    result = vk::vkBeginCommandBuffer(cmdBuffer, &cmd_buf_info);          // 启动命令缓冲
 
-    MyVulkanManager::flushUniformBuffer();//将当前帧相关数据送入一致变量缓冲
-    MyVulkanManager::flushTexToDesSet();//更新绘制用描述集
+    MyVulkanManager::flushUniformBuffer();                                // 将当前帧相关数据送入一致变量缓冲
+    MyVulkanManager::flushTexToDesSet();                                  // 更新绘制用描述集
 
-    vk::vkCmdBeginRenderPass(cmdBuffer, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);//启动渲染通道
-    triForDraw->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline,
-                         &(sqsCL->descSet[0]));    //绘制三色三角形
-    vk::vkCmdEndRenderPass(cmdBuffer);//结束渲染通道
-    result = vk::vkEndCommandBuffer(cmdBuffer);//结束命令缓冲
+    // VK_SUBPASS_CONTENTS_INLINE：表示仅采用主命令缓冲而没有采用二级命令缓冲(或称之为子命令缓冲)
+    // 若需要采用二级命令缓冲，则第三个参数应该选用VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
+    vk::vkCmdBeginRenderPass(cmdBuffer, &rp_begin, VK_SUBPASS_CONTENTS_INLINE); // 启动渲染通道
+    triForDraw->drawSelf(                                                 // 绘制三色三角形
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+    vk::vkCmdEndRenderPass(cmdBuffer);                                    // 结束渲染通道
+    result = vk::vkEndCommandBuffer(cmdBuffer);                           // 结束命令缓冲
 
-    submit_info[0].waitSemaphoreCount = 1;//等待的信号量数量
-    submit_info[0].pWaitSemaphores = &imageAcquiredSemaphore;//等待的信号量列表
+    submit_info[0].waitSemaphoreCount = 1;                                // 等待的信号量数量
+    // 该信号量是前面获取交换链中当前帧索引时设置的。
+    // 这样命令缓冲提交后，在执行前就会等待此信号量到位，避免多个队列同时执行导致的并发问题
+    submit_info[0].pWaitSemaphores = &imageAcquiredSemaphore;             // 等待的信号量列表
+    result = vk::vkQueueSubmit(queueGraphics, 1, submit_info, taskFinishFence); // 提交命令缓冲到指定的队列执行并指定栅栏
 
-    result = vk::vkQueueSubmit(queueGraphics, 1, submit_info, taskFinishFence);//提交命令缓冲
-    do {    //等待渲染完毕
-      result = vk::vkWaitForFences(device, 1, &taskFinishFence, VK_TRUE, FENCE_TIMEOUT);
-    } while (result == VK_TIMEOUT);
-    vk::vkResetFences(device, 1, &taskFinishFence);//重置栅栏
-    present.pImageIndices = &currentBuffer;//指定此次呈现的交换链图像索引
-    result = vk::vkQueuePresentKHR(queueGraphics, &present);//执行呈现
-    FPSUtil::after(60);//限制FPS不超过指定的值
+    do {
+      result = vk::vkWaitForFences(device, 1, &taskFinishFence, VK_TRUE, FENCE_TIMEOUT); // 循环等待提交到队列的任务完成
+    } while (result == VK_TIMEOUT);                                       // 等待渲染完毕
+    vk::vkResetFences(device, 1, &taskFinishFence);                       // 重置栅栏
+
+    present.pImageIndices = &currentBuffer;                               // 指定此次呈现的交换链图像索引
+    result = vk::vkQueuePresentKHR(queueGraphics, &present);              // 执行呈现(执行完毕后，就可以看到一帧完整的画面了)
+
+    FPSUtil::after(60);                                             // 限制FPS不超过指定的值
   }
-}
-
-//执行绘制
-void MyVulkanManager::doVulkan() {
-  ThreadTask *tt = new ThreadTask();
-  thread t1(&ThreadTask::doTask, tt);
-  t1.detach();
 }
 
 /**
@@ -774,7 +812,18 @@ void MyVulkanManager::initPipeline() {
   sqsCL = new ShaderQueueSuit_Common(&device, renderPass, memoryroperties); // 创建封装了渲染管线相关的对象
 }
 
-void MyVulkanManager::destroyPipeline()//销毁管线
-{
+/**
+ * 销毁管线
+ */
+void MyVulkanManager::destroyPipeline() {
   delete sqsCL;
+}
+
+/**
+ * 启动自定义线程执行Vulkan绘制相关任务
+ */
+void MyVulkanManager::doVulkan() {
+  auto *tt = new ThreadTask();                                    // 创建执行Vulkan绘制相关任务的对象
+  thread t1(&ThreadTask::doTask, tt);                             // 创建线程执行任务方法doTask
+  t1.detach();                                                    // 将子线程与主线程分离
 }

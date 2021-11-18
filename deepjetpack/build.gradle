@@ -46,5 +46,6 @@ android {
 }
 
 dependencies {
+    implementation project(':libcommon')
     implementation project(':libbase')
 }

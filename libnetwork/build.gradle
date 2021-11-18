@@ -33,6 +33,8 @@ android {
 }
 
 dependencies {
+    implementation project(':libcommon')
+
     // Retrofit
     implementation(dep_retrofit)
     implementation(dep_retrofit_moshi)

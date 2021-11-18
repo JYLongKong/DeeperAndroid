@@ -1,8 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -34,22 +32,5 @@ android {
 }
 
 dependencies {
-    // UI
-    api(dep_appcompat)
-    implementation(dep_material)
-
-    // Lifecycle
-    implementation(dep_lifecycle_common)
-    implementation(dep_lifecycle_runtime)
-    implementation(dep_lifecycle_livedata)
-    implementation(dep_lifecycle_viewmodel)
-    implementation(dep_lifecycle_savedstate)
-
-    // Navigation
-    api(dep_nav_ui)
-    api(dep_nav_fragment)
-
-    // Hilt
-    implementation(dep_hilt)
-    kapt(kapt_hilt)
+    implementation project(':libcommon')
 }

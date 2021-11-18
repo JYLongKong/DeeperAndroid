@@ -1,4 +1,4 @@
-package com.lgjy.deeper.common.kotlin
+package com.lgjy.deeper.common.learn
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*

@@ -1,4 +1,4 @@
-package com.lgjy.deeper.common.kotlin
+package com.lgjy.deeper.common.learn
 
 import com.squareup.moshi.*
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

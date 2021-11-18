@@ -3,10 +3,10 @@ buildscript {
         isRelease = true
 
         deepApplicationId = "com.lgjy.deeper.android"
-        deepCompileSdk = 30
+        deepCompileSdk = 31
         deepNDKVersion = "21.4.7075529"
         deepMinSdk = 21
-        deepTargetSdk = 30
+        deepTargetSdk = 31
         deepVersionCode = 1_00_00
         deepVersionName = "1.0.0"
 
