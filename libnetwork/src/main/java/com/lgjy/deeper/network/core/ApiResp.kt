@@ -10,7 +10,7 @@ import retrofit2.Response
  * Unified api response format
  */
 
-internal data class ApiResponse<T>(
+data class ApiResponse<T>(
     val code: Int,
     val message: String = "",
     val data: T?

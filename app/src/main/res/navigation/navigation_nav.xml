@@ -3,7 +3,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/graph_nav"
-    app:startDestination="@id/nav_jetpack">
+    app:startDestination="@id/graph_jetpack">
 
     <include app:graph="@navigation/nav_jetpack" />
 

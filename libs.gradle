@@ -1,0 +1,74 @@
+buildscript {
+    ext {
+        // KTX Kotlin Coroutine
+        lib_ktx = 'androidx.core:core-ktx:1.6.0'
+        lib_kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        lib_coroutine = 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+
+        // UI
+        lib_appcompat = 'androidx.appcompat:appcompat:1.3.1'
+        lib_material = 'com.google.android.material:material:1.3.0'
+        lib_constraintlayout = 'androidx.constraintlayout:constraintlayout:2.1.0'
+
+        // Lifecycle
+        lifecycle_version = '2.4.0-alpha03'
+        lib_lifecycle_common = "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+        lib_lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+        lib_lifecycle_livedata = "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+        lib_lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+        lib_lifecycle_savedstate = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+
+        // Navigation
+        lib_nav_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
+        lib_nav_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
+        lib_nav_compose = "androidx.navigation:navigation-compose:$nav_version"
+
+        // Hilt
+        lib_hilt = "com.google.dagger:hilt-android:$hilt_version"
+        kapt_hilt = "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+        // Retrofit
+        retrofit_version = '2.9.0'
+        lib_retrofit = "com.squareup.retrofit2:retrofit:$retrofit_version"
+        lib_retrofit_moshi = "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+        lib_retrofit_coroutine = 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
+
+        // OkHttp
+        okhttp_version = '4.9.2'
+        lib_okhttp = "com.squareup.okhttp3:okhttp:$okhttp_version"
+        lib_okhttp_log = "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+        // Moshi
+        moshi_version = '1.12.0'
+        lib_moshi = "com.squareup.moshi:moshi-kotlin:$moshi_version"
+        kapt_moshi = "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+        // Room
+        room_version = "2.3.0"
+        lib_room = "androidx.room:room-runtime:$room_version"
+        kapt_room = "androidx.room:room-compiler:$room_version"
+        lib_room_paging = "androidx.room:room-paging:2.4.0-alpha04"
+
+        // CameraX
+        camerax_version = '1.1.0-alpha07'
+        lib_camerax_core = "androidx.camera:camera-core:$camerax_version"
+        lib_camerax_camera2 = "androidx.camera:camera-camera2:$camerax_version"
+        lib_camerax_lifecycle = "androidx.camera:camera-lifecycle:$camerax_version"
+        lib_camerax_view = 'androidx.camera:camera-view:1.0.0-alpha27'
+        lib_camerax_extensions = 'androidx.camera:camera-extensions:1.0.0-alpha27'
+
+        // DataStore
+        lib_datatore = "androidx.datastore:datastore-preferences:1.0.0"
+
+        // App Startup
+        lib_startup = "androidx.startup:startup-runtime:1.1.0"
+
+        // Paging3
+        lib_paging = "androidx.paging:paging-runtime:3.0.1"
+
+        // Test
+        lib_junit = 'junit:junit:4.13'
+        lib_androidRunner = 'androidx.test:runner:1.2.0'
+        lib_androidEspresso = 'androidx.test.espresso:espresso-core:3.4.0'
+    }
+}

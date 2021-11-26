@@ -35,32 +35,32 @@ android {
 
 dependencies {
     // KTX Kotlin Coroutine
-    api(dep_ktx)
-    api(dep_kotlin)
-    api(dep_coroutine)
+    api(lib_ktx)
+    api(lib_kotlin)
+    api(lib_coroutine)
 
     // UI
-    api(dep_appcompat)
-    api(dep_material)
-    api(dep_constraintlayout)
+    api(lib_appcompat)
+    api(lib_material)
+    api(lib_constraintlayout)
 
     // Lifecycle
-    api(dep_lifecycle_common)
-    api(dep_lifecycle_runtime)
-    api(dep_lifecycle_livedata)
-    api(dep_lifecycle_viewmodel)
-    api(dep_lifecycle_savedstate)
+    api(lib_lifecycle_common)
+    api(lib_lifecycle_runtime)
+    api(lib_lifecycle_livedata)
+    api(lib_lifecycle_viewmodel)
+    api(lib_lifecycle_savedstate)
 
     // Navigation
-    api(dep_nav_ui)
-    api(dep_nav_fragment)
+    api(lib_nav_ui)
+    api(lib_nav_fragment)
 
     // Hilt
-    api(dep_hilt)
+    api(lib_hilt)
 
     // Moshi
-    implementation(dep_moshi)
+    implementation(lib_moshi)
 
     // DataStore
-    implementation(dep_datatore)
+    implementation(lib_datatore)
 }

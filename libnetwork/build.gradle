@@ -36,15 +36,15 @@ dependencies {
     implementation project(':libcommon')
 
     // Retrofit
-    implementation(dep_retrofit)
-    implementation(dep_retrofit_moshi)
-    implementation(dep_retrofit_coroutine)
+    api(lib_retrofit)
+    api(lib_retrofit_moshi)
+    api(lib_retrofit_coroutine)
 
-    // Okhttp
-    implementation(dep_okhttp)
-    implementation(dep_okhttp_log)
+    // OkHttp
+    api(lib_okhttp)
+    api(lib_okhttp_log)
 
     // Moshi
-    implementation(dep_moshi)
+    implementation(lib_moshi)
     kapt(kapt_moshi)
 }

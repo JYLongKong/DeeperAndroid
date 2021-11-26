@@ -42,5 +42,5 @@ dependencies {
     implementation project(':libcommon')
 
     // App Startup
-    implementation(dep_startup)
+    implementation(lib_startup)
 }

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_compose"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_compose"
     app:startDestination="@id/fragment_compose">
 
     <fragment
         android:id="@+id/fragment_compose"
         android:name="com.lgjy.deeper.compose.fragment.ComposeFragment"
-        android:label="ComposeFragment" />
+        android:label="@string/label_fragment_compose"
+        tools:layout="@layout/fragment_compose" />
 
 </navigation>

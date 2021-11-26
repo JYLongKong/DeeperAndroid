@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_jetpack"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_jetpack"
     app:startDestination="@id/fragment_jetpack">
 
     <fragment
         android:id="@+id/fragment_jetpack"
         android:name="com.lgjy.deeper.jetpack.fragment.JetpackFragment"
-        android:label="JetpackFragment" />
+        android:label="@string/label_fragment_jetpack"
+        tools:layout="@layout/fragment_jetpack" />
 
 </navigation>

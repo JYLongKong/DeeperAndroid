@@ -1,5 +1,5 @@
-apply from:"dependency.gradle"
-apply from:"configuration.gradle"
+apply from:"libs.gradle"
+apply from:"config.gradle"
 
 buildscript {
     ext {

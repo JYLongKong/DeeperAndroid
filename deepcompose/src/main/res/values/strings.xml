@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="label_fragment_compose">I am a ComposeFragment</string>
+</resources>

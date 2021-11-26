@@ -2,23 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graphics"
-    app:startDestination="@id/graphicsFragment">
+    android:id="@+id/graph_graphics"
+    app:startDestination="@id/fragment_graphics">
 
     <fragment
-        android:id="@+id/graphicsFragment"
+        android:id="@+id/fragment_graphics"
         android:name="com.lgjy.deeper.graphics.fragment.GraphicsFragment"
-        android:label="@string/label_computer_graphics"
+        android:label="@string/label_fragment_graphics"
         tools:layout="@layout/fragment_graphics">
         <action
             android:id="@+id/action_graphicsFragment_to_vulkanActivity"
-            app:destination="@id/vulkanActivity" />
+            app:destination="@id/activity_vulkan" />
     </fragment>
 
     <!--Tip2: Navigate to Activity-->
     <activity
-        android:id="@+id/vulkanActivity"
+        android:id="@+id/activity_vulkan"
         android:name="com.lgjy.deeper.graphics.activity.VulkanActivity"
-        android:label="@string/label_vulkan" />
+        android:label="@string/label_activity_vulkan" />
 
 </navigation>

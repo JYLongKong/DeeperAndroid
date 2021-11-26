@@ -4,6 +4,7 @@ if (isRelease) {
     apply plugin: 'com.android.application'
 }
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk deepCompileSdk
@@ -43,9 +44,13 @@ android {
             }
         }
     }
+    buildFeatures{
+        dataBinding = true
+    }
 }
 
 dependencies {
     implementation project(':libcommon')
     implementation project(':libbase')
+    implementation project(':libnetwork')
 }

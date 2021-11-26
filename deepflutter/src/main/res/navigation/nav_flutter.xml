@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_flutter"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_flutter"
     app:startDestination="@id/fragment_flutter">
 
     <fragment
         android:id="@+id/fragment_flutter"
         android:name="com.lgjy.deeper.flutter.fragment.FlutterFragment"
-        android:label="FlutterFragment" />
+        android:label="@string/label_fragment_flutter"
+        tools:layout="@layout/fragment_flutter" />
 
 </navigation>

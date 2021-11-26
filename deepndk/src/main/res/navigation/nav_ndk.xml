@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_ndk"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_ndk"
     app:startDestination="@id/fragment_ndk">
 
     <fragment
         android:id="@+id/fragment_ndk"
         android:name="com.lgjy.deeper.ndk.fragment.NDKFragment"
-        android:label="NDKFragment" />
+        android:label="@string/label_fragment_ndk"
+        tools:layout="@layout/fragment_ndk" />
 
 </navigation>
