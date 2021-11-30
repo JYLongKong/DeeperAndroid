@@ -11,4 +11,11 @@
         android:label="@string/label_fragment_login"
         tools:layout="@layout/fragment_login" />
 
+    <fragment
+        android:id="@+id/fragment_register"
+        android:name="com.lgjy.deeper.login.fragment.RegisterFragment"
+        android:label="@string/label_fragment_register">
+
+    </fragment>
+
 </navigation>

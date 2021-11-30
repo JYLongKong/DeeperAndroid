@@ -15,7 +15,8 @@ import okhttp3.HttpUrl
 class WanCookie : CookieJar {
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        // TODO: 2021/11/18  
+        // TODO: 2021/11/18
+        return emptyList()
     }
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {

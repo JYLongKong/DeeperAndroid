@@ -53,4 +53,5 @@ dependencies {
     implementation project(':libcommon')
     implementation project(':libbase')
     implementation project(':libnetwork')
+    implementation project(':librepo')
 }

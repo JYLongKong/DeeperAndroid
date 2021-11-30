@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_fragment_login">I am a LoginFragment</string>
+    <string name="label_fragment_register">I am a RegisterFragment</string>
 
     <string name="username_">USERNAME:</string>
     <string name="password_">PASSWORD:</string>

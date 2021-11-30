@@ -6,6 +6,11 @@
         <variable
             name="vm"
             type="com.lgjy.deeper.login.viewmodel.LoginVM" />
+
+        <variable
+            name="event"
+            type="com.lgjy.deeper.login.fragment.LoginFragment.Event" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -95,6 +100,7 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/bg_btn_theme_hollow"
             android:gravity="center"
+            android:onClick="@{()->event.goToRegister()}"
             android:text="@string/register"
             android:textColor="@color/theme_black"
             android:textSize="@dimen/text_size_xxxl"
@@ -112,6 +118,7 @@
             android:layout_marginStart="20dp"
             android:background="@drawable/bg_btn_theme_solid"
             android:gravity="center"
+            android:onClick="@{()->event.login()}"
             android:paddingHorizontal="20dp"
             android:text="@string/login"
             android:textColor="@color/text_white"

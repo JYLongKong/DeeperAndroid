@@ -4,17 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.lgjy.deeper.base.mvvm.BaseFragment
-import com.lgjy.deeper.login.R
+import com.lgjy.deeper.login.databinding.FragmentLoginBinding
+import com.lgjy.deeper.login.viewmodel.LoginVM
 
 /**
  * Created by LGJY on 2021/9/25.
  * Email：yujye@sina.com
+ *
+ * User login by typing username and password
  */
 
-internal class LoginFragment : BaseFragment() {
+class LoginFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    private val loginVM: LoginVM by viewModels()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return FragmentLoginBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = this@LoginFragment
+            vm = loginVM
+            event = Event()
+        }.root
+    }
+
+    inner class Event {
+
+        fun goToRegister() {
+
+        }
+
+        fun login() {
+
+        }
     }
 }
