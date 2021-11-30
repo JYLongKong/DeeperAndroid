@@ -4,7 +4,6 @@ if (isRelease) {
     apply plugin: 'com.android.application'
 }
 apply plugin: 'kotlin-android'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdk deepCompileSdk

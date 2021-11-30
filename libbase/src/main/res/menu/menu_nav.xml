@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_jetpack"
+        android:id="@+id/graph_jetpack"
         android:enabled="true"
         android:icon="@drawable/ic_jetpack"
         android:title="@string/jetpack" />
     <item
-        android:id="@+id/nav_graphics"
+        android:id="@+id/graph_graphics"
         android:enabled="true"
         android:icon="@drawable/ic_vulkan"
         android:title="@string/graphics" />
     <item
-        android:id="@+id/nav_ndk"
+        android:id="@+id/graph_ndk"
         android:enabled="true"
         android:icon="@drawable/ic_ffmpeg"
         android:title="@string/ndk" />
     <item
-        android:id="@+id/nav_compose"
+        android:id="@+id/graph_compose"
         android:enabled="true"
         android:icon="@drawable/ic_compose"
         android:title="@string/compose" />
     <item
-        android:id="@+id/nav_flutter"
+        android:id="@+id/graph_flutter"
         android:enabled="true"
         android:icon="@drawable/ic_flutter"
         android:title="@string/flutter" />
