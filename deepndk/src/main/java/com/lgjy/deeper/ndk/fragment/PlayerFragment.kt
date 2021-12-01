@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
  * Media Player
  */
 
-class PlayerFragment : BaseFragment() {
+internal class PlayerFragment : BaseFragment() {
 
     // Tip10: by lazy {} used in findViewById()
     private val tvStatus: TextView by lazy { requireView().findViewById(R.id.tv_status) }

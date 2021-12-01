@@ -59,7 +59,7 @@ dependencies {
     api(lib_hilt)
 
     // Moshi
-    implementation(lib_moshi)
+    api(lib_moshi)
 
     // DataStore
     implementation(lib_datatore)

@@ -18,6 +18,7 @@ android {
         versionName deepVersionName
 
         consumerProguardFiles "consumer-rules.pro"
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -54,4 +55,8 @@ dependencies {
     implementation project(':libbase')
     implementation project(':libnetwork')
     implementation project(':librepo')
+
+    testImplementation(test_junit)
+    androidTestImplementation(test_android_junit)
+    androidTestImplementation(test_android_espresso)
 }
