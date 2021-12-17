@@ -7,4 +7,6 @@
     <string name="password_">PASSWORD:</string>
     <string name="register">REGISTER</string>
     <string name="login">LOGIN</string>
+    <string name="register_and_login">REGISTER AND LOGIN</string>
+    <string name="repassword_">REPASSWORD:</string>
 </resources>

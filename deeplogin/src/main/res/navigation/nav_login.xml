@@ -16,6 +16,7 @@
         android:name="com.lgjy.deeper.login.fragment.RegisterFragment"
         android:label="@string/label_fragment_register">
 
+        <action android:id=""
     </fragment>
 
 </navigation>

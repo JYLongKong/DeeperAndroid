@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--Tip20: Replace CircleImageView with ImageFilterView-->
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/iv_icon"
             android:layout_width="120dp"
@@ -57,6 +58,7 @@
             android:background="@drawable/bg_et_theme_hollow"
             android:inputType="textPersonName"
             android:paddingHorizontal="16dp"
+            android:text="@={vm.username}"
             android:textColor="@color/text_dark"
             android:textSize="@dimen/text_size_xxl"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_username"
@@ -87,6 +89,7 @@
             android:background="@drawable/bg_et_theme_hollow"
             android:inputType="textPassword"
             android:paddingHorizontal="16dp"
+            android:text="@={vm.password}"
             android:textColor="@color/text_dark"
             android:textSize="@dimen/text_size_xxl"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_pwd"
@@ -118,7 +121,7 @@
             android:layout_marginStart="20dp"
             android:background="@drawable/bg_btn_theme_solid"
             android:gravity="center"
-            android:onClick="@{()->event.login()}"
+            android:onClick="@{()->vm.login()}"
             android:paddingHorizontal="20dp"
             android:text="@string/login"
             android:textColor="@color/text_white"
