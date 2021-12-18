@@ -8,8 +8,6 @@ android {
     defaultConfig {
         minSdk deepMinSdk
         targetSdk deepTargetSdk
-        versionCode deepVersionCode
-        versionName deepVersionName
 
         consumerProguardFiles "consumer-rules.pro"
     }

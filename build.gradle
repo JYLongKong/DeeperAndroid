@@ -4,12 +4,12 @@ apply from:"config.gradle"
 buildscript {
     ext {
         java_version = JavaVersion.VERSION_1_8
-        kotlin_version = '1.6.0'
+        kotlin_version = '1.6.10'
         nav_version = '2.4.0-alpha10'
         hilt_version = '2.36'
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.2"
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
