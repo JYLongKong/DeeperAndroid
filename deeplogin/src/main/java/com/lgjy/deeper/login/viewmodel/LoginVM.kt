@@ -1,9 +1,8 @@
 package com.lgjy.deeper.login.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.lgjy.deeper.base.mvvm.BaseViewModel
-import com.lgjy.deeper.repository.repo.UserRepo
+import com.lgjy.deeper.login.repo.LoginRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,16 +14,13 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-internal class LoginVM @Inject constructor(private val userRepo: UserRepo) : BaseViewModel() {
+internal class LoginVM @Inject constructor(private val loginRepo: LoginRepo) : BaseViewModel() {
 
-    private val _username = MutableLiveData<String>("")
-    val username: LiveData<String> = _username
+    val username = MutableLiveData<String>("")
 
-    private val _password = MutableLiveData<String>("")
-    val password: LiveData<String> = _password
+    val password = MutableLiveData<String>("")
 
-    private val _rePassword = MutableLiveData<String>("")
-    val rePassword: LiveData<String> = _rePassword
+    val rePassword = MutableLiveData<String>("")
 
     fun login() {
 

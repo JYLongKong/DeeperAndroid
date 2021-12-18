@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="com.lgjy.deeper.base.ext.NavigationExt" />
+
         <variable
             name="vm"
             type="com.lgjy.deeper.login.viewmodel.LoginVM" />
@@ -14,6 +16,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <include
+            layout="@layout/include_back"
+            android:onClick="@{(view)->NavigationExt.INSTANCE.back(view)}" />
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/iv_register"

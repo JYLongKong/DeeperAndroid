@@ -9,14 +9,18 @@
         android:id="@+id/fragment_login"
         android:name="com.lgjy.deeper.login.fragment.LoginFragment"
         android:label="@string/label_fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/fragment_register" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_register"
         android:name="com.lgjy.deeper.login.fragment.RegisterFragment"
-        android:label="@string/label_fragment_register">
-
-        <action android:id=""
-    </fragment>
+        android:label="@string/label_fragment_register"
+        tools:layout="@layout/fragment_register" />
 
 </navigation>

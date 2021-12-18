@@ -9,7 +9,5 @@ package com.lgjy.deeper.repository.repo
 
 class UserRepo private constructor() : BaseRepository() {
 
-    companion object {
 
-    }
 }

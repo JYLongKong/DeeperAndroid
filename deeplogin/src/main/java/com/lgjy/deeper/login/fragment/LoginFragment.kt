@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.lgjy.deeper.base.mvvm.BaseFragment
 import com.lgjy.deeper.login.R
@@ -33,7 +34,7 @@ class LoginFragment : BaseFragment() {
     inner class Event {
 
         fun goToRegister() {
-
+            findNavController().navigate(LoginFragmentDirections.actionLoginToRegister())
         }
     }
 }

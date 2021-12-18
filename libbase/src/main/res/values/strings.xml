@@ -18,4 +18,6 @@
     <string name="label_fragment_deep">I am a DeepFragment</string>
     <string name="label_fragment_content">I am a ContentFragment</string>
     <string name="label_fragment_nav">I am a NavFragment</string>
+
+    <string name="back">back</string>
 </resources>
