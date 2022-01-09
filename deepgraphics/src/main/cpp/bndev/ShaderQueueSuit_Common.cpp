@@ -255,15 +255,21 @@ void ShaderQueueSuit_Common::initVertexAttributeInfo() {
  * 创建管线
  */
 void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &renderPass) {
-  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
-  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
+//  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
+//  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
+
+  /// Sample4_1
+  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
+  dynamicStateEnables[0] = VK_DYNAMIC_STATE_VIEWPORT;                     // 视口为动态设置
 
   // 管线动态状态是指在程序运行过程中可以通过命令修改的一些参数，只有启用了某方面的动态状态才可以动态修改此方面的参数(如剪裁窗口、视口等)
   VkPipelineDynamicStateCreateInfo dynamicState = {};                     // 管线动态状态创建信息
   dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
   dynamicState.pNext = nullptr;
   dynamicState.pDynamicStates = dynamicStateEnables;                      // 动态状态启用标志数组
-  dynamicState.dynamicStateCount = 0;                                     // 启用的动态状态项数量(本案例没有这方面需要)
+//  dynamicState.dynamicStateCount = 0;                                     // 启用的动态状态项数量(本案例没有这方面需要)
+  /// Sample4_1
+  dynamicState.dynamicStateCount = 1;                                     // 启用的动态状态项数量
 
   VkPipelineVertexInputStateCreateInfo vi;                                // 管线顶点数据输入状态创建信息
   vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;

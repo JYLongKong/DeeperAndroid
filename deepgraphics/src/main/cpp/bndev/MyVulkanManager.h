@@ -61,6 +61,10 @@ class MyVulkanManager {
   static DrawableObjectCommonLight *triForDraw;           // 绘制用3色三角形物体对象指针
   static float xAngle;                                    // 三角形旋转角度
 
+  /// Sample4_1 触摸点作为显示中点
+  static int vpCenterX;
+  static int vpCenterY;
+
   static void init_vulkan_instance();                     // 创建Vulkan实例
   static void enumerate_vulkan_phy_devices();             // 初始化物理设备
   static void create_vulkan_devices();                    // 创建逻辑设备

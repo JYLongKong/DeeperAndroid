@@ -62,6 +62,10 @@ ShaderQueueSuit_Common *MyVulkanManager::sqsCL;
 DrawableObjectCommonLight *MyVulkanManager::triForDraw;
 float MyVulkanManager::xAngle = 0;
 
+/// Sample4_1
+int MyVulkanManager::vpCenterX = 0;
+int MyVulkanManager::vpCenterY = 0;
+
 /**
  * 创建Vulkan实例的方法
  */
@@ -766,6 +770,11 @@ void MyVulkanManager::flushTexToDesSet() {
  */
 void MyVulkanManager::drawObject() {
   FPSUtil::init();                                                        // 初始化FPS计算
+
+  /// Sample4_1
+  vpCenterX = screenWidth / 2;
+  vpCenterY = screenHeight / 2;
+
   while (MyVulkanManager::loopDrawFlag) {                                 // 每循环一次绘制一帧画面
     FPSUtil::calFPS();                                                    // 计算FPS
     FPSUtil::before();                                                    // 一帧开始
@@ -778,6 +787,20 @@ void MyVulkanManager::drawObject() {
 
     MyVulkanManager::flushUniformBuffer();                                // 将当前帧相关数据送入一致变量缓冲
     MyVulkanManager::flushTexToDesSet();                                  // 更新绘制用描述集
+
+    /// Sample4_1
+    VkViewport viewportList[1];                                           // 视口信息序列
+    viewportList[0].minDepth = 0.0f;                                      // 视口最小深度
+    viewportList[0].maxDepth = 1.0f;                                      // 视口最大深度
+    viewportList[0].x = vpCenterX - screenWidth / 4;                      // 视口X坐标
+    viewportList[0].y = vpCenterY - screenHeight / 4;                     // 视口Y坐标
+    viewportList[0].width = screenWidth / 2;                              // 视口宽度
+    viewportList[0].height = screenHeight / 2;                            // 视口高度
+    vk::vkCmdSetViewport(                                                 // 设置视口
+        cmdBuffer,                                                        // 命令缓冲
+        0,                                                                // 第1个视口的索引
+        1,                                                                // 视口的数量
+        viewportList);                                                    // 视口信息序列
 
     // VK_SUBPASS_CONTENTS_INLINE：表示仅采用主命令缓冲而没有采用二级命令缓冲(或称之为子命令缓冲)
     // 若需要采用二级命令缓冲，则第三个参数应该选用VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS

@@ -15,31 +15,41 @@ int yPre;
 float xDis;
 float yDis;
 
-//事件处理回调方法
+/**
+ * 事件处理回调方法
+ * Sample4_1
+ */
 static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) {
   //struct engine* engine = (struct engine*)app->userData;
-  //如果是MOTION事件(包含触屏和轨迹球)
+  // 如果是MOTION事件(包含触屏和轨迹球)
   if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-    //如果是触屏
+    // 如果是触屏
     if (AInputEvent_getSource(event) == AINPUT_SOURCE_TOUCHSCREEN) {
-      //获取坐标
+      // 获取触控点坐标
       int x = AMotionEvent_getRawX(event, 0);
       int y = AMotionEvent_getRawY(event, 0);
-      //获取事件类型
+      // 获取事件类型编号
       int32_t id = AMotionEvent_getAction(event);
       switch (id) {
-        //触摸按下消息
-        case AMOTION_EVENT_ACTION_DOWN:xPre = x;
-          yPre = y;
+
+        case AMOTION_EVENT_ACTION_DOWN: // 触摸点按下
+          MyVulkanManager::vpCenterX = x;
+          MyVulkanManager::vpCenterY = y;
+          // 控制边界
+          if (x > MyVulkanManager::screenWidth / 4 * 3)
+            MyVulkanManager::vpCenterX = MyVulkanManager::screenWidth / 4 * 3;
+          if (x < MyVulkanManager::screenWidth / 4)
+            MyVulkanManager::vpCenterX = MyVulkanManager::screenWidth / 4;
+          if (y > MyVulkanManager::screenHeight / 4 * 3)
+            MyVulkanManager::vpCenterY = MyVulkanManager::screenHeight / 4 * 3;
+          if (y < MyVulkanManager::screenHeight / 4)
+            MyVulkanManager::vpCenterY = MyVulkanManager::screenHeight / 4;
           break;
-          //触摸移动消息
-        case AMOTION_EVENT_ACTION_MOVE:xDis = x - xPre;
-          yDis = y - yPre;
-          xPre = x;
-          yPre = y;
+        case AMOTION_EVENT_ACTION_MOVE: // 触摸点移动
           break;
-          //触摸弹起消息
-        case AMOTION_EVENT_ACTION_UP:break;
+        case AMOTION_EVENT_ACTION_UP:   // 触摸点抬起
+          break;
+        default:break;
       }
     }
     return true;
