@@ -59,8 +59,10 @@ VkFence MyVulkanManager::taskFinishFence;
 VkPresentInfoKHR MyVulkanManager::present;
 VkFramebuffer *MyVulkanManager::framebuffers;
 ShaderQueueSuit_Common *MyVulkanManager::sqsCL;
-DrawableObjectCommonLight *MyVulkanManager::triForDraw;
+DrawableObjectCommonLight *MyVulkanManager::objForDraw;
 float MyVulkanManager::xAngle = 0;
+/// Sample4_2
+float MyVulkanManager::yAngle = 0;
 
 /// Sample4_1
 int MyVulkanManager::vpCenterX = 0;
@@ -681,7 +683,7 @@ void MyVulkanManager::destroy_frame_buffer() {
  */
 void MyVulkanManager::createDrawableObject() {
   TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
-  triForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
+  objForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
       TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
 }
 
@@ -689,7 +691,7 @@ void MyVulkanManager::createDrawableObject() {
  * 销毁绘制用物体
  */
 void MyVulkanManager::destroyDrawableObject() {
-  delete triForDraw;
+  delete objForDraw;
 }
 
 /**
@@ -730,23 +732,28 @@ void MyVulkanManager::initPresentInfo() {
  * 初始化基本变换矩阵、摄像机矩阵和投影矩阵
  */
 void MyVulkanManager::initMatrix() {
-  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机
+//  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机
+  MatrixState3D::setCamera(0, 0, 2, 0, 0, 0, 0, 1, 0); // Sample4_2-初始化摄像机
   MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
-  float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕长宽比
-  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
+  float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕宽高比
+//  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
+  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
 }
 
 /**
  * 将当前帧相关数据送入一致变量缓冲
  */
 void MyVulkanManager::flushUniformBuffer() {
-  xAngle = xAngle + 1.0f;                                                 // 改变3色三角形的旋转角
-  if (xAngle >= 360) { xAngle = 0; }                                      // 限制3色三角形旋转角范围
+//  xAngle = xAngle + 1.0f;                                                 // 改变3色三角形的旋转角
+//  if (xAngle >= 360) { xAngle = 0; }                                      // 限制3色三角形旋转角范围
+//
+//  MatrixState3D::pushMatrix();                                            // 保护现场
+//  MatrixState3D::rotate(xAngle, 1, 0, 0);                           // 旋转变换
+//  float *vertexUniformData = MatrixState3D::getFinalMatrix();             // 获取最终变换矩阵
+//  MatrixState3D::popMatrix();                                             // 恢复现场
 
-  MatrixState3D::pushMatrix();                                            // 保护现场
-  MatrixState3D::rotate(xAngle, 1, 0, 0);                           // 旋转变换
-  float *vertexUniformData = MatrixState3D::getFinalMatrix();             // 获取最终变换矩阵
-  MatrixState3D::popMatrix();                                             // 恢复现场
+  /// Sample4_2
+  float *vertexUniformData = MatrixState3D::getFinalMatrix();
 
   uint8_t *pData;                                                         // CPU访问设备内存时的辅助指针
   VkResult result = vk::vkMapMemory(                                      // 将设备内存映射为CPU可访问
@@ -772,8 +779,8 @@ void MyVulkanManager::drawObject() {
   FPSUtil::init();                                                        // 初始化FPS计算
 
   /// Sample4_1
-  vpCenterX = screenWidth / 2;
-  vpCenterY = screenHeight / 2;
+//  vpCenterX = screenWidth / 2;
+//  vpCenterY = screenHeight / 2;
 
   while (MyVulkanManager::loopDrawFlag) {                                 // 每循环一次绘制一帧画面
     FPSUtil::calFPS();                                                    // 计算FPS
@@ -789,24 +796,38 @@ void MyVulkanManager::drawObject() {
     MyVulkanManager::flushTexToDesSet();                                  // 更新绘制用描述集
 
     /// Sample4_1
-    VkViewport viewportList[1];                                           // 视口信息序列
-    viewportList[0].minDepth = 0.0f;                                      // 视口最小深度
-    viewportList[0].maxDepth = 1.0f;                                      // 视口最大深度
-    viewportList[0].x = vpCenterX - screenWidth / 4;                      // 视口X坐标
-    viewportList[0].y = vpCenterY - screenHeight / 4;                     // 视口Y坐标
-    viewportList[0].width = screenWidth / 2;                              // 视口宽度
-    viewportList[0].height = screenHeight / 2;                            // 视口高度
-    vk::vkCmdSetViewport(                                                 // 设置视口
-        cmdBuffer,                                                        // 命令缓冲
-        0,                                                                // 第1个视口的索引
-        1,                                                                // 视口的数量
-        viewportList);                                                    // 视口信息序列
+//    VkViewport viewportList[1];                                           // 视口信息序列
+//    viewportList[0].minDepth = 0.0f;                                      // 视口最小深度
+//    viewportList[0].maxDepth = 1.0f;                                      // 视口最大深度
+//    viewportList[0].x = vpCenterX - screenWidth / 4;                      // 视口X坐标
+//    viewportList[0].y = vpCenterY - screenHeight / 4;                     // 视口Y坐标
+//    viewportList[0].width = screenWidth / 2;                              // 视口宽度
+//    viewportList[0].height = screenHeight / 2;                            // 视口高度
+//    vk::vkCmdSetViewport(                                                 // 设置视口
+//        cmdBuffer,                                                        // 命令缓冲
+//        0,                                                                // 第1个视口的索引
+//        1,                                                                // 视口的数量
+//        viewportList);                                                    // 视口信息序列
 
     // VK_SUBPASS_CONTENTS_INLINE：表示仅采用主命令缓冲而没有采用二级命令缓冲(或称之为子命令缓冲)
     // 若需要采用二级命令缓冲，则第三个参数应该选用VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
     vk::vkCmdBeginRenderPass(cmdBuffer, &rp_begin, VK_SUBPASS_CONTENTS_INLINE); // 启动渲染通道
-    triForDraw->drawSelf(                                                 // 绘制三色三角形
-        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+
+    /// Sample4_2
+    MatrixState3D::pushMatrix();                                          // 保护现场
+    MatrixState3D::rotate(xAngle, 1, 0, 0);                       // 绕x轴旋转xAngle
+    MatrixState3D::rotate(yAngle, 0, 1, 0);                       // 绕y轴旋转yAngle
+    for (int i = 0; i <= 5; ++i) {                                        // 循环绘制所有六角星
+      MatrixState3D::pushMatrix();                                        // 保护现场
+      MatrixState3D::translate(0, 0, i * 0.5);                    // 沿Z轴平移
+      objForDraw->drawSelf(                                               // 绘制物体
+          cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+      MatrixState3D::popMatrix();                                         // 恢复现场
+    }
+    MatrixState3D::popMatrix();                                           // 恢复现场
+
+//    triForDraw->drawSelf(                                                 // 绘制三色三角形
+//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
     vk::vkCmdEndRenderPass(cmdBuffer);                                    // 结束渲染通道
     result = vk::vkEndCommandBuffer(cmdBuffer);                           // 结束命令缓冲
 

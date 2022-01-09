@@ -33,6 +33,14 @@ class MatrixState3D {
       float near,
       float far
   );
+  static void setProjectOrtho(
+      float left,
+      float right,
+      float bottom,
+      float top,
+      float near,
+      float far
+  );
   static float *getFinalMatrix();                             // 获取总变换矩阵
   static float *getMMatrix();                                 // 获取当前基本变换矩阵
 };

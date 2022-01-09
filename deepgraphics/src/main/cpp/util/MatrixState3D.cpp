@@ -116,6 +116,20 @@ void MatrixState3D::setProjectFrustum(
 }
 
 /**
+ * 设置正交投影参数
+ */
+void MatrixState3D::setProjectOrtho(
+    float left,
+    float right,
+    float bottom,
+    float top,
+    float near,
+    float far
+) {
+  Matrix::orthoM(mProjMatrix, 0, left, right, bottom, top, near, far);
+}
+
+/**
  * 获取总变换矩阵
  */
 float *MatrixState3D::getFinalMatrix() {
