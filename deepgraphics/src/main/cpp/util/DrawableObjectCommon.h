@@ -7,6 +7,9 @@
 
 class DrawableObjectCommonLight {
  public:
+  /// Sample4_2-需推送的常量数据数组的首地址指针
+  float *pushConstantData;
+
   VkDevice *devicePointer;                      // 指向逻辑设备的指针
   float *vdata;                                 // 顶点数据数组首地址指针
   int vCount;                                   // 顶点数量

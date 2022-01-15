@@ -105,16 +105,26 @@ void ShaderQueueSuit_Common::create_pipeline_layout(VkDevice &device) {
   descriptor_layout.pNext = nullptr;
   descriptor_layout.bindingCount = 1;                                     // 描述集布局绑定的数量
   descriptor_layout.pBindings = layout_bindings;                          // 描述集布局绑定数组
+
   descLayouts.resize(NUM_DESCRIPTOR_SETS);                                // 调整描述集布局列表尺寸
   VkResult result = vk::vkCreateDescriptorSetLayout(                      // 创建描述集布局
       device, &descriptor_layout, nullptr, descLayouts.data());
   assert(result == VK_SUCCESS);                                           // 检查描述集布局创建是否成功
 
+  /// Sample4_2
+  const unsigned push_constant_range_count = 1;                           // 推送常量块数量
+  VkPushConstantRange push_constant_ranges[push_constant_range_count] = {}; // 推送常量范围列表
+  push_constant_ranges[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;        // 对应着色器阶段
+  push_constant_ranges[0].offset = 0;                                     // 推送常量数据起始偏移量
+  push_constant_ranges[0].size = sizeof(float) * 16;                      // 推送常量数据总字节数
+
   VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};              // 构建管线布局创建信息结构体实例
   pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
   pPipelineLayoutCreateInfo.pNext = nullptr;
-  pPipelineLayoutCreateInfo.pushConstantRangeCount = 0;                   // 推送常量范围的数量
-  pPipelineLayoutCreateInfo.pPushConstantRanges = nullptr;                // 推送常量范围的列表
+//  pPipelineLayoutCreateInfo.pushConstantRangeCount = 0;                   // 推送常量范围的数量
+//  pPipelineLayoutCreateInfo.pPushConstantRanges = nullptr;                // 推送常量范围的列表
+  pPipelineLayoutCreateInfo.pushConstantRangeCount = push_constant_range_count; // Sample4_2-推送常量范围数量
+  pPipelineLayoutCreateInfo.pPushConstantRanges = push_constant_ranges;   // Sample4_2-推送常量范围列表
   pPipelineLayoutCreateInfo.setLayoutCount = NUM_DESCRIPTOR_SETS;         // 描述集布局的数量
   pPipelineLayoutCreateInfo.pSetLayouts = descLayouts.data();             // 描述集布局列表
   result = vk::vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, nullptr, &pipelineLayout); // 创建管线布局

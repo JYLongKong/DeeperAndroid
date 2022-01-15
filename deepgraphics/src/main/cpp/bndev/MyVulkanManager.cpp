@@ -128,6 +128,12 @@ void MyVulkanManager::enumerate_vulkan_phy_devices() {
   result = vk::vkEnumeratePhysicalDevices(instance, &gpuCount, gpus.data());// 填充物理设备列表
   assert(result == VK_SUCCESS);
   vk::vkGetPhysicalDeviceMemoryProperties(gpus[0], &memoryroperties);       // 获取第一物理设备的内存属性
+
+  /// 获取不同平台下推送常量允许使用的最大总字节数
+  VkPhysicalDeviceProperties gpuProps;                                      // 声明所需的结构体实例
+  vk::vkGetPhysicalDeviceProperties(gpus[0], &gpuProps);                    // 获取各项属性值
+  LOGI("VkPhysicalDeviceProperties::limits::maxPushConstantsSize=%d",
+       gpuProps.limits.maxPushConstantsSize); // 最大推送常量总字节数
 }
 
 /**
@@ -737,7 +743,8 @@ void MyVulkanManager::initMatrix() {
   MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
   float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕宽高比
 //  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
-  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
+//  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
+  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
 }
 
 /**
