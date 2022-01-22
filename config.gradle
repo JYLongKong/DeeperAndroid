@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        isRelease = true
+        isRelease = false
 
         deepApplicationId = "com.lgjy.deeper.android"
         deepCompileSdk = 31

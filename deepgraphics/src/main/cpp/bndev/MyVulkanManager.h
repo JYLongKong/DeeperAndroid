@@ -58,7 +58,8 @@ class MyVulkanManager {
   static VkPresentInfoKHR present;                        // 呈现信息
   static VkFramebuffer *framebuffers;                     // 帧缓冲序列首指针
   static ShaderQueueSuit_Common *sqsCL;                   // 着色器管线指针
-  static DrawableObjectCommonLight *objForDraw;           // 绘制用3色三角形物体对象指针
+  static DrawableObjectCommonLight *triForDraw;           // Sample4_1-绘制用3色三角形物体对象指针
+  static DrawableObjectCommonLight *objForDraw;           // Sample4_2-六角星
   static float xAngle;                                    // 三角形旋转角度
   /// Sample4_2 六角星
   static float yAngle;

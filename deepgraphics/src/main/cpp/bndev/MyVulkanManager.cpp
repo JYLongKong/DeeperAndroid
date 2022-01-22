@@ -11,6 +11,7 @@
 #include "MyVulkanManager.h"
 #include "ThreadTask.h"
 #include "TriangleData.h"
+#include "SixPointedStar.h"
 #include "MatrixState3D.h"
 
 // 静态成员实现
@@ -59,14 +60,16 @@ VkFence MyVulkanManager::taskFinishFence;
 VkPresentInfoKHR MyVulkanManager::present;
 VkFramebuffer *MyVulkanManager::framebuffers;
 ShaderQueueSuit_Common *MyVulkanManager::sqsCL;
-DrawableObjectCommonLight *MyVulkanManager::objForDraw;
 float MyVulkanManager::xAngle = 0;
-/// Sample4_2
-float MyVulkanManager::yAngle = 0;
 
 /// Sample4_1
 int MyVulkanManager::vpCenterX = 0;
 int MyVulkanManager::vpCenterY = 0;
+DrawableObjectCommonLight *MyVulkanManager::triForDraw;
+
+/// Sample4_2
+float MyVulkanManager::yAngle = 0;
+DrawableObjectCommonLight *MyVulkanManager::objForDraw;
 
 /**
  * 创建Vulkan实例的方法
@@ -688,15 +691,23 @@ void MyVulkanManager::destroy_frame_buffer() {
  * 创建绘制用物体
  */
 void MyVulkanManager::createDrawableObject() {
-  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
-  objForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
-      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
+  /// Sample4_1
+//  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
+//  triForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
+//      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
+  /// Sample4_2
+  SixPointedStar::genStarData(0.2, 0.5, 0);
+  objForDraw = new DrawableObjectCommonLight(
+      SixPointedStar::vdata, SixPointedStar::dataByteCount, SixPointedStar::vCount, device, memoryroperties);
 }
 
 /**
  * 销毁绘制用物体
  */
 void MyVulkanManager::destroyDrawableObject() {
+  /// Sample4_1
+//  delete triForDraw;
+  /// Sample4_2
   delete objForDraw;
 }
 
@@ -743,8 +754,8 @@ void MyVulkanManager::initMatrix() {
   MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
   float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕宽高比
 //  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
-//  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
-  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
+  MatrixState3D::setProjectOrtho(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
+//  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
 }
 
 /**

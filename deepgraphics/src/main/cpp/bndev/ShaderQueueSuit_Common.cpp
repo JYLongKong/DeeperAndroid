@@ -43,6 +43,7 @@ void ShaderQueueSuit_Common::create_uniform_buffer(VkDevice &device,
   buf_info.pQueueFamilyIndices = nullptr;                                 // 队列家族索引列表
   buf_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;                       // 共享模式
   buf_info.flags = 0;                                                     // 标志
+
   VkResult result = vk::vkCreateBuffer(device, &buf_info, nullptr, &uniformBuf); // 创建一致变量缓冲
   assert(result == VK_SUCCESS);                                           // 检查创建是否成功
 
@@ -54,15 +55,18 @@ void ShaderQueueSuit_Common::create_uniform_buffer(VkDevice &device,
   alloc_info.pNext = nullptr;                                             // 自定义数据的指针
   alloc_info.memoryTypeIndex = 0;                                         // 内存类型索引
   alloc_info.allocationSize = mem_reqs.size;                              // 缓冲内存分配字节数
+
   VkFlags requirements_mask = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |       // 需要的内存类型掩码
       VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;                               // 该组合表示分配的设备内存可以被CPU访问，同时保证CPU与GPU访问的一致性
   bool flag = memoryTypeFromProperties(                                   // 获取所需内存类型索引
       memoryroperties, mem_reqs.memoryTypeBits, requirements_mask, &alloc_info.memoryTypeIndex);
+
   if (flag) {
     LOGI("confirm memory type of uniformBuf succeed, memoryTypeIndex = %d", alloc_info.memoryTypeIndex);
   } else {
     LOGE("confirm memory type of uniformBuf failed!");
   }
+
   result = vk::vkAllocateMemory(device, &alloc_info, nullptr, &memUniformBuf); // 分配内存
   assert(result == VK_SUCCESS);                                           // 检查内存分配是否成功
 
@@ -127,6 +131,7 @@ void ShaderQueueSuit_Common::create_pipeline_layout(VkDevice &device) {
   pPipelineLayoutCreateInfo.pPushConstantRanges = push_constant_ranges;   // Sample4_2-推送常量范围列表
   pPipelineLayoutCreateInfo.setLayoutCount = NUM_DESCRIPTOR_SETS;         // 描述集布局的数量
   pPipelineLayoutCreateInfo.pSetLayouts = descLayouts.data();             // 描述集布局列表
+
   result = vk::vkCreatePipelineLayout(device, &pPipelineLayoutCreateInfo, nullptr, &pipelineLayout); // 创建管线布局
   assert(result == VK_SUCCESS);
 }
@@ -265,21 +270,20 @@ void ShaderQueueSuit_Common::initVertexAttributeInfo() {
  * 创建管线
  */
 void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &renderPass) {
-//  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
-//  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
-
   /// Sample4_1
-  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
-  dynamicStateEnables[0] = VK_DYNAMIC_STATE_VIEWPORT;                     // 视口为动态设置
+//  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
+//  dynamicStateEnables[0] = VK_DYNAMIC_STATE_VIEWPORT;                     // 视口为动态设置
+  /// Sample4_2
+  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
+  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
 
   // 管线动态状态是指在程序运行过程中可以通过命令修改的一些参数，只有启用了某方面的动态状态才可以动态修改此方面的参数(如剪裁窗口、视口等)
   VkPipelineDynamicStateCreateInfo dynamicState = {};                     // 管线动态状态创建信息
   dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
   dynamicState.pNext = nullptr;
   dynamicState.pDynamicStates = dynamicStateEnables;                      // 动态状态启用标志数组
-//  dynamicState.dynamicStateCount = 0;                                     // 启用的动态状态项数量(本案例没有这方面需要)
-  /// Sample4_1
-  dynamicState.dynamicStateCount = 1;                                     // 启用的动态状态项数量
+//  dynamicState.dynamicStateCount = 1;                                     // Sample4_1-启用的动态状态项数量
+  dynamicState.dynamicStateCount = 0;                                     // Sample4_2-启用的动态状态项数量(本案例没有这方面需要)
 
   VkPipelineVertexInputStateCreateInfo vi;                                // 管线顶点数据输入状态创建信息
   vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;

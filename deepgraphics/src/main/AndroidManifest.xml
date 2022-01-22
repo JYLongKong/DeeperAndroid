@@ -3,7 +3,11 @@
     package="com.lgjy.deeper.graphics">
 
     <application>
-        <activity android:name=".activity.VulkanActivity">
+        <activity
+            android:name=".activity.VulkanActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="bn-vulkan-lib" />
