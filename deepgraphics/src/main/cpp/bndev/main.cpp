@@ -33,7 +33,7 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
       switch (id) {
 
         case AMOTION_EVENT_ACTION_DOWN: // 触摸点按下
-          /// Sample4_1
+          /// Sample4_1 ************************************************** start
 //          MyVulkanManager::vpCenterX = x;
 //          MyVulkanManager::vpCenterY = y;
 //          // 控制边界
@@ -45,21 +45,24 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
 //            MyVulkanManager::vpCenterY = MyVulkanManager::screenHeight / 4 * 3;
 //          if (y < MyVulkanManager::screenHeight / 4)
 //            MyVulkanManager::vpCenterY = MyVulkanManager::screenHeight / 4;
+          /// Sample4_1 **************************************************** end
 
-          /// Sample4_2
+          /// Sample4_2 ************************************************** start
           xPre = x;
           yPre = y;
+          /// Sample4_2 **************************************************** end
 
           break;
         case AMOTION_EVENT_ACTION_MOVE: // 触摸点移动
 
-          /// Sample4_2
+          /// Sample4_2 ************************************************** start
           xDis = x - xPre;                      // 计算触控点x位移
           yDis = y - yPre;                      // 计算触控点y位移
           MyVulkanManager::xAngle += yDis / 10; // 计算x轴旋转角
           MyVulkanManager::yAngle += xDis / 10; // 计算y轴旋转角
           xPre = x;                             // 记录触控点x坐标
           yPre = y;                             // 记录触控点y坐标
+          /// Sample4_2 **************************************************** end
 
           break;
         case AMOTION_EVENT_ACTION_UP:   // 触摸点抬起

@@ -115,12 +115,13 @@ void ShaderQueueSuit_Common::create_pipeline_layout(VkDevice &device) {
       device, &descriptor_layout, nullptr, descLayouts.data());
   assert(result == VK_SUCCESS);                                           // 检查描述集布局创建是否成功
 
-  /// Sample4_2
+  /// Sample4_2 ************************************************** start
   const unsigned push_constant_range_count = 1;                           // 推送常量块数量
   VkPushConstantRange push_constant_ranges[push_constant_range_count] = {}; // 推送常量范围列表
   push_constant_ranges[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;        // 对应着色器阶段
   push_constant_ranges[0].offset = 0;                                     // 推送常量数据起始偏移量
   push_constant_ranges[0].size = sizeof(float) * 16;                      // 推送常量数据总字节数
+  /// Sample4_2 **************************************************** end
 
   VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};              // 构建管线布局创建信息结构体实例
   pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -270,12 +271,15 @@ void ShaderQueueSuit_Common::initVertexAttributeInfo() {
  * 创建管线
  */
 void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &renderPass) {
-  /// Sample4_1
+  /// Sample4_1 ************************************************** start
 //  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
 //  dynamicStateEnables[0] = VK_DYNAMIC_STATE_VIEWPORT;                     // 视口为动态设置
-  /// Sample4_2
+  /// Sample4_1 **************************************************** end
+
+  /// Sample4_2 ************************************************** start
   VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
   memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
+  /// Sample4_2 **************************************************** end
 
   // 管线动态状态是指在程序运行过程中可以通过命令修改的一些参数，只有启用了某方面的动态状态才可以动态修改此方面的参数(如剪裁窗口、视口等)
   VkPipelineDynamicStateCreateInfo dynamicState = {};                     // 管线动态状态创建信息

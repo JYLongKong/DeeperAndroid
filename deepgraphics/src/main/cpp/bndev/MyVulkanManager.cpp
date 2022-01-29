@@ -62,14 +62,16 @@ VkFramebuffer *MyVulkanManager::framebuffers;
 ShaderQueueSuit_Common *MyVulkanManager::sqsCL;
 float MyVulkanManager::xAngle = 0;
 
-/// Sample4_1
+/// Sample4_1 ************************************************** start
 int MyVulkanManager::vpCenterX = 0;
 int MyVulkanManager::vpCenterY = 0;
 DrawableObjectCommonLight *MyVulkanManager::triForDraw;
+/// Sample4_1 **************************************************** end
 
-/// Sample4_2
+/// Sample4_2 ************************************************** start
 float MyVulkanManager::yAngle = 0;
 DrawableObjectCommonLight *MyVulkanManager::objForDraw;
+/// Sample4_2 **************************************************** end
 
 /**
  * 创建Vulkan实例的方法
@@ -691,14 +693,17 @@ void MyVulkanManager::destroy_frame_buffer() {
  * 创建绘制用物体
  */
 void MyVulkanManager::createDrawableObject() {
-  /// Sample4_1
+  /// Sample4_1 ************************************************** start
 //  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
 //  triForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
 //      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
-  /// Sample4_2
+  /// Sample4_1 **************************************************** end
+
+  /// Sample4_2 ************************************************** start
   SixPointedStar::genStarData(0.2, 0.5, 0);
   objForDraw = new DrawableObjectCommonLight(
       SixPointedStar::vdata, SixPointedStar::dataByteCount, SixPointedStar::vCount, device, memoryroperties);
+  /// Sample4_2 **************************************************** end
 }
 
 /**
@@ -796,9 +801,10 @@ void MyVulkanManager::flushTexToDesSet() {
 void MyVulkanManager::drawObject() {
   FPSUtil::init();                                                        // 初始化FPS计算
 
-  /// Sample4_1
+  /// Sample4_1 ************************************************** start
 //  vpCenterX = screenWidth / 2;
 //  vpCenterY = screenHeight / 2;
+  /// Sample4_1 **************************************************** end
 
   while (MyVulkanManager::loopDrawFlag) {                                 // 每循环一次绘制一帧画面
     FPSUtil::calFPS();                                                    // 计算FPS
@@ -813,7 +819,7 @@ void MyVulkanManager::drawObject() {
     MyVulkanManager::flushUniformBuffer();                                // 将当前帧相关数据送入一致变量缓冲
     MyVulkanManager::flushTexToDesSet();                                  // 更新绘制用描述集
 
-    /// Sample4_1
+    /// Sample4_1 ************************************************** start
 //    VkViewport viewportList[1];                                           // 视口信息序列
 //    viewportList[0].minDepth = 0.0f;                                      // 视口最小深度
 //    viewportList[0].maxDepth = 1.0f;                                      // 视口最大深度
@@ -826,23 +832,43 @@ void MyVulkanManager::drawObject() {
 //        0,                                                                // 第1个视口的索引
 //        1,                                                                // 视口的数量
 //        viewportList);                                                    // 视口信息序列
+    /// Sample4_1 **************************************************** end
 
     // VK_SUBPASS_CONTENTS_INLINE：表示仅采用主命令缓冲而没有采用二级命令缓冲(或称之为子命令缓冲)
     // 若需要采用二级命令缓冲，则第三个参数应该选用VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
     vk::vkCmdBeginRenderPass(cmdBuffer, &rp_begin, VK_SUBPASS_CONTENTS_INLINE); // 启动渲染通道
 
-    /// Sample4_2
-    MatrixState3D::pushMatrix();                                          // 保护现场
-    MatrixState3D::rotate(xAngle, 1, 0, 0);                       // 绕x轴旋转xAngle
-    MatrixState3D::rotate(yAngle, 0, 1, 0);                       // 绕y轴旋转yAngle
-    for (int i = 0; i <= 5; ++i) {                                        // 循环绘制所有六角星
-      MatrixState3D::pushMatrix();                                        // 保护现场
-      MatrixState3D::translate(0, 0, i * 0.5);                    // 沿Z轴平移
-      objForDraw->drawSelf(                                               // 绘制物体
-          cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
-      MatrixState3D::popMatrix();                                         // 恢复现场
-    }
-    MatrixState3D::popMatrix();                                           // 恢复现场
+    /// Sample4_2 ************************************************** start
+//    MatrixState3D::pushMatrix();                                          // 保护现场
+//    MatrixState3D::rotate(xAngle, 1, 0, 0);                       // 绕x轴旋转xAngle
+//    MatrixState3D::rotate(yAngle, 0, 1, 0);                       // 绕y轴旋转yAngle
+//    for (int i = 0; i <= 5; ++i) {                                        // 循环绘制所有六角星
+//      MatrixState3D::pushMatrix();                                        // 保护现场
+//      MatrixState3D::translate(0, 0, i * 0.5);                    // 沿Z轴平移
+//      objForDraw->drawSelf(                                               // 绘制物体
+//          cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//      MatrixState3D::popMatrix();                                         // 恢复现场
+//    }
+//    MatrixState3D::popMatrix();                                           // 恢复现场
+    /// Sample4_2 **************************************************** end
+
+    /// Sample4_4 ************************************************** start
+    MatrixState3D::pushMatrix();
+    MatrixState3D::rotate(xAngle, 1, 0, 0);
+    MatrixState3D::rotate(yAngle, 0, 1, 0);
+    MatrixState3D::pushMatrix();
+    objForDraw->drawSelf(                                                 // 绘制第一个立方体
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+    MatrixState3D::popMatrix();
+    MatrixState3D::pushMatrix();
+    MatrixState3D::translate(3.5f, 0, 0);                         // 沿x方向平移3.5
+    MatrixState3D::rotate(30, 0, 0, 1);                      // 绕z轴旋转30°
+    MatrixState3D::scale(0.4f, 2.0f, 0.6f);                       // x轴、y轴、z轴3个方向按各自的缩放因子进行缩放
+    objForDraw->drawSelf(                                                 // 绘制变换后的立方体
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+    MatrixState3D::popMatrix();
+    MatrixState3D::popMatrix();
+    /// Sample4_4 **************************************************** end
 
 //    triForDraw->drawSelf(                                                 // 绘制三色三角形
 //        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));

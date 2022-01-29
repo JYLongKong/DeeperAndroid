@@ -25,11 +25,13 @@ add_library(
         src/main/cpp/util/DrawableObjectCommon.cpp
         src/main/cpp/bndev/ShaderCompileUtil.cpp
         src/main/cpp/bndev/ShaderQueueSuit_Common.cpp
-        src/main/cpp/bndev/SixPointedStar.cpp
-        src/main/cpp/bndev/TriangleData.cpp
         src/main/cpp/bndev/MyVulkanManager.cpp
         src/main/cpp/bndev/ThreadTask.cpp
         src/main/cpp/bndev/main.cpp
+
+        src/main/cpp/bndev/TriangleData.cpp
+        src/main/cpp/bndev/SixPointedStar.cpp
+        src/main/cpp/bndev/CubeData.cpp
 )
 
 
