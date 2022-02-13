@@ -5,7 +5,7 @@
 #include "vulkan_wrapper.h"
 #include <string>
 
-class DrawableObjectCommonLight {
+class DrawableObjectCommon {
  public:
   /// Sample4_2-需推送的常量数据数组的首地址指针
   float *pushConstantData;
@@ -17,13 +17,13 @@ class DrawableObjectCommonLight {
   VkDeviceMemory vertexDataMem;                 // 顶点数据所需设备内存
   VkDescriptorBufferInfo vertexDataBufferInfo;  // 顶点数据缓冲描述信息
 
-  DrawableObjectCommonLight(float *vdataIn,
-                            int dataByteCount,
-                            int vCountIn,
-                            VkDevice &device,
-                            VkPhysicalDeviceMemoryProperties &memoryroperties);
+  DrawableObjectCommon(float *vdataIn,
+                       int dataByteCount,
+                       int vCountIn,
+                       VkDevice &device,
+                       VkPhysicalDeviceMemoryProperties &memoryroperties);
 
-  ~DrawableObjectCommonLight();
+  ~DrawableObjectCommon();
 
   /**
    * 绘制方法

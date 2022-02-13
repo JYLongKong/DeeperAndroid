@@ -32,6 +32,7 @@ add_library(
         src/main/cpp/bndev/TriangleData.cpp
         src/main/cpp/bndev/SixPointedStar.cpp
         src/main/cpp/bndev/CubeData.cpp
+        src/main/cpp/bndev/ObjectData.cpp
 )
 
 

@@ -58,8 +58,8 @@ class MyVulkanManager {
   static VkPresentInfoKHR present;                        // 呈现信息
   static VkFramebuffer *framebuffers;                     // 帧缓冲序列首指针
   static ShaderQueueSuit_Common *sqsCL;                   // 着色器管线指针
-  static DrawableObjectCommonLight *triForDraw;           // Sample4_1-绘制用3色三角形物体对象指针
-  static DrawableObjectCommonLight *objForDraw;           // Sample4_2-六角星
+  static DrawableObjectCommon *triForDraw;                // Sample4_1-绘制用3色三角形物体对象指针
+  static DrawableObjectCommon *objForDraw;                // Sample4_2-六角星
   static float xAngle;                                    // 三角形旋转角度
   /// Sample4_2 六角星
   static float yAngle;
@@ -67,6 +67,9 @@ class MyVulkanManager {
   /// Sample4_1 触摸点作为显示中点
   static int vpCenterX;
   static int vpCenterY;
+
+  /// Sample4_7 线段绘制方式
+  static int topologyWay;
 
   static void init_vulkan_instance();                     // 创建Vulkan实例
   static void enumerate_vulkan_phy_devices();             // 初始化物理设备

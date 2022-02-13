@@ -14,6 +14,7 @@
 #include "SixPointedStar.h"
 #include "MatrixState3D.h"
 #include "CubeData.h"
+#include "ObjectData.h"
 
 // 静态成员实现
 android_app *MyVulkanManager::Android_application;
@@ -66,13 +67,16 @@ float MyVulkanManager::xAngle = 0;
 /// Sample4_1 ************************************************** start
 int MyVulkanManager::vpCenterX = 0;
 int MyVulkanManager::vpCenterY = 0;
-DrawableObjectCommonLight *MyVulkanManager::triForDraw;
+DrawableObjectCommon *MyVulkanManager::triForDraw;
 /// Sample4_1 **************************************************** end
 
 /// Sample4_2 ************************************************** start
 float MyVulkanManager::yAngle = 0;
-DrawableObjectCommonLight *MyVulkanManager::objForDraw;
+DrawableObjectCommon *MyVulkanManager::objForDraw;
 /// Sample4_2 **************************************************** end
+
+/// Sample4_7
+int MyVulkanManager::topologyWay = 0;
 
 /**
  * 创建Vulkan实例的方法
@@ -172,18 +176,30 @@ void MyVulkanManager::create_vulkan_devices() {
   queueInfo.queueCount = 1;                                                 // 指定队列数量
   queueInfo.pQueuePriorities = queue_priorities;                            // 给出每个队列的优先级
   queueInfo.queueFamilyIndex = queueGraphicsFamilyIndex;                    // 绑定队列家族索引
+  deviceExtensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);          // 设置逻辑设备所需的扩展名称列表，使创建的设备支持交换链的使用
+
+  /// Sample4_7 ************************************************** start
+  VkPhysicalDeviceFeatures pdf;                                             // 存储设备所支持特性的结构体实例
+  vk::vkGetPhysicalDeviceFeatures(gpus[0], &pdf);                           // 获取指定设备支持的特性
+  if (pdf.wideLines == VK_TRUE) {                                           // 判断是否支持wideLines特性
+    LOGI("support wideLines feature!");
+  } else {
+    LOGE("don't support wideLines feature!");
+  }
+  /// Sample4_7 **************************************************** end
 
   VkDeviceCreateInfo deviceInfo = {};                                       // 构建逻辑设备创建信息结构体实例
   deviceInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;                  // 给出结构体类型
   deviceInfo.pNext = nullptr;                                               // 自定义数据的指针
   deviceInfo.queueCreateInfoCount = 1;                                      // 指定设备队列创建信息结构体数量
   deviceInfo.pQueueCreateInfos = &queueInfo;                                // 给定设备队列创建信息结构体列表
-  deviceExtensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);          // 设置逻辑设备所需的扩展名称列表，使创建的设备支持交换链的使用
   deviceInfo.enabledExtensionCount = deviceExtensionNames.size();           // 所需扩展数量
   deviceInfo.ppEnabledExtensionNames = deviceExtensionNames.data();         // 所需扩展列表
   deviceInfo.enabledLayerCount = 0;                                         // 需启动Layer的数量
   deviceInfo.ppEnabledLayerNames = nullptr;                                 // 需启动Layer的名称列表
-  deviceInfo.pEnabledFeatures = nullptr;                                    // 启动的设备特性
+//  deviceInfo.pEnabledFeatures = nullptr;                                    // 启动的设备特性
+  /// Sample4_7-创建的逻辑设备启用所有设备能够支持的特性(绘制宽度大于1的线需要启用wideLines特性)
+  deviceInfo.pEnabledFeatures = &pdf;
 
   VkResult result = vk::vkCreateDevice(gpus[0], &deviceInfo, nullptr, &device); // 创建逻辑设备
   assert(result == VK_SUCCESS);                                             // 检查逻辑设备是否创建成功
@@ -696,21 +712,27 @@ void MyVulkanManager::destroy_frame_buffer() {
 void MyVulkanManager::createDrawableObject() {
   /// Sample4_1 ************************************************** start
 //  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
-//  triForDraw = new DrawableObjectCommonLight(                           // 创建绘制用三色三角形对象
+//  triForDraw = new DrawableObjectCommon(                                // 创建绘制用三色三角形对象
 //      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
   /// Sample4_1 **************************************************** end
 
   /// Sample4_2 ************************************************** start
 //  SixPointedStar::genStarData(0.2, 0.5, 0);
-//  objForDraw = new DrawableObjectCommonLight(
+//  objForDraw = new DrawableObjectCommon(
 //      SixPointedStar::vdata, SixPointedStar::dataByteCount, SixPointedStar::vCount, device, memoryroperties);
   /// Sample4_2 **************************************************** end
 
   /// Sample4_4 ************************************************** start
-  CubeData::genBallData();
-  objForDraw = new DrawableObjectCommonLight(
-      CubeData::vdata, CubeData::dataByteCount, CubeData::vCount, device, memoryroperties);
+//  CubeData::genBallData();
+//  objForDraw = new DrawableObjectCommon(
+//      CubeData::vdata, CubeData::dataByteCount, CubeData::vCount, device, memoryroperties);
   /// Sample4_4 **************************************************** end
+
+  /// Sample4_7 ************************************************** start
+  ObjectData::genVertexData();
+  objForDraw = new DrawableObjectCommon(
+      ObjectData::vdata, ObjectData::dataByteCount, ObjectData::vCount, device, memoryroperties);
+  /// Sample4_7 **************************************************** end
 }
 
 /**
@@ -763,13 +785,15 @@ void MyVulkanManager::initPresentInfo() {
 void MyVulkanManager::initMatrix() {
 //  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机
 //  MatrixState3D::setCamera(0, 0, 2, 0, 0, 0, 0, 1, 0); // Sample4_2-初始化摄像机
-  MatrixState3D::setCamera(-16, 8, 45, 0, 0, 0, 0, 1.0, 0.0); // Sample4_4-CubeData
+//  MatrixState3D::setCamera(-16, 8, 45, 0, 0, 0, 0, 1.0, 0.0); // Sample4_4-CubeData
+  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // Sample4_7
   MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
   float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕宽高比
 //  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
 //  MatrixState3D::setProjectOrtho(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
 //  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
-  MatrixState3D::setProjectFrustum(-ratio * 0.8f, ratio * 1.2f, -1, 1, 20, 100); // Sample4_4-CubeData
+//  MatrixState3D::setProjectFrustum(-ratio * 0.8f, ratio * 1.2f, -1, 1, 20, 100); // Sample4_4-CubeData
+  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // Sample4_7
 }
 
 /**
@@ -862,22 +886,27 @@ void MyVulkanManager::drawObject() {
     /// Sample4_2 **************************************************** end
 
     /// Sample4_4 ************************************************** start
-    MatrixState3D::pushMatrix();
-    MatrixState3D::rotate(xAngle, 1, 0, 0);
-    MatrixState3D::rotate(yAngle, 0, 1, 0);
-    MatrixState3D::pushMatrix();
-    objForDraw->drawSelf(                                                 // 绘制第一个立方体
-        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
-    MatrixState3D::popMatrix();
-    MatrixState3D::pushMatrix();
-    MatrixState3D::translate(3.5f, 0, 0);                         // Sample4_4-沿x方向平移3.5
-    MatrixState3D::rotate(30, 0, 0, 1);                      // Sample4_5-绕z轴旋转30°
-    MatrixState3D::scale(0.4f, 2.0f, 0.6f);                       // Sample4_6-x轴、y轴、z轴3个方向按各自的缩放因子进行缩放
-    objForDraw->drawSelf(                                                 // 绘制变换后的立方体
-        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
-    MatrixState3D::popMatrix();
-    MatrixState3D::popMatrix();
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::rotate(xAngle, 1, 0, 0);
+//    MatrixState3D::rotate(yAngle, 0, 1, 0);
+//    MatrixState3D::pushMatrix();
+//    objForDraw->drawSelf(                                                 // 绘制第一个立方体
+//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(3.5f, 0, 0);                         // Sample4_4-沿x方向平移3.5
+//    MatrixState3D::rotate(30, 0, 0, 1);                      // Sample4_5-绕z轴旋转30°
+//    MatrixState3D::scale(0.4f, 2.0f, 0.6f);                       // Sample4_6-x轴、y轴、z轴3个方向按各自的缩放因子进行缩放
+//    objForDraw->drawSelf(                                                 // 绘制变换后的立方体
+//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//    MatrixState3D::popMatrix();
     /// Sample4_4 **************************************************** end
+
+    /// Sample4_7 ************************************************** start
+    objForDraw->drawSelf(
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[topologyWay], &(sqsCL->descSet[0]));
+    /// Sample4_7 **************************************************** end
 
 //    triForDraw->drawSelf(                                                 // 绘制三色三角形
 //        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));

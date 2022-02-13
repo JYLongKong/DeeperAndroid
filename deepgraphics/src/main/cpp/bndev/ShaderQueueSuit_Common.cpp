@@ -298,12 +298,31 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   vi.vertexAttributeDescriptionCount = 2;                                 // 顶点输入属性描述数量
   vi.pVertexAttributeDescriptions = vertexAttribs;                        // 顶点输入属性描述列表
 
-  VkPipelineInputAssemblyStateCreateInfo ia;                              // 管线图元组装状态创建信息
-  ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-  ia.pNext = nullptr;
-  ia.flags = 0;
-  ia.primitiveRestartEnable = VK_FALSE;                                   // 关闭图元重启
-  ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;                      // 采用三角形图元列表模式进行图元组装
+//  VkPipelineInputAssemblyStateCreateInfo ia;                              // 管线图元组装状态创建信息
+//  ia.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+//  ia.pNext = nullptr;
+//  ia.flags = 0;
+//  ia.primitiveRestartEnable = VK_FALSE;                                   // 关闭图元重启
+//  ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;                      // 采用三角形图元列表模式进行图元组装
+
+  /// Sample4_7 ************************************************** start
+  VkPipelineInputAssemblyStateCreateInfo ia[topologyCount];               // 管线图元组装状态创建信息数组
+  for (int i = 0; i < topologyCount; ++i) {                               // 遍历数组中每个元素进行初始化
+    ia[i].sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    ia[i].pNext = nullptr;
+    ia[i].flags = 0;
+    ia[i].primitiveRestartEnable = VK_FALSE;                              // 关闭图元重启
+    switch (i) {                                                          // 数组中的每个元素设置不同的图元组装方式
+      case 0:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;           // 点列表方式
+        break;
+      case 1:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;            // 线段列表方式
+        break;
+      case 2:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;           // 折线方式
+        break;
+      default:break;
+    }
+  }
+  /// Sample4_7 **************************************************** end
 
   VkPipelineRasterizationStateCreateInfo rs;                              // 管线光栅化状态创建信息
   rs.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -318,7 +337,8 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   rs.depthBiasConstantFactor = 0;                                         // 深度偏移常量因子
   rs.depthBiasClamp = 0;                                                  // 深度偏移值上下限(若为正作为上限，为负作为下限)
   rs.depthBiasSlopeFactor = 0;                                            // 深度偏移斜率因子
-  rs.lineWidth = 1.0f;                                                    // 线宽度(仅在线绘制模式起作用)
+//  rs.lineWidth = 1.0f;                                                   // 线宽度(仅在线绘制模式起作用)
+  rs.lineWidth = 10.0f;                                                   // Sample4_7-设置线宽时还需要wideLines特性支持和启用
 
   VkPipelineColorBlendAttachmentState att_state[1];                       // 管线颜色混合附件状态数组
   att_state[0].colorWriteMask = 0xf;                                      // 设置写入掩码
@@ -412,7 +432,7 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   // VK_PIPELINE_CREATE_DERIVATIVE_BIT:表示创建的管线作为前面创建管线的子管线，与VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT对应
   pipelineInfo.flags = 0;                                                 // 标志
   pipelineInfo.pVertexInputState = &vi;                                   // 管线的顶点数据输入状态信息
-  pipelineInfo.pInputAssemblyState = &ia;                                 // 管线的图元组装状态信息
+//  pipelineInfo.pInputAssemblyState = &ia;                                 // 管线的图元组装状态信息
   pipelineInfo.pRasterizationState = &rs;                                 // 管线的光栅化状态信息
   pipelineInfo.pColorBlendState = &cb;                                    // 管线的颜色混合状态信息
   pipelineInfo.pTessellationState = nullptr;                              // 管线的曲面细分状态信息
@@ -434,14 +454,29 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
 
   VkResult result = vk::vkCreatePipelineCache(device, &pipelineCacheInfo, nullptr, &pipelineCache);
   assert(result == VK_SUCCESS);                                           // 检查管线缓冲创建是否成功
-  result = vk::vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineInfo, nullptr, &pipeline);
-  assert(result == VK_SUCCESS);                                           // 检查管线创建是否成功
+
+//  result = vk::vkCreateGraphicsPipelines(device, pipelineCache, 1, &pipelineInfo, nullptr, &pipeline);
+//  assert(result == VK_SUCCESS);                                           // 检查管线创建是否成功
+  /// Sample4_7 ************************************************** start
+  for (int i = 0; i < topologyCount; ++i) {                               // 为每种图元组装方式创建管线
+    pipelineInfo.pInputAssemblyState = &ia[i];                            // 指定管线的图元组装状态信息
+    result = vk::vkCreateGraphicsPipelines(                               // 创建管线
+        device, pipelineCache, 1, &pipelineInfo, nullptr, &pipeline[i]);
+    assert(result == VK_SUCCESS);                                         // 检查管线创建是否成功
+  }
+  /// Sample4_7 **************************************************** end
 }
 
 /**
  * 销毁管线(和管线缓冲)
  */
 void ShaderQueueSuit_Common::destroy_pipe_line(VkDevice &device) {
-  vk::vkDestroyPipeline(device, pipeline, nullptr);
+//  vk::vkDestroyPipeline(device, pipeline, nullptr);
+  /// Sample4_7 ************************************************** start
+  for (int i = 0; i < topologyCount; ++i) {
+    vk::vkDestroyPipeline(device, pipeline[i], nullptr);
+  }
+  /// Sample4_7 **************************************************** end
+
   vk::vkDestroyPipelineCache(device, pipelineCache, nullptr);
 }

@@ -38,7 +38,12 @@ class ShaderQueueSuit_Common {
   VkWriteDescriptorSet writes[1];                     // 一致变量写入描述集
   std::vector<VkDescriptorSet> descSet;               // 描述集列表
   VkPipelineLayout pipelineLayout;                    // 管线布局
-  VkPipeline pipeline;                                // 管线
+
+//  VkPipeline pipeline;                                // 管线
+  /// Sample4_7 ************************************************** start
+  static const int topologyCount = 3;                 // 绘制方式总数
+  VkPipeline pipeline[topologyCount];                 // 管线
+  /// Sample4_7 **************************************************** end
 
   ShaderQueueSuit_Common(VkDevice *deviceIn,
                          VkRenderPass &renderPass,

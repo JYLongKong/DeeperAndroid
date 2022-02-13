@@ -5,11 +5,11 @@
 #include "MatrixState3D.h"
 #include <string.h>
 
-DrawableObjectCommonLight::DrawableObjectCommonLight(float *vdataIn,
-                                                     int dataByteCount,
-                                                     int vCountIn,
-                                                     VkDevice &device,
-                                                     VkPhysicalDeviceMemoryProperties &memoryroperties) {
+DrawableObjectCommon::DrawableObjectCommon(float *vdataIn,
+                                           int dataByteCount,
+                                           int vCountIn,
+                                           VkDevice &device,
+                                           VkPhysicalDeviceMemoryProperties &memoryroperties) {
   /// Sample4_2-推送常量数据数组的初始化(4X4的最终变换矩阵)
   pushConstantData = new float[16];
 
@@ -67,7 +67,7 @@ DrawableObjectCommonLight::DrawableObjectCommonLight(float *vdataIn,
   vertexDataBufferInfo.range = mem_reqs.size;                             // 数据缓冲所占字节数
 }
 
-DrawableObjectCommonLight::~DrawableObjectCommonLight() {
+DrawableObjectCommon::~DrawableObjectCommon() {
   delete vdata;                                                           // 释放指针内存
   vk::vkDestroyBuffer(*devicePointer, vertexDatabuf, nullptr);            // 销毁顶点缓冲
   vk::vkFreeMemory(*devicePointer, vertexDataMem, nullptr);               // 释放设备内存
@@ -76,10 +76,10 @@ DrawableObjectCommonLight::~DrawableObjectCommonLight() {
 /**
  * 绘制的方法
  */
-void DrawableObjectCommonLight::drawSelf(VkCommandBuffer &cmd,
-                                         VkPipelineLayout &pipelineLayout,
-                                         VkPipeline &pipeline,
-                                         VkDescriptorSet *desSetPointer) {
+void DrawableObjectCommon::drawSelf(VkCommandBuffer &cmd,
+                                    VkPipelineLayout &pipelineLayout,
+                                    VkPipeline &pipeline,
+                                    VkDescriptorSet *desSetPointer) {
   // VK_PIPELINE_BIND_POINT_GRAPHICS表示绑定的管线为图形渲染管线
   vk::vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);  // 将当前使用的命令缓冲与指定管线绑定
   vk::vkCmdBindDescriptorSets(                                            // 将命令缓冲、管线布局、描述集绑定
