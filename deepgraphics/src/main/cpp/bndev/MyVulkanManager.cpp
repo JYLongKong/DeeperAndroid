@@ -13,6 +13,7 @@
 #include "TriangleData.h"
 #include "SixPointedStar.h"
 #include "MatrixState3D.h"
+#include "CubeData.h"
 
 // 静态成员实现
 android_app *MyVulkanManager::Android_application;
@@ -700,10 +701,16 @@ void MyVulkanManager::createDrawableObject() {
   /// Sample4_1 **************************************************** end
 
   /// Sample4_2 ************************************************** start
-  SixPointedStar::genStarData(0.2, 0.5, 0);
-  objForDraw = new DrawableObjectCommonLight(
-      SixPointedStar::vdata, SixPointedStar::dataByteCount, SixPointedStar::vCount, device, memoryroperties);
+//  SixPointedStar::genStarData(0.2, 0.5, 0);
+//  objForDraw = new DrawableObjectCommonLight(
+//      SixPointedStar::vdata, SixPointedStar::dataByteCount, SixPointedStar::vCount, device, memoryroperties);
   /// Sample4_2 **************************************************** end
+
+  /// Sample4_4 ************************************************** start
+  CubeData::genBallData();
+  objForDraw = new DrawableObjectCommonLight(
+      CubeData::vdata, CubeData::dataByteCount, CubeData::vCount, device, memoryroperties);
+  /// Sample4_4 **************************************************** end
 }
 
 /**
@@ -755,12 +762,14 @@ void MyVulkanManager::initPresentInfo() {
  */
 void MyVulkanManager::initMatrix() {
 //  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机
-  MatrixState3D::setCamera(0, 0, 2, 0, 0, 0, 0, 1, 0); // Sample4_2-初始化摄像机
+//  MatrixState3D::setCamera(0, 0, 2, 0, 0, 0, 0, 1, 0); // Sample4_2-初始化摄像机
+  MatrixState3D::setCamera(-16, 8, 45, 0, 0, 0, 0, 1.0, 0.0); // Sample4_4-CubeData
   MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
   float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕宽高比
 //  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
 //  MatrixState3D::setProjectOrtho(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
-  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
+//  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
+  MatrixState3D::setProjectFrustum(-ratio * 0.8f, ratio * 1.2f, -1, 1, 20, 100); // Sample4_4-CubeData
 }
 
 /**
@@ -861,9 +870,9 @@ void MyVulkanManager::drawObject() {
         cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
     MatrixState3D::popMatrix();
     MatrixState3D::pushMatrix();
-    MatrixState3D::translate(3.5f, 0, 0);                         // 沿x方向平移3.5
-    MatrixState3D::rotate(30, 0, 0, 1);                      // 绕z轴旋转30°
-    MatrixState3D::scale(0.4f, 2.0f, 0.6f);                       // x轴、y轴、z轴3个方向按各自的缩放因子进行缩放
+    MatrixState3D::translate(3.5f, 0, 0);                         // Sample4_4-沿x方向平移3.5
+    MatrixState3D::rotate(30, 0, 0, 1);                      // Sample4_5-绕z轴旋转30°
+    MatrixState3D::scale(0.4f, 2.0f, 0.6f);                       // Sample4_6-x轴、y轴、z轴3个方向按各自的缩放因子进行缩放
     objForDraw->drawSelf(                                                 // 绘制变换后的立方体
         cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
     MatrixState3D::popMatrix();
