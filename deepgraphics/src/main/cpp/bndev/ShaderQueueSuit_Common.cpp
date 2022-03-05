@@ -313,9 +313,11 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
     ia[i].flags = 0;
     ia[i].primitiveRestartEnable = VK_FALSE;                              // 关闭图元重启
     switch (i) {                                                          // 数组中的每个元素设置不同的图元组装方式
-      case 0:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;           // 点列表方式
+//      case 0:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;           // Sample4_7-点列表方式
+      case 0:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;       // Sample4_8-三点成面，点共用
         break;
-      case 1:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;            // 线段列表方式
+//      case 1:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;            // Sample4_7-线段列表方式
+      case 1:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;         // Sample4_8-三点成面，点共用
         break;
       case 2:ia[i].topology = VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;           // 折线方式
         break;
@@ -337,8 +339,8 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   rs.depthBiasConstantFactor = 0;                                         // 深度偏移常量因子
   rs.depthBiasClamp = 0;                                                  // 深度偏移值上下限(若为正作为上限，为负作为下限)
   rs.depthBiasSlopeFactor = 0;                                            // 深度偏移斜率因子
-//  rs.lineWidth = 1.0f;                                                   // 线宽度(仅在线绘制模式起作用)
-  rs.lineWidth = 10.0f;                                                   // Sample4_7-设置线宽时还需要wideLines特性支持和启用
+  rs.lineWidth = 1.0f;                                                    // 线宽度(仅在线绘制模式起作用)
+//  rs.lineWidth = 10.0f;                                                   // Sample4_7-设置线宽时还需要wideLines特性支持和启用
 
   VkPipelineColorBlendAttachmentState att_state[1];                       // 管线颜色混合附件状态数组
   att_state[0].colorWriteMask = 0xf;                                      // 设置写入掩码

@@ -15,6 +15,8 @@
 #include "MatrixState3D.h"
 #include "CubeData.h"
 #include "ObjectData.h"
+#include "BeltData.h"
+#include "CircleData.h"
 
 // 静态成员实现
 android_app *MyVulkanManager::Android_application;
@@ -77,6 +79,9 @@ DrawableObjectCommon *MyVulkanManager::objForDraw;
 
 /// Sample4_7
 int MyVulkanManager::topologyWay = 0;
+
+/// Sample4_8
+DrawableObjectCommon *MyVulkanManager::cirForDraw;
 
 /**
  * 创建Vulkan实例的方法
@@ -729,10 +734,19 @@ void MyVulkanManager::createDrawableObject() {
   /// Sample4_4 **************************************************** end
 
   /// Sample4_7 ************************************************** start
-  ObjectData::genVertexData();
-  objForDraw = new DrawableObjectCommon(
-      ObjectData::vdata, ObjectData::dataByteCount, ObjectData::vCount, device, memoryroperties);
+//  ObjectData::genVertexData();
+//  objForDraw = new DrawableObjectCommon(
+//      ObjectData::vdata, ObjectData::dataByteCount, ObjectData::vCount, device, memoryroperties);
   /// Sample4_7 **************************************************** end
+
+  /// Sample4_8 ************************************************** start
+  BeltData::genVertexData();
+  triForDraw = new DrawableObjectCommon(
+      BeltData::vdata, BeltData::dataByteCount, BeltData::vCount, device, memoryroperties);
+  CircleData::genVertexData();
+  cirForDraw = new DrawableObjectCommon(
+      CircleData::vdata, CircleData::dataByteCount, CircleData::vCount, device, memoryroperties);
+  /// Sample4_8 **************************************************** end
 }
 
 /**
@@ -742,7 +756,10 @@ void MyVulkanManager::destroyDrawableObject() {
   /// Sample4_1
 //  delete triForDraw;
   /// Sample4_2
-  delete objForDraw;
+//  delete objForDraw;
+  /// Sample4_8
+  delete triForDraw;
+  delete cirForDraw;
 }
 
 /**
@@ -904,9 +921,29 @@ void MyVulkanManager::drawObject() {
     /// Sample4_4 **************************************************** end
 
     /// Sample4_7 ************************************************** start
-    objForDraw->drawSelf(
-        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[topologyWay], &(sqsCL->descSet[0]));
+//    objForDraw->drawSelf(
+//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[topologyWay], &(sqsCL->descSet[0]));
     /// Sample4_7 **************************************************** end
+
+    /// Sample4_8 ************************************************** start
+    MatrixState3D::pushMatrix();
+    MatrixState3D::rotate(xAngle, 1, 0, 0);
+    MatrixState3D::rotate(yAngle, 0, 1, 0);
+
+    MatrixState3D::pushMatrix();
+    MatrixState3D::translate(90, 0, 0);
+    triForDraw->drawSelf(                                                 // 绘制三角形条带
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[0], &(sqsCL->descSet[0]));
+    MatrixState3D::popMatrix();
+
+    MatrixState3D::pushMatrix();
+    MatrixState3D::translate(-90, 0, 0);
+    cirForDraw->drawSelf(                                                 // 绘制扇形
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[1], &(sqsCL->descSet[0]));
+    MatrixState3D::popMatrix();
+
+    MatrixState3D::popMatrix();
+    /// Sample4_8 **************************************************** end
 
 //    triForDraw->drawSelf(                                                 // 绘制三色三角形
 //        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));

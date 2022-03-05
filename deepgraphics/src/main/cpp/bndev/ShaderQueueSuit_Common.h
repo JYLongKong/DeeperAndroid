@@ -41,7 +41,8 @@ class ShaderQueueSuit_Common {
 
 //  VkPipeline pipeline;                                // 管线
   /// Sample4_7 ************************************************** start
-  static const int topologyCount = 3;                 // 绘制方式总数
+//  static const int topologyCount = 3;                 // Sample4_7-绘制方式总数
+  static const int topologyCount = 2;                 // Sample4_8-绘制方式总数
   VkPipeline pipeline[topologyCount];                 // 管线
   /// Sample4_7 **************************************************** end
 
