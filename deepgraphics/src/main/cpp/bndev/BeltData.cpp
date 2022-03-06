@@ -7,10 +7,6 @@
 const double
     PI = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170680;
 
-float *BeltData::vdata;
-int BeltData::dataByteCount;
-int BeltData::vCount;
-
 double BeltData::toRadians(double d) {
   double e = d * PI / 180;
   return e;
