@@ -740,13 +740,26 @@ void MyVulkanManager::createDrawableObject() {
   /// Sample4_7 **************************************************** end
 
   /// Sample4_8 ************************************************** start
-  BeltData::genVertexData();
-  triForDraw = new DrawableObjectCommon(
-      BeltData::vdata, BeltData::dataByteCount, BeltData::vCount, device, memoryroperties);
+//  BeltData::genVertexData();
+//  triForDraw = new DrawableObjectCommon(
+//      BeltData::vdata, BeltData::dataByteCount, BeltData::vCount, device, memoryroperties);
+//  CircleData::genVertexData();
+//  cirForDraw = new DrawableObjectCommon(
+//      CircleData::vdata, CircleData::dataByteCount, CircleData::vCount, device, memoryroperties);
+  /// Sample4_8 **************************************************** end
+
+  /// Sample4_10 ************************************************* start
   CircleData::genVertexData();
   cirForDraw = new DrawableObjectCommon(
-      CircleData::vdata, CircleData::dataByteCount, CircleData::vCount, device, memoryroperties);
-  /// Sample4_8 **************************************************** end
+      CircleData::vdata,
+      CircleData::dataByteCount,
+      CircleData::vCount,
+      CircleData::idata,
+      CircleData::indexByteCount,
+      CircleData::iCount,
+      device,
+      memoryroperties);
+  /// Sample4_10 *************************************************** end
 }
 
 /**
@@ -926,24 +939,41 @@ void MyVulkanManager::drawObject() {
     /// Sample4_7 **************************************************** end
 
     /// Sample4_8 ************************************************** start
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::rotate(xAngle, 1, 0, 0);
+//    MatrixState3D::rotate(yAngle, 0, 1, 0);
+//
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(90, 0, 0);
+//    triForDraw->drawSelf(                                                 // 绘制三角形条带
+//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[0], &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(-90, 0, 0);
+//    cirForDraw->drawSelf(                                                 // 绘制扇形
+//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[1], &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//
+//    MatrixState3D::popMatrix();
+    /// Sample4_8 **************************************************** end
+
+    /// Sample4_10 ************************************************* start
     MatrixState3D::pushMatrix();
     MatrixState3D::rotate(xAngle, 1, 0, 0);
     MatrixState3D::rotate(yAngle, 0, 1, 0);
-
     MatrixState3D::pushMatrix();
-    MatrixState3D::translate(90, 0, 0);
-    triForDraw->drawSelf(                                                 // 绘制三角形条带
-        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[0], &(sqsCL->descSet[0]));
+    MatrixState3D::translate(0, 50, 0);
+    cirForDraw->drawSelf(                                                 // 绘制正十边形
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]), 0, CircleData::iCount);
     MatrixState3D::popMatrix();
-
     MatrixState3D::pushMatrix();
-    MatrixState3D::translate(-90, 0, 0);
-    cirForDraw->drawSelf(                                                 // 绘制扇形
-        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline[1], &(sqsCL->descSet[0]));
+    MatrixState3D::translate(0, -50, 0);
+    cirForDraw->drawSelf(                                                 // 绘制正十边形的下半部分
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]), 0, CircleData::iCount / 2 + 1);
     MatrixState3D::popMatrix();
-
     MatrixState3D::popMatrix();
-    /// Sample4_8 **************************************************** end
+    /// Sample4_10 *************************************************** end
 
 //    triForDraw->drawSelf(                                                 // 绘制三色三角形
 //        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));

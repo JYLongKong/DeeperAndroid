@@ -39,11 +39,11 @@ class ShaderQueueSuit_Common {
   std::vector<VkDescriptorSet> descSet;               // 描述集列表
   VkPipelineLayout pipelineLayout;                    // 管线布局
 
-//  VkPipeline pipeline;                                // 管线
+  VkPipeline pipeline;                                // 管线
   /// Sample4_7 ************************************************** start
 //  static const int topologyCount = 3;                 // Sample4_7-绘制方式总数
-  static const int topologyCount = 2;                 // Sample4_8-绘制方式总数
-  VkPipeline pipeline[topologyCount];                 // 管线
+//  static const int topologyCount = 2;                 // Sample4_8-绘制方式总数
+//  VkPipeline pipeline[topologyCount];                 // 管线
   /// Sample4_7 **************************************************** end
 
   ShaderQueueSuit_Common(VkDevice *deviceIn,
