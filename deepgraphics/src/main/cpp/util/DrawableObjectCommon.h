@@ -30,9 +30,9 @@ class DrawableObjectCommon {
       int vCountIn,
 
       /// Sample4_10
-      uint16_t *idataIn,
-      int indexByteCount,
-      int iCountIn,
+//      uint16_t *idataIn,
+//      int indexByteCount,
+//      int iCountIn,
 
       VkDevice &device,
       VkPhysicalDeviceMemoryProperties &memoryroperties
@@ -47,11 +47,11 @@ class DrawableObjectCommon {
       VkCommandBuffer &secondary_cmd,
       VkPipelineLayout &pipelineLayout,
       VkPipeline &pipeline,
-      VkDescriptorSet *desSetPointer,
+      VkDescriptorSet *desSetPointer
 
       /// Sample4_10
-      uint32_t sIndex,
-      uint32_t eIndex
+//      uint32_t sIndex,
+//      uint32_t eIndex
   );
 
   /// Sample4_10 ************************************************* start

@@ -35,6 +35,8 @@ add_library(
         src/main/cpp/bndev/ObjectData.cpp
         src/main/cpp/bndev/BeltData.cpp
         src/main/cpp/bndev/CircleData.cpp
+        src/main/cpp/bndev/ColorRect.cpp
+        src/main/cpp/bndev/Cube.cpp
 )
 
 

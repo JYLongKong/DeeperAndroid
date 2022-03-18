@@ -8,6 +8,7 @@
 #include "mylog.h"
 #include "DrawableObjectCommon.h"
 #include "ShaderQueueSuit_Common.h"
+#include "Cube.h"
 
 #define FENCE_TIMEOUT 100000000                           // 栅栏的超时时间
 
@@ -73,6 +74,10 @@ class MyVulkanManager {
 
   /// Sample4_8 扇形条
   static DrawableObjectCommon *cirForDraw;
+
+  /// Sample4_11 视角立方体
+  static Cube *cubeForDraw;
+  static int ViewPara;
 
   static void init_vulkan_instance();                     // 创建Vulkan实例
   static void enumerate_vulkan_phy_devices();             // 初始化物理设备
