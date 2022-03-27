@@ -15,7 +15,7 @@ layout (push_constant) uniform constantVals { // 推送常量块
 layout (location = 0) in vec3 pos;// 传入的物体坐标系顶点坐标
 layout (location = 1) in vec3 color;// 传入的顶点颜色
 layout (location = 0) out vec3 vcolor;// 传到片元着色器的顶点颜色
-layout (location = 1) out vec3 vPosition;// Sample4_11
+//layout (location = 1) out vec3 vPosition;// Sample4_11
 
 out gl_PerVertex { // 定义输出的接口块
     vec4 gl_Position;// 内建输出变量：负责接收最终的顶点位置并传递到渲染管线进行后继处理
@@ -28,7 +28,7 @@ void main() { // 主函数
     //    gl_Position = myBufferVals.mvp * vec4(pos, 1.0);// 计算最终顶点位置
     //    gl_PointSize = 15.0;// Sample4_7-设置点的尺寸
 
-    vPosition = gl_Position.xyz;// Sample4_11
+    //    vPosition = gl_Position.xyz;// Sample4_11
 
     vcolor = color;// 传递顶点颜色给片元着色器
 }

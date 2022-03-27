@@ -89,6 +89,7 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
           }
           if (!isClick) { // 若为滑动操作
             MyVulkanManager::yAngle += xDis / 10; // 计算绕y轴转角
+            MyVulkanManager::zAngle += yDis / 10; // Sample4_12-计算绕z轴转角
             xPre = x;
             yPre = y;
           }
@@ -105,11 +106,18 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
           /// Sample4_7 **************************************************** end
 
           /// Sample4_11 ************************************************* start
+//          if (isClick) {
+//            MyVulkanManager::ViewPara = ++MyVulkanManager::ViewPara % 2;  // 更新当前采用的视角索引
+//            MyVulkanManager::initMatrix();  // 重新初始化矩阵
+//          }
+          /// Sample4_11 *************************************************** end
+
+          /// Sample4_12 ************************************************* start
           if (isClick) {
-            MyVulkanManager::ViewPara = ++MyVulkanManager::ViewPara % 2;  // 更新当前采用的视角索引
+            MyVulkanManager::ProjectPara = ++MyVulkanManager::ProjectPara % 2;
             MyVulkanManager::initMatrix();  // 重新初始化矩阵
           }
-          /// Sample4_11 *************************************************** end
+          /// Sample4_12 *************************************************** end
 
           break;
         default:break;

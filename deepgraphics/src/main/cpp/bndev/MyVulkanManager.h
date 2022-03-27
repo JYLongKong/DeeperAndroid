@@ -79,6 +79,12 @@ class MyVulkanManager {
   static Cube *cubeForDraw;
   static int ViewPara;
 
+  /// Sample4_12 远视角造成深度遮挡误差
+  static Cube *cube1ForDraw;
+  static Cube *cube2ForDraw;
+  static int ProjectPara;
+  static float zAngle;
+
   static void init_vulkan_instance();                     // 创建Vulkan实例
   static void enumerate_vulkan_phy_devices();             // 初始化物理设备
   static void create_vulkan_devices();                    // 创建逻辑设备
