@@ -278,17 +278,22 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   /// Sample4_1 **************************************************** end
 
   /// Sample4_2 ************************************************** start
-  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
-  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
+//  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
+//  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
   /// Sample4_2 **************************************************** end
+
+  /// Sample4_13 ************************************************* start
+  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
+  dynamicStateEnables[0] = VK_DYNAMIC_STATE_DEPTH_BIAS;                   // 深度偏移为动态设置
+  /// Sample4_13 *************************************************** end
 
   // 管线动态状态是指在程序运行过程中可以通过命令修改的一些参数，只有启用了某方面的动态状态才可以动态修改此方面的参数(如剪裁窗口、视口等)
   VkPipelineDynamicStateCreateInfo dynamicState = {};                     // 管线动态状态创建信息
   dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
   dynamicState.pNext = nullptr;
   dynamicState.pDynamicStates = dynamicStateEnables;                      // 动态状态启用标志数组
-//  dynamicState.dynamicStateCount = 1;                                     // Sample4_1-启用的动态状态项数量
-  dynamicState.dynamicStateCount = 0;                                     // Sample4_2-启用的动态状态项数量(本案例没有这方面需要)
+  dynamicState.dynamicStateCount = 1;                                     // Sample4_1、Sample4_13-启用的动态状态项数量
+//  dynamicState.dynamicStateCount = 0;                                     // Sample4_2-启用的动态状态项数量(本案例没有这方面需要)
 
   VkPipelineVertexInputStateCreateInfo vi;                                // 管线顶点数据输入状态创建信息
   vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -337,10 +342,11 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   rs.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;                         // 卷绕方向为逆时针
   rs.depthClampEnable = VK_TRUE;                                          // 深度截取
   rs.rasterizerDiscardEnable = VK_FALSE;                                  // 启用光栅化操作(若为TRUE则光栅化不产生任何片元)
-  rs.depthBiasEnable = VK_FALSE;                                          // 不启用深度偏移
-  rs.depthBiasConstantFactor = 0;                                         // 深度偏移常量因子
+//  rs.depthBiasEnable = VK_FALSE;                                          // 不启用深度偏移
+  rs.depthBiasEnable = VK_TRUE;                                           // Sample4_13-启用深度偏移
+  rs.depthBiasConstantFactor = 0;                                         // 深度偏移常量因子，启动深度偏移后，片元深度将加上此值
   rs.depthBiasClamp = 0;                                                  // 深度偏移值上下限(若为正作为上限，为负作为下限)
-  rs.depthBiasSlopeFactor = 0;                                            // 深度偏移斜率因子
+  rs.depthBiasSlopeFactor = 0;                                            // 深度偏移斜率因子，深度偏移计算中应用于片元斜率的标量因子
   rs.lineWidth = 1.0f;                                                    // 线宽度(仅在线绘制模式起作用)
 //  rs.lineWidth = 10.0f;                                                   // Sample4_7-设置线宽时还需要wideLines特性支持和启用
 

@@ -85,6 +85,11 @@ class MyVulkanManager {
   static int ProjectPara;
   static float zAngle;
 
+  /// Sample4_13 深度偏移
+  static int depthOffsetFlag;
+  static DrawableObjectCommon *colorRectG;
+  static DrawableObjectCommon *colorRectY;
+
   static void init_vulkan_instance();                     // 创建Vulkan实例
   static void enumerate_vulkan_phy_devices();             // 初始化物理设备
   static void create_vulkan_devices();                    // 创建逻辑设备

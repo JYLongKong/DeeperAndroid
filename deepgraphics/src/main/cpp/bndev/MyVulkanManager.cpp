@@ -95,6 +95,11 @@ int MyVulkanManager::ProjectPara = 0;
 float MyVulkanManager::yAngle = 90;
 float MyVulkanManager::zAngle = 20;
 
+/// Sample4_13
+int MyVulkanManager::depthOffsetFlag = 0;
+DrawableObjectCommon *MyVulkanManager::colorRectG;
+DrawableObjectCommon *MyVulkanManager::colorRectY;
+
 /**
  * 创建Vulkan实例的方法
  */
@@ -778,10 +783,18 @@ void MyVulkanManager::createDrawableObject() {
   /// Sample4_11 *************************************************** end
 
   /// Sample4_12 ************************************************* start
-  ColorRect::genVertexData();
-  cube1ForDraw = new Cube(device, memoryroperties, ColorRect::vdataG, ColorRect::UNIT_SIZEG);
-  cube2ForDraw = new Cube(device, memoryroperties, ColorRect::vdataY, ColorRect::UNIT_SIZEY);
+//  ColorRect::genVertexData();
+//  cube1ForDraw = new Cube(device, memoryroperties, ColorRect::vdataG, ColorRect::UNIT_SIZEG);
+//  cube2ForDraw = new Cube(device, memoryroperties, ColorRect::vdataY, ColorRect::UNIT_SIZEY);
   /// Sample4_12 *************************************************** end
+
+  /// Sample4_13 ************************************************* start
+  ColorRect::genVertexData();
+  colorRectG = new DrawableObjectCommon(
+      ColorRect::vdataG, ColorRect::dataByteCount, ColorRect::vCount, device, memoryroperties);
+  colorRectY = new DrawableObjectCommon(
+      ColorRect::vdataY, ColorRect::dataByteCount, ColorRect::vCount, device, memoryroperties);
+  /// Sample4_13 *************************************************** end
 }
 
 /**
@@ -802,8 +815,12 @@ void MyVulkanManager::destroyDrawableObject() {
 //  delete cubeForDraw;
 
   /// Sample4_12
-  delete cube1ForDraw;
-  delete cube2ForDraw;
+//  delete cube1ForDraw;
+//  delete cube2ForDraw;
+
+  /// Sample4_13
+  delete colorRectG;
+  delete colorRectY;
 }
 
 /**
@@ -867,16 +884,23 @@ void MyVulkanManager::initMatrix() {
   /// Sample4_11 *************************************************** end
 
   /// Sample4_12 ************************************************* start
-  MatrixState3D::setCamera(5000.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-  float NEAR;                                                             // 表示近平面参数的变量
-  if (ProjectPara) {
-    NEAR = 800.0f;                                                        // 较大的NEAR值
-  } else {
-    NEAR = 1.0f;                                                          // 较小的NEAR值
-  }
-  MatrixState3D::setProjectFrustum(
-      -NEAR * ratio * 0.25f, NEAR * ratio * 0.25f, -NEAR * 0.25f, NEAR * 0.25f, NEAR, 10000.0f);
+//  MatrixState3D::setCamera(5000.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//  float NEAR;                                                             // 表示近平面参数的变量
+//  if (ProjectPara) {
+//    NEAR = 800.0f;                                                        // 较大的NEAR值
+//  } else {
+//    NEAR = 1.0f;                                                          // 较小的NEAR值
+//  }
+//  MatrixState3D::setProjectFrustum(
+//      -NEAR * ratio * 0.25f, NEAR * ratio * 0.25f, -NEAR * 0.25f, NEAR * 0.25f, NEAR, 10000.0f);
   /// Sample4_12 *************************************************** end
+
+  /// Sample4_13 ************************************************* start
+  MatrixState3D::setProjectFrustum(-ratio * 75.0f, ratio * 75.0f, -75.0f, 75.0f, 300.0f, 10000.0f);
+//  MatrixState3D::setProjectFrustum(                                       // 效果更明显
+//      -ratio * 225.0f, ratio * 225.0f, -225.0f, 225.0f, 900.0f, 10000.0f);
+  MatrixState3D::setCamera(5000.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+  /// Sample4_13 *************************************************** end
 }
 
 /**
@@ -1050,20 +1074,44 @@ void MyVulkanManager::drawObject() {
     /// Sample4_11 *************************************************** end
 
     /// Sample4_12 ************************************************* start
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::rotate(-yAngle, 0, 1, 0);
+//    MatrixState3D::rotate(-zAngle, 0, 0, 1);
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(250, 0, 0);
+//    cube1ForDraw->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(-250, 0, 0);
+//    cube2ForDraw->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//    MatrixState3D::popMatrix();
+    /// Sample4_12 *************************************************** end
+
+    /// Sample4_13 ************************************************* start
     MatrixState3D::pushMatrix();
-    MatrixState3D::rotate(-yAngle, 0, 1, 0);
-    MatrixState3D::rotate(-zAngle, 0, 0, 1);
+    MatrixState3D::rotate(xAngle, 1, 0, 0);
+    MatrixState3D::rotate(yAngle, 0, 1, 0);
+    vk::vkCmdSetDepthBias(cmdBuffer, 0.0, 0.0, 0.0);                      // 设置青色矩形的深度偏移信息
     MatrixState3D::pushMatrix();
-    MatrixState3D::translate(250, 0, 0);
-    cube1ForDraw->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+    MatrixState3D::translate(-250.0f, 0.0f, 0.0f);
+    colorRectG->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
     MatrixState3D::popMatrix();
 
+    switch (depthOffsetFlag) {                                            // 根据索引设置黄色矩形深度偏移参数
+      case 1:vk::vkCmdSetDepthBias(cmdBuffer, -1.0, -3.0, -2.0);          // 黄色矩形深度值减小
+        break;
+      case 2:vk::vkCmdSetDepthBias(cmdBuffer, 1.0, 3.0, 2.0);             // 黄色矩形深度值增大
+        break;
+      default:break;
+    }
     MatrixState3D::pushMatrix();
-    MatrixState3D::translate(-250, 0, 0);
-    cube2ForDraw->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+    MatrixState3D::translate(250.0f, 0.0f, 0.0f);
+    colorRectY->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
     MatrixState3D::popMatrix();
     MatrixState3D::popMatrix();
-    /// Sample4_12 *************************************************** end
+    /// Sample4_13 *************************************************** end
 
 //    triForDraw->drawSelf(                                                 // 绘制三色三角形
 //        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
