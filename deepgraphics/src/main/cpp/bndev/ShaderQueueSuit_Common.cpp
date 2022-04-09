@@ -116,20 +116,20 @@ void ShaderQueueSuit_Common::create_pipeline_layout(VkDevice &device) {
   assert(result == VK_SUCCESS);                                           // 检查描述集布局创建是否成功
 
   /// Sample4_2 ************************************************** start
-  const unsigned push_constant_range_count = 1;                           // 推送常量块数量
-  VkPushConstantRange push_constant_ranges[push_constant_range_count] = {}; // 推送常量范围列表
-  push_constant_ranges[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;        // 对应着色器阶段
-  push_constant_ranges[0].offset = 0;                                     // 推送常量数据起始偏移量
-  push_constant_ranges[0].size = sizeof(float) * 16;                      // 推送常量数据总字节数
+//  const unsigned push_constant_range_count = 1;                           // 推送常量块数量
+//  VkPushConstantRange push_constant_ranges[push_constant_range_count] = {}; // 推送常量范围列表
+//  push_constant_ranges[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;        // 对应着色器阶段
+//  push_constant_ranges[0].offset = 0;                                     // 推送常量数据起始偏移量
+//  push_constant_ranges[0].size = sizeof(float) * 16;                      // 推送常量数据总字节数
   /// Sample4_2 **************************************************** end
 
   VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = {};              // 构建管线布局创建信息结构体实例
   pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
   pPipelineLayoutCreateInfo.pNext = nullptr;
-//  pPipelineLayoutCreateInfo.pushConstantRangeCount = 0;                   // 推送常量范围的数量
-//  pPipelineLayoutCreateInfo.pPushConstantRanges = nullptr;                // 推送常量范围的列表
-  pPipelineLayoutCreateInfo.pushConstantRangeCount = push_constant_range_count; // Sample4_2-推送常量范围数量
-  pPipelineLayoutCreateInfo.pPushConstantRanges = push_constant_ranges;   // Sample4_2-推送常量范围列表
+  pPipelineLayoutCreateInfo.pushConstantRangeCount = 0;                   // 推送常量范围的数量
+  pPipelineLayoutCreateInfo.pPushConstantRanges = nullptr;                // 推送常量范围的列表
+//  pPipelineLayoutCreateInfo.pushConstantRangeCount = push_constant_range_count; // Sample4_2-推送常量范围数量
+//  pPipelineLayoutCreateInfo.pPushConstantRanges = push_constant_ranges;   // Sample4_2-推送常量范围列表
   pPipelineLayoutCreateInfo.setLayoutCount = NUM_DESCRIPTOR_SETS;         // 描述集布局的数量
   pPipelineLayoutCreateInfo.pSetLayouts = descLayouts.data();             // 描述集布局列表
 
@@ -277,14 +277,14 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
 //  dynamicStateEnables[0] = VK_DYNAMIC_STATE_VIEWPORT;                     // 视口为动态设置
   /// Sample4_1 **************************************************** end
 
-  /// Sample4_2 ************************************************** start
-//  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
-//  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
-  /// Sample4_2 **************************************************** end
+  /// Sample4_2、Sample4_14 ************************************** start
+  VkDynamicState dynamicStateEnables[VK_DYNAMIC_STATE_RANGE_SIZE];        // 动态状态启用标志
+  memset(dynamicStateEnables, 0, sizeof dynamicStateEnables);           // 设置所有标志为false
+  /// Sample4_2、Sample4_14 **************************************** end
 
   /// Sample4_13 ************************************************* start
-  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
-  dynamicStateEnables[0] = VK_DYNAMIC_STATE_DEPTH_BIAS;                   // 深度偏移为动态设置
+//  VkDynamicState dynamicStateEnables[1];                                  // 动态状态启用标志数组
+//  dynamicStateEnables[0] = VK_DYNAMIC_STATE_DEPTH_BIAS;                   // 深度偏移为动态设置
   /// Sample4_13 *************************************************** end
 
   // 管线动态状态是指在程序运行过程中可以通过命令修改的一些参数，只有启用了某方面的动态状态才可以动态修改此方面的参数(如剪裁窗口、视口等)
@@ -292,8 +292,8 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
   dynamicState.pNext = nullptr;
   dynamicState.pDynamicStates = dynamicStateEnables;                      // 动态状态启用标志数组
-  dynamicState.dynamicStateCount = 1;                                     // Sample4_1、Sample4_13-启用的动态状态项数量
-//  dynamicState.dynamicStateCount = 0;                                     // Sample4_2-启用的动态状态项数量(本案例没有这方面需要)
+//  dynamicState.dynamicStateCount = 1;                                     // Sample4_1、Sample4_13-启用的动态状态项数量
+  dynamicState.dynamicStateCount = 0;                                     // Sample4_2、Sample4_14-启用的动态状态项数量(本案例没有这方面需要)
 
   VkPipelineVertexInputStateCreateInfo vi;                                // 管线顶点数据输入状态创建信息
   vi.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -309,8 +309,8 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   ia.pNext = nullptr;
   ia.flags = 0;
   ia.primitiveRestartEnable = VK_FALSE;                                   // 关闭图元重启
-//  ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;                      // 采用三角形图元列表模式进行图元组装
-  ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;                       // Sample4_10
+  ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;                      // 采用三角形图元列表模式进行图元组装
+//  ia.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;                       // Sample4_10
 
   /// Sample4_7 ************************************************** start
 //  VkPipelineInputAssemblyStateCreateInfo ia[topologyCount];               // 管线图元组装状态创建信息数组
@@ -338,12 +338,13 @@ void ShaderQueueSuit_Common::create_pipe_line(VkDevice &device, VkRenderPass &re
   rs.pNext = nullptr;
   rs.flags = 0;
   rs.polygonMode = VK_POLYGON_MODE_FILL;                                  // 绘制方式为填充
-  rs.cullMode = VK_CULL_MODE_NONE;                                        // 不使用背面剪裁
+//  rs.cullMode = VK_CULL_MODE_NONE;                                        // 不使用背面剪裁
+  rs.cullMode = VK_CULL_MODE_BACK_BIT;                                    // Sample4_14-开启背面剪裁
   rs.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;                         // 卷绕方向为逆时针
   rs.depthClampEnable = VK_TRUE;                                          // 深度截取
   rs.rasterizerDiscardEnable = VK_FALSE;                                  // 启用光栅化操作(若为TRUE则光栅化不产生任何片元)
-//  rs.depthBiasEnable = VK_FALSE;                                          // 不启用深度偏移
-  rs.depthBiasEnable = VK_TRUE;                                           // Sample4_13-启用深度偏移
+  rs.depthBiasEnable = VK_FALSE;                                          // 不启用深度偏移
+//  rs.depthBiasEnable = VK_TRUE;                                           // Sample4_13-启用深度偏移
   rs.depthBiasConstantFactor = 0;                                         // 深度偏移常量因子，启动深度偏移后，片元深度将加上此值
   rs.depthBiasClamp = 0;                                                  // 深度偏移值上下限(若为正作为上限，为负作为下限)
   rs.depthBiasSlopeFactor = 0;                                            // 深度偏移斜率因子，深度偏移计算中应用于片元斜率的标量因子

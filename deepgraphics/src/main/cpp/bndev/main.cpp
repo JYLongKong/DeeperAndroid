@@ -51,26 +51,26 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
           /// Sample4_1 **************************************************** end
 
           /// Sample4_2 ************************************************** start
-//          xPre = x;
-//          yPre = y;
+          xPre = x;
+          yPre = y;
           /// Sample4_2 **************************************************** end
 
           /// Sample4_7 ************************************************** start
-          isClick = true;
-          xPre = x;
-          yPre = y;
+//          isClick = true;
+//          xPre = x;
+//          yPre = y;
           /// Sample4_7 **************************************************** end
 
           break;
         case AMOTION_EVENT_ACTION_MOVE: // 触摸点移动
 
           /// Sample4_2 ************************************************** start
-//          xDis = x - xPre;                      // 计算触控点x位移
-//          yDis = y - yPre;                      // 计算触控点y位移
-//          MyVulkanManager::xAngle += yDis / 10; // 计算x轴旋转角
-//          MyVulkanManager::yAngle += xDis / 10; // 计算y轴旋转角
-//          xPre = x;                             // 记录触控点x坐标
-//          yPre = y;                             // 记录触控点y坐标
+          xDis = x - xPre;                      // 计算触控点x位移
+          yDis = y - yPre;                      // 计算触控点y位移
+          MyVulkanManager::xAngle += yDis / 10; // 计算x轴旋转角
+          MyVulkanManager::yAngle += xDis / 10; // 计算y轴旋转角
+          xPre = x;                             // 记录触控点x坐标
+          yPre = y;                             // 记录触控点y坐标
           /// Sample4_2 **************************************************** end
 
           /// Sample4_7 ************************************************** start
@@ -82,18 +82,18 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
           /// Sample4_7 **************************************************** end
 
           /// Sample4_11 ************************************************* start
-          xDis = x - xPre;
-          yDis = y - yPre;
-          if (abs((int) xDis) > 10 || abs((int) yDis) > 10) {
-            isClick = false;
-          }
-          if (!isClick) { // 若为滑动操作
-            MyVulkanManager::yAngle += xDis / 10; // 计算绕y轴转角
-//            MyVulkanManager::zAngle += yDis / 10; // Sample4_12-计算绕z轴转角
-            MyVulkanManager::xAngle += yDis / 10; // Sample4_13-计算绕x轴转角
-            xPre = x;
-            yPre = y;
-          }
+//          xDis = x - xPre;
+//          yDis = y - yPre;
+//          if (abs((int) xDis) > 10 || abs((int) yDis) > 10) {
+//            isClick = false;
+//          }
+//          if (!isClick) { // 若为滑动操作
+//            MyVulkanManager::yAngle += xDis / 10; // 计算绕y轴转角
+////            MyVulkanManager::zAngle += yDis / 10; // Sample4_12-计算绕z轴转角
+//            MyVulkanManager::xAngle += yDis / 10; // Sample4_13-计算绕x轴转角
+//            xPre = x;
+//            yPre = y;
+//          }
           /// Sample4_11 *************************************************** end
 
           break;
@@ -114,16 +114,16 @@ static int32_t engine_handle_input(struct android_app *app, AInputEvent *event) 
           /// Sample4_11 *************************************************** end
 
           /// Sample4_12 ************************************************* start
-          if (isClick) {
-            MyVulkanManager::ProjectPara = ++MyVulkanManager::ProjectPara % 2;
-            MyVulkanManager::initMatrix();  // 重新初始化矩阵
-          }
+//          if (isClick) {
+//            MyVulkanManager::ProjectPara = ++MyVulkanManager::ProjectPara % 2;
+//            MyVulkanManager::initMatrix();  // 重新初始化矩阵
+//          }
           /// Sample4_12 *************************************************** end
 
           /// Sample4_13 ************************************************* start
-          if (isClick) {
-            MyVulkanManager::depthOffsetFlag = ++MyVulkanManager::depthOffsetFlag % 3;
-          }
+//          if (isClick) {
+//            MyVulkanManager::depthOffsetFlag = ++MyVulkanManager::depthOffsetFlag % 3;
+//          }
           /// Sample4_13 *************************************************** end
 
           break;

@@ -89,16 +89,19 @@ Cube *MyVulkanManager::cubeForDraw;
 int MyVulkanManager::ViewPara = 0;
 
 /// Sample4_12
-Cube *MyVulkanManager::cube1ForDraw;
-Cube *MyVulkanManager::cube2ForDraw;
-int MyVulkanManager::ProjectPara = 0;
-float MyVulkanManager::yAngle = 90;
-float MyVulkanManager::zAngle = 20;
+//Cube *MyVulkanManager::cube1ForDraw;
+//Cube *MyVulkanManager::cube2ForDraw;
+//int MyVulkanManager::ProjectPara = 0;
+//float MyVulkanManager::yAngle = 90;
+//float MyVulkanManager::zAngle = 20;
 
 /// Sample4_13
 int MyVulkanManager::depthOffsetFlag = 0;
 DrawableObjectCommon *MyVulkanManager::colorRectG;
 DrawableObjectCommon *MyVulkanManager::colorRectY;
+
+/// Sample4_14
+float MyVulkanManager::yAngle = 0;
 
 /**
  * 创建Vulkan实例的方法
@@ -732,11 +735,11 @@ void MyVulkanManager::destroy_frame_buffer() {
  * 创建绘制用物体
  */
 void MyVulkanManager::createDrawableObject() {
-  /// Sample4_1 ************************************************** start
-//  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
-//  triForDraw = new DrawableObjectCommon(                                // 创建绘制用三色三角形对象
-//      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
-  /// Sample4_1 **************************************************** end
+  /// Sample4_1、Sample4_14 ************************************** start
+  TriangleData::genVertexData();                                        // 生成3色三角形顶点数据和颜色数据
+  triForDraw = new DrawableObjectCommon(                                // 创建绘制用三色三角形对象
+      TriangleData::vdata, TriangleData::dataByteCount, TriangleData::vCount, device, memoryroperties);
+  /// Sample4_1、Sample4_14 **************************************** end
 
   /// Sample4_2 ************************************************** start
 //  SixPointedStar::genStarData(0.2, 0.5, 0);
@@ -789,11 +792,11 @@ void MyVulkanManager::createDrawableObject() {
   /// Sample4_12 *************************************************** end
 
   /// Sample4_13 ************************************************* start
-  ColorRect::genVertexData();
-  colorRectG = new DrawableObjectCommon(
-      ColorRect::vdataG, ColorRect::dataByteCount, ColorRect::vCount, device, memoryroperties);
-  colorRectY = new DrawableObjectCommon(
-      ColorRect::vdataY, ColorRect::dataByteCount, ColorRect::vCount, device, memoryroperties);
+//  ColorRect::genVertexData();
+//  colorRectG = new DrawableObjectCommon(
+//      ColorRect::vdataG, ColorRect::dataByteCount, ColorRect::vCount, device, memoryroperties);
+//  colorRectY = new DrawableObjectCommon(
+//      ColorRect::vdataY, ColorRect::dataByteCount, ColorRect::vCount, device, memoryroperties);
   /// Sample4_13 *************************************************** end
 }
 
@@ -801,8 +804,8 @@ void MyVulkanManager::createDrawableObject() {
  * 销毁绘制用物体
  */
 void MyVulkanManager::destroyDrawableObject() {
-  /// Sample4_1
-//  delete triForDraw;
+  /// Sample4_1、Sample4_14
+  delete triForDraw;
 
   /// Sample4_2
 //  delete objForDraw;
@@ -819,8 +822,8 @@ void MyVulkanManager::destroyDrawableObject() {
 //  delete cube2ForDraw;
 
   /// Sample4_13
-  delete colorRectG;
-  delete colorRectY;
+//  delete colorRectG;
+//  delete colorRectY;
 }
 
 /**
@@ -861,13 +864,13 @@ void MyVulkanManager::initPresentInfo() {
  * 初始化基本变换矩阵、摄像机矩阵和投影矩阵
  */
 void MyVulkanManager::initMatrix() {
-//  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机
+  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // 初始化摄像机、Sample4_14-卷绕和背面剪裁
 //  MatrixState3D::setCamera(0, 0, 2, 0, 0, 0, 0, 1, 0); // Sample4_2-初始化摄像机
 //  MatrixState3D::setCamera(-16, 8, 45, 0, 0, 0, 0, 1.0, 0.0); // Sample4_4-CubeData
 //  MatrixState3D::setCamera(0, 0, 200, 0, 0, 0, 0, 1, 0); // Sample4_7
   MatrixState3D::setInitStack();                                          // 初始化基本变换矩阵
   float ratio = (float) screenWidth / (float) screenHeight;               // 求屏幕宽高比
-//  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数
+  MatrixState3D::setProjectFrustum(-ratio, ratio, -1, 1, 1.5f, 1000); // 设置投影参数、Sample4_14-卷绕和背面剪裁
 //  MatrixState3D::setProjectOrtho(-ratio, ratio, -1, 1, 1.0f, 20); // Sample4_2-设置正交投影参数
 //  MatrixState3D::setProjectFrustum(-ratio * 0.4, ratio * 0.4, -1 * 0.4, 1 * 0.4, 1.0f, 20); // Sample4_3-设置透视投影参数
 //  MatrixState3D::setProjectFrustum(-ratio * 0.8f, ratio * 1.2f, -1, 1, 20, 100); // Sample4_4-CubeData
@@ -896,10 +899,10 @@ void MyVulkanManager::initMatrix() {
   /// Sample4_12 *************************************************** end
 
   /// Sample4_13 ************************************************* start
-  MatrixState3D::setProjectFrustum(-ratio * 75.0f, ratio * 75.0f, -75.0f, 75.0f, 300.0f, 10000.0f);
-//  MatrixState3D::setProjectFrustum(                                       // 效果更明显
-//      -ratio * 225.0f, ratio * 225.0f, -225.0f, 225.0f, 900.0f, 10000.0f);
-  MatrixState3D::setCamera(5000.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+//  MatrixState3D::setProjectFrustum(-ratio * 75.0f, ratio * 75.0f, -75.0f, 75.0f, 300.0f, 10000.0f);
+////  MatrixState3D::setProjectFrustum(                                       // 效果更明显
+////      -ratio * 225.0f, ratio * 225.0f, -225.0f, 225.0f, 900.0f, 10000.0f);
+//  MatrixState3D::setCamera(5000.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
   /// Sample4_13 *************************************************** end
 }
 
@@ -915,8 +918,23 @@ void MyVulkanManager::flushUniformBuffer() {
 //  float *vertexUniformData = MatrixState3D::getFinalMatrix();             // 获取最终变换矩阵
 //  MatrixState3D::popMatrix();                                             // 恢复现场
 
+  /// Sample4_14 ************************************************* start
+  if (xAngle >= 360) {
+    xAngle = 0;
+  }
+  if (yAngle >= 360) {
+    yAngle = 0;
+  }
+  MatrixState3D::pushMatrix();
+  MatrixState3D::rotate(xAngle, 1, 0, 0);
+  MatrixState3D::rotate(yAngle, 0, 1, 0);
+  /// Sample4_14 *************************************************** end
+
   /// Sample4_2
   float *vertexUniformData = MatrixState3D::getFinalMatrix();
+
+  /// Sample4_14
+  MatrixState3D::popMatrix();
 
   uint8_t *pData;                                                         // CPU访问设备内存时的辅助指针
   VkResult result = vk::vkMapMemory(                                      // 将设备内存映射为CPU可访问
@@ -1090,31 +1108,31 @@ void MyVulkanManager::drawObject() {
     /// Sample4_12 *************************************************** end
 
     /// Sample4_13 ************************************************* start
-    MatrixState3D::pushMatrix();
-    MatrixState3D::rotate(xAngle, 1, 0, 0);
-    MatrixState3D::rotate(yAngle, 0, 1, 0);
-    vk::vkCmdSetDepthBias(cmdBuffer, 0.0, 0.0, 0.0);                      // 设置青色矩形的深度偏移信息
-    MatrixState3D::pushMatrix();
-    MatrixState3D::translate(-250.0f, 0.0f, 0.0f);
-    colorRectG->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
-    MatrixState3D::popMatrix();
-
-    switch (depthOffsetFlag) {                                            // 根据索引设置黄色矩形深度偏移参数
-      case 1:vk::vkCmdSetDepthBias(cmdBuffer, -1.0, -3.0, -2.0);          // 黄色矩形深度值减小
-        break;
-      case 2:vk::vkCmdSetDepthBias(cmdBuffer, 1.0, 3.0, 2.0);             // 黄色矩形深度值增大
-        break;
-      default:break;
-    }
-    MatrixState3D::pushMatrix();
-    MatrixState3D::translate(250.0f, 0.0f, 0.0f);
-    colorRectY->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
-    MatrixState3D::popMatrix();
-    MatrixState3D::popMatrix();
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::rotate(xAngle, 1, 0, 0);
+//    MatrixState3D::rotate(yAngle, 0, 1, 0);
+//    vk::vkCmdSetDepthBias(cmdBuffer, 0.0, 0.0, 0.0);                      // 设置青色矩形的深度偏移信息
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(-250.0f, 0.0f, 0.0f);
+//    colorRectG->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//
+//    switch (depthOffsetFlag) {                                            // 根据索引设置黄色矩形深度偏移参数
+//      case 1:vk::vkCmdSetDepthBias(cmdBuffer, -1.0, -3.0, -2.0);          // 黄色矩形深度值减小
+//        break;
+//      case 2:vk::vkCmdSetDepthBias(cmdBuffer, 1.0, 3.0, 2.0);             // 黄色矩形深度值增大
+//        break;
+//      default:break;
+//    }
+//    MatrixState3D::pushMatrix();
+//    MatrixState3D::translate(250.0f, 0.0f, 0.0f);
+//    colorRectY->drawSelf(cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+//    MatrixState3D::popMatrix();
+//    MatrixState3D::popMatrix();
     /// Sample4_13 *************************************************** end
 
-//    triForDraw->drawSelf(                                                 // 绘制三色三角形
-//        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
+    triForDraw->drawSelf(                                                 // 绘制三色三角形、Sample4_14-卷绕和背面剪裁
+        cmdBuffer, sqsCL->pipelineLayout, sqsCL->pipeline, &(sqsCL->descSet[0]));
     vk::vkCmdEndRenderPass(cmdBuffer);                                    // 结束渲染通道
     result = vk::vkEndCommandBuffer(cmdBuffer);                           // 结束命令缓冲
 
