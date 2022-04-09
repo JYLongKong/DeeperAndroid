@@ -18,9 +18,9 @@ add_library(
 target_link_libraries(
         deepplayer
 
-        -Wl,--start-group   # Tip8: Ignore sequence of linked libraries in cmake
+        -Wl,--start-group   # Tip8: Ignore sequence of linked libraries in CMake
         avcodec avfilter avformat avutil swresample swscale
-        -Wl,--end-group     # ignore sequence of linked libraries in cmake
+        -Wl,--end-group     # ignore sequence of linked libraries in CMake
 
         log
         z           # libz.so: support for FFmpeg

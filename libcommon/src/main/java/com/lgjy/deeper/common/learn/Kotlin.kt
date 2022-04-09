@@ -1810,7 +1810,8 @@ private fun reflection() {
 }
 
 @Deprecated("This experimental API marker is not used anymore. Remove its usages from your code.")
-@Experimental(level = Experimental.Level.WARNING)   // Experimental.Level.ERROR by default
+//@Experimental(level = Experimental.Level.WARNING)   // Experimental.Level.ERROR by default
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
 @Retention(AnnotationRetention.BINARY)  // Experimental required
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 private annotation class ExperimentalDateTime
@@ -1833,7 +1834,8 @@ private fun printDate() {
 
 //**********************************Non-propagating use**********************************start
 // for modules which don't provide their own API(application modules)
-@UseExperimental(ExperimentalDateTime::class)
+//@UseExperimental(ExperimentalDateTime::class)
+@OptIn(ExperimentalDateTime::class)
 private fun getYear() {
     val dateProvider = DateProvider()
 }

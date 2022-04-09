@@ -23,7 +23,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++11  -frtti -fexceptions"
-                abiFilters 'arm64-v8a', 'armeabi-v7a'   // cmake compile these abi
+                abiFilters 'arm64-v8a', 'armeabi-v7a'   // CMake compile these abi
             }
         }
         ndk {

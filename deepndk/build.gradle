@@ -22,7 +22,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
-                abiFilters 'armeabi-v7a'    // cmake compile these abi
+                abiFilters 'armeabi-v7a'    // CMake compile these abi
             }
         }
         ndk {
